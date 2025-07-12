@@ -16,10 +16,11 @@ export const createTeacher = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "Teacher already exists" });
     }
 
-    await Teacher.create({ name, email, subject, password });
+    const newTeacher = await Teacher.create({ name, email, subject, password });
     res.status(200).json({
       success: true,
-      message: "Teacher created!"
+      message: "Teacher created!",
+      teacher: newTeacher
     });
   } catch (err) {
     next(err);
