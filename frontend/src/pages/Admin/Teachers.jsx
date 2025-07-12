@@ -1,5 +1,5 @@
 // Teachers.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import axios from 'axios';
 import {
@@ -22,6 +22,8 @@ const [newTeacher, setNewTeacher] = useState({
   password: ''
 });
   const [teachers, setTeachers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     fetchTeachers();
@@ -29,24 +31,39 @@ const [newTeacher, setNewTeacher] = useState({
 
   const fetchTeachers = async () => {
     try {
+      setLoading(true);
       const response = await axios.get('http://localhost:4000/api/v1/teachers/getall');
       setTeachers(response.data.teachers);
     } catch (error) {
       console.error('Error fetching teachers:', error);
+      setError('Failed to fetch teachers');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleAddTeacher = async (e) => {
     e.preventDefault();
-    if (newTeacher.name.trim() !== '' && newTeacher.email.trim() !== '' && newTeacher.subject.trim() !== '') {
+    if (newTeacher.name.trim() !== '' && newTeacher.email.trim() !== '' && newTeacher.subject.trim() !== '' && newTeacher.password.trim() !== '') {
       try {
+        setLoading(true);
+        setError('');
         const response = await axios.post('http://localhost:4000/api/v1/teachers', newTeacher);
-        const createdTeacher = response.data.teacher;
-        setTeachers([...teachers, createdTeacher]);
-        setNewTeacher({ name: '', email: '', subject: '' ,password:''});
+        
+        if (response.data.success && response.data.teacher) {
+          setTeachers([...teachers, response.data.teacher]);
+          setNewTeacher({ name: '', email: '', subject: '', password: '' });
+        } else {
+          setError('Failed to add teacher');
+        }
       } catch (error) {
         console.error('Error adding teacher:', error);
+        setError(error.response?.data?.message || 'Failed to add teacher');
+      } finally {
+        setLoading(false);
       }
+    } else {
+      setError('Please fill all fields');
     }
   };
 
@@ -56,6 +73,7 @@ const [newTeacher, setNewTeacher] = useState({
       <Content>
         <TeachersContent>
           <TeachersHeader>Teachers</TeachersHeader>
+          {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
           <AddTeacherForm onSubmit={handleAddTeacher}>
             <AddTeacherInput
               type="text"
@@ -83,12 +101,18 @@ const [newTeacher, setNewTeacher] = useState({
                 setNewTeacher({ ...newTeacher, password: e.target.value })
               }
             />  
-            <AddTeacherButton type="submit">Add Teacher</AddTeacherButton>
+            <AddTeacherButton type="submit" disabled={loading}>
+              {loading ? 'Adding...' : 'Add Teacher'}
+            </AddTeacherButton>
           </AddTeacherForm>
           <TeacherList>
-            {teachers.map((teacher) => (
-              <TeacherItem key={teacher.id}>{teacher.name} - {teacher.email} - {teacher.subject}</TeacherItem>
-            ))}
+            {loading && teachers.length === 0 ? (
+              <div>Loading teachers...</div>
+            ) : (
+              teachers.map((teacher) => (
+                <TeacherItem key={teacher._id || teacher.id}>{teacher.name} - {teacher.email} - {teacher.subject}</TeacherItem>
+              ))
+            )}
           </TeacherList>
         </TeachersContent>
       </Content>
