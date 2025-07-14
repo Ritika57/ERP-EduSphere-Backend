@@ -15,7 +15,7 @@ import {
 } from '../../styles/StudentsStyles'; 
 
 const Students = () => {
-  const [newStudent, setNewStudent] = useState({ name: '', registrationNumber: '', grade: '' });
+  const [newStudent, setNewStudent] = useState({ name: '', registrationNumber: '', grade: '', email: '', password: '' });
   const [students, setStudents] = useState([]);
 
   useEffect(() => {
@@ -33,11 +33,11 @@ const Students = () => {
 
   const handleAddStudent = async (e) => {
     e.preventDefault();
-    if (newStudent.name.trim() !== '' && newStudent.registrationNumber.trim() !== '' && newStudent.grade.trim() !== '') {
+    if (newStudent.name.trim() !== '' && newStudent.registrationNumber.trim() !== '' && newStudent.grade.trim() !== '' && newStudent.email.trim() !== '' && newStudent.password.trim() !== '') {
       try {
         const response = await axios.post('http://localhost:4000/api/v1/students', newStudent);
         setStudents([...students, response.data.student]);
-        setNewStudent({ name: '', registrationNumber: '', grade: '' });
+        setNewStudent({ name: '', registrationNumber: '', grade: '', email: '', password: '' });
       } catch (error) {
         console.error('Error adding student:', error);
       }
@@ -69,11 +69,23 @@ const Students = () => {
               value={newStudent.grade}
               onChange={(e) => setNewStudent({ ...newStudent, grade: e.target.value })}
             />
+            <AddStudentInput
+              type="email"
+              placeholder="Enter email"
+              value={newStudent.email}
+              onChange={(e) => setNewStudent({ ...newStudent, email: e.target.value })}
+            />
+            <AddStudentInput
+              type="password"
+              placeholder="Enter password"
+              value={newStudent.password}
+              onChange={(e) => setNewStudent({ ...newStudent, password: e.target.value })}
+            />
             <AddStudentButton type="submit">Add Student</AddStudentButton>
           </AddStudentForm>
           <StudentList>
             {students.map((student) => (
-              <StudentItem key={student.id}>{student.name} - {student.registrationNumber} - {student.grade}</StudentItem>
+              <StudentItem key={student._id || student.id}>{student.name} - {student.registrationNumber} - {student.grade}</StudentItem>
             ))}
           </StudentList>
         </StudentsContent>

@@ -35,7 +35,7 @@ export const studentSignIn = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     if (!email || !password) {
-      handleValidationError("Please provide email and password", 400);
+      return res.status(400).json({ success: false, message: "Please provide email and password" });
     }
 
     const existingStudent = await Student.findOne({ email });
@@ -61,7 +61,7 @@ export const teacherSignIn = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     if (!email || !password) {
-      handleValidationError("Please provide email and password", 400);
+      return res.status(400).json({ success: false, message: "Please provide email and password" });
     }
 
     const existingTeacher = await Teacher.findOne({ email });
