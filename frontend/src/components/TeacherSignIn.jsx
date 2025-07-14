@@ -14,12 +14,16 @@ const TeacherSignIn = () => {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
+    console.log('Sign in attempt with:', { email, password });
 
     try {
+      console.log('Making API call to:', 'http://localhost:4000/api/v1/teachers/signin');
       const response = await axios.post(
         'http://localhost:4000/api/v1/teachers/signin',
         { email, password }
       );
+
+      console.log('API response:', response.data);
 
       if (response.data.success) {
         alert('Teacher signed in successfully!');

@@ -31,7 +31,7 @@ export const InputField = styled.input`
   border-radius: 4px;
 `;
 
-export const SubmitButton = styled(Link)`
+export const SubmitButton = styled.button`
   width: 100%;
   padding: 12px;
   margin-top: 20px;
