@@ -55,7 +55,7 @@ const Attendance = () => {
   const handleSubmit = async () => {
     try {
       // Send attendance data to the database
-      const formattedData = attendanceData.map(({ id, name, status }) => ({ studentId: id, name, status }));
+      const formattedData = attendanceData.map(({ id, status }) => ({ student: id, status }));
       const response = await axios.post('http://localhost:4000/api/v1/attendance', { attendanceData: formattedData });
       console.log('Attendance data submitted:', response.data);
     } catch (error) {

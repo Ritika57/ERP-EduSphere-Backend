@@ -5,8 +5,9 @@ export const markAttendance = async (req, res, next) => {
   const { attendanceData } = req.body;
   try {
     if (!attendanceData || !Array.isArray(attendanceData) || attendanceData.length === 0) {
-      handleValidationError("Attendance data is missing or invalid!", 400);
+      return next(handleValidationError("Attendance data is missing or invalid!", 400));
     }
+    console.log("Received attendanceData:", attendanceData);
     const attendanceRecords = await Promise.all(attendanceData.map(async (record) => {
       const { student, status } = record;
       return await Attendance.create({ student, status });

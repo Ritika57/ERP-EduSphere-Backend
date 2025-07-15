@@ -1,12 +1,9 @@
 import express from "express";
-import { createTeacher, getAllTeachers, teacherSignIn } from "../controllers/teacherController.js";
+import { addExam, getAllExams } from "../controllers/examController.js";
 
 const router = express.Router();
 
-router.post('/', createTeacher);
-router.get('/getall', getAllTeachers);
-
-// 👇 NEW
-router.post('/signin', teacherSignIn);
+router.post('/', addExam);
+router.get('/getall', getAllExams);
 
 export default router;
