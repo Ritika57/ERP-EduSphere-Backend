@@ -18,7 +18,8 @@ import {
   ActionButton,
 } from '../../styles/LibraryStyles';
 
-const Library = () => {
+const 
+Library = () => {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ const Library = () => {
 
   const addBook = async (book) => {
     try {
-      const response = await axios.post('http://localhost:4000/api/v1/library', {
+      const response = await axios.post('http://localhost:4000/api/v1/library/books', {
         bookname: book.title,
         author: book.author,
       });
