@@ -30,4 +30,31 @@ export const getAllBooks= async (req, res, next) => {
 }
 };
 
+export const pickBook = async (req, res) => {
+  const { bookId, studentId } = req.body;
+
+  // Example logic:
+  const book = await Book.findById(bookId);
+  if (!book) return res.status(404).json({ success: false, message: "Book not found" });
+
+  book.isBorrowed = true;
+  book.borrowedBy = studentId;
+  await book.save();
+
+  res.status(200).json({ success: true, message: "Book picked" });
+};
+
+export const returnBook = async (req, res) => {
+  const { bookId, studentId } = req.body;
+
+  const book = await Book.findById(bookId);
+  if (!book) return res.status(404).json({ success: false, message: "Book not found" });
+
+  book.isBorrowed = false;
+  book.borrowedBy = null;
+  await book.save();
+
+  res.status(200).json({ success: true, message: "Book returned" });
+};
+
 

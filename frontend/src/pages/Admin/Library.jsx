@@ -48,12 +48,31 @@ Library = () => {
   };
 
   const handleBookPick = async (bookId, studentId) => {
-    // Implement logic to record when a student picks a book
+    try {
+      await axios.post('http://localhost:4000/api/v1/library/pick', {
+        bookId,
+        studentId
+      });
+      fetchBooks(); // Refresh books
+      alert('Book picked!');
+    } catch (err) {
+      console.error(err);
+    }
   };
-
+  
   const handleBookReturn = async (bookId, studentId) => {
-    // Implement logic to mark when a student returns a book
+    try {
+      await axios.post('http://localhost:4000/api/v1/library/return', {
+        bookId,
+        studentId
+      });
+      fetchBooks(); // Refresh books
+      alert('Book returned!');
+    } catch (err) {
+      console.error(err);
+    }
   };
+  
 
   return (
     <LibraryContainer>
