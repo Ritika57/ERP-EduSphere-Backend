@@ -39,7 +39,7 @@ const EventCalendar = () => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:4000/api/v1/events', {
-        event: newEvent,
+        events: newEvent,
       });
       setEvents([...events, response.data.event]);
       setNewEvent('');

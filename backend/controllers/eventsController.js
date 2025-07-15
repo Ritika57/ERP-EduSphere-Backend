@@ -8,10 +8,11 @@ export const createEvents = async (req, res, next) => {
   if (!events ) {
     return next("Please Fill Form!", 400);
   }
-  await Events.create({ events });
+  const createdEvent = await Events.create({ events });
   res.status(200).json({
     success: true,
     message: "Event is Created!",
+    event: createdEvent,
   });    
   }  catch (err) {
     next(err);
