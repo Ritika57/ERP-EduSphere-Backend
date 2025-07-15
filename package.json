@@ -9,6 +9,8 @@
     "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\""
   },
   "dependencies": {
-    "bcryptjs": "^3.0.2"
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^17.2.0",
+    "jsonwebtoken": "^9.0.2"
   }
 }

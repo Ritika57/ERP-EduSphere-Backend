@@ -16,10 +16,12 @@ const AdminSignIn = () => {
 
 
       
-      if (response.status === 200) {
-        console.log('Login success:', response.data);
+      if (response.status === 200 && response.data.token && response.data.admin) {
+        // Store token and admin info in localStorage
+        localStorage.setItem('adminToken', response.data.token);
+        localStorage.setItem('adminInfo', JSON.stringify(response.data.admin));
 
-        // Redirect to dashboard if login works
+        // Redirect to dashboard
         window.location.href = '/admin/dashboard';
       } else {
         console.error('Sign-in failed');

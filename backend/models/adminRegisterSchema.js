@@ -15,6 +15,10 @@ const adminRegisterSchema = new mongoose.Schema({
     required: true,
     minlength: 6,
   },
+  name: { type: String },
+  phone: { type: String },
+  address: { type: String },
+  qualification: { type: String },
 });
 
 // ✅ Hash password before saving
