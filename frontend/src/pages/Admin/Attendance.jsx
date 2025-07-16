@@ -35,7 +35,7 @@ const Attendance = () => {
 
   const initializeAttendanceData = (students) => {
     const initialAttendanceData = students.map((student) => ({
-      id: student.id,
+      id: student._id, // Changed from student.id to student._id
       name: student.name,
       status: 'Present', // Default to 'Present'
     }));
@@ -71,14 +71,14 @@ const Attendance = () => {
           <AttendanceHeader>Attendance</AttendanceHeader>
           <AttendanceList>
             {students.map((student, index) => (
-              <React.Fragment key={student.id}>
+              <React.Fragment key={student._id}> {/* Changed from student.id to student._id */}
                 <AttendanceItem>
                   <StudentName>{student.name}</StudentName>
                   <CheckboxLabel>
                     <input
                       type="checkbox"
                       checked={attendanceData[index]?.status === 'Present'}
-                      onChange={() => handleStatusChange(student.id, 'Present')}
+                      onChange={() => handleStatusChange(student._id, 'Present')} // Changed from student.id to student._id
                     />
                     Present
                   </CheckboxLabel>
@@ -86,7 +86,7 @@ const Attendance = () => {
                     <input
                       type="checkbox"
                       checked={attendanceData[index]?.status === 'Absent'}
-                      onChange={() => handleStatusChange(student.id, 'Absent')}
+                      onChange={() => handleStatusChange(student._id, 'Absent')} // Changed from student.id to student._id
                     />
                     Absent
                   </CheckboxLabel>
@@ -94,7 +94,7 @@ const Attendance = () => {
                     <input
                       type="checkbox"
                       checked={attendanceData[index]?.status === 'Absent with apology'}
-                      onChange={() => handleStatusChange(student.id, 'Absent with apology')}
+                      onChange={() => handleStatusChange(student._id, 'Absent with apology')} // Changed from student.id to student._id
                     />
                     Absent with apology
                   </CheckboxLabel>
