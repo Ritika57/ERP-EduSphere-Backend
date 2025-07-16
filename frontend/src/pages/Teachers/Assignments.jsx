@@ -60,7 +60,7 @@ const AssignmentSection = () => {
               onChange={(e) => setNewAssignment({ ...newAssignment, grade: e.target.value })}
             />
             <AddAssignmentInput
-              type="text"
+              type="date"
               placeholder="Enter assignment deadline"
               value={newAssignment.deadline}
               onChange={(e) => setNewAssignment({ ...newAssignment, deadline: e.target.value })}

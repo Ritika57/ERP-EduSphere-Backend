@@ -14,6 +14,7 @@ import examRouter from "./router/examRouter.js";
 import attendanceRouter from "./router/attendanceRouter.js";
 import usersRouter from "./router/usersRouter.js"
 import adminRegisterRouter from "./router/adminRegisterRouter.js"
+import performanceRouter from "./router/performanceRouter.js";
 import  { errorHandler } from "./middlewares/errorHandler.js";
 
 
@@ -46,6 +47,7 @@ app.use("/api/v1/library", libraryRouter);
 app.use("/api/v1/events", eventsRouter);
 app.use("/api/v1/exam", examRouter);
 app.use("/api/v1/attendance", attendanceRouter);
+app.use("/api/v1/performance", performanceRouter);
 
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/register", adminRegisterRouter);

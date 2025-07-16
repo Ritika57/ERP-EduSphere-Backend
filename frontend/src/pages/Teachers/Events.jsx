@@ -8,13 +8,14 @@ from '../../styles/EventCalendarStyles';
 const EventSection = () => {
   const [events, setEvents] = useState([]);
   const [newEvent, setNewEvent] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
   const [error, setError] = useState(null);
 
   // Function to fetch events from the backend
   const fetchEvents = async () => {
     try {
       const response = await axios.get('http://localhost:4000/api/v1/events/getall');
-      setEvents(response.data.events || []);
+      setEvents(response.data.event || []);
     } catch (error) {
       console.error('Error fetching events:', error);
       setError('Error fetching events');
@@ -28,12 +29,19 @@ const EventSection = () => {
   // Function to add a new event
   const addEvent = async (e) => {
     e.preventDefault();
+    if (!selectedDate) {
+      setError('Please select a date for the event.');
+      return;
+    }
     try {
       const response = await axios.post('http://localhost:4000/api/v1/events', {
-        event: newEvent,
+        events: newEvent,
+        date: selectedDate,
       });
       setEvents([...events, response.data.event]);
       setNewEvent('');
+      setSelectedDate('');
+      setError(null);
     } catch (error) {
       console.error('Error adding event:', error);
       if (error.response && error.response.data && error.response.data.error) {
@@ -51,9 +59,18 @@ const EventSection = () => {
         <h1>Events & Calendar</h1>
         <div>Current Time: {new Date().toLocaleString()}</div>
         <CalendarContainer>
-          {/* Display Calendar Here */}
-          {/* For example: <Calendar /> */}
-          Calendar
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={e => setSelectedDate(e.target.value)}
+              style={{ marginLeft: 4 }}
+            />
+            <span style={{ marginLeft: 8 }}>Calendar</span>
+          </div>
+          {selectedDate && (
+            <div style={{ marginTop: 8 }}>Selected Date: {selectedDate}</div>
+          )}
         </CalendarContainer>
         <AddEventForm onSubmit={addEvent}>
           <h2>Add New Event</h2>
@@ -69,7 +86,12 @@ const EventSection = () => {
         <Events>
           <h2>Events</h2>
           {events.map((event, index) => (
-            <Event key={index}>{event}</Event>
+            <Event key={index}>
+              <div><strong>{event.events}</strong></div>
+              <div style={{ fontSize: '0.9em', color: '#666' }}>
+                {event.date ? new Date(event.date).toLocaleDateString() : 'No date'}
+              </div>
+            </Event>
           ))}
         </Events>
       </Content>

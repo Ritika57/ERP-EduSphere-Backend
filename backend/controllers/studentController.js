@@ -1,4 +1,4 @@
-import { Student } from "../models/studentSchema.js";
+import Student from "../models/studentSchema.js";
 import { Student as StudentUser } from "../models/usersSchema.js";
 import { handleValidationError } from "../middlewares/errorHandler.js";
 
@@ -36,6 +36,15 @@ export const getAllStudents = async (req, res, next) => {
 } catch (err) {
   next(err);
 }
+};
+
+export const getStudentCount = async (req, res, next) => {
+  try {
+    const count = await Student.countDocuments();
+    res.status(200).json({ count });
+  } catch (err) {
+    next(err);
+  }
 };
 
 

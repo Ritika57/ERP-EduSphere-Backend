@@ -3,12 +3,12 @@ import { handleValidationError } from "../middlewares/errorHandler.js";
 
 export const createEvents = async (req, res, next) => {
   console.log(req.body);
-  const { events } = req.body;
+  const { events, date } = req.body;
   try {
-  if (!events ) {
-    return next("Please Fill Form!", 400);
-  }
-  const createdEvent = await Events.create({ events });
+    if (!events || !date) {
+      return next("Please Fill Form!", 400);
+    }
+    const createdEvent = await Events.create({ events, date });
   res.status(200).json({
     success: true,
     message: "Event is Created!",

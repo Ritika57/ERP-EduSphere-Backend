@@ -25,9 +25,12 @@ const TeacherSignIn = () => {
 
       console.log('API response:', response.data);
 
-      if (response.data.success) {
+      if (response.data.success && response.data.token) {
+        localStorage.setItem('teacherToken', response.data.token);
         alert('Teacher signed in successfully!');
         window.location.href = '/teacher/dashboard';
+      } else {
+        alert('Sign in failed: No token received.');
       }
     } catch (error) {
       console.error('Error during teacher sign-in:', error);

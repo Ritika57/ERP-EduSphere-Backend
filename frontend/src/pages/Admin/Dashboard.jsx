@@ -23,17 +23,19 @@ const AdminDashboard = () => {
   const [events, setEvents] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
   const [studentPerformance, setStudentPerformance] = useState([]);
+  const [counts, setCounts] = useState({ students: 0, teachers: 0, classes: 0 });
 
   useEffect(() => {
     fetchEvents();
     fetchAnnouncements();
     fetchStudentPerformance();
+    fetchCounts();
   }, []);
 
   const fetchEvents = async () => {
     try {
       const response = await axios.get('http://localhost:4000/api/v1/events/getall');
-      setEvents(response.data.events || []);
+      setEvents(response.data.event || []);
     } catch (error) {
       console.error('Error fetching events:', error);
     }
@@ -57,6 +59,23 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchCounts = async () => {
+    try {
+      const [studentsRes, teachersRes, classesRes] = await Promise.all([
+        axios.get('http://localhost:4000/api/v1/students/count'),
+        axios.get('http://localhost:4000/api/v1/teachers/count'),
+        axios.get('http://localhost:4000/api/v1/class/count'),
+      ]);
+      setCounts({
+        students: studentsRes.data.count,
+        teachers: teachersRes.data.count,
+        classes: classesRes.data.count,
+      });
+    } catch (error) {
+      console.error('Error fetching counts:', error);
+    }
+  };
+
   return (
     <AdminDashboardContainer>
       <Sidebar />
@@ -67,15 +86,15 @@ const AdminDashboard = () => {
             <CardContainer>
               <Card>
                 <CardTitle>Total Students</CardTitle>
-                <CardContent>500</CardContent>
+                <CardContent>{counts.students}</CardContent>
               </Card>
               <Card>
                 <CardTitle>Total Teachers</CardTitle>
-                <CardContent>50</CardContent>
+                <CardContent>{counts.teachers}</CardContent>
               </Card>
               <Card>
                 <CardTitle>Total Classes</CardTitle>
-                <CardContent>50</CardContent>
+                <CardContent>{counts.classes}</CardContent>
               </Card>
             </CardContainer>
           </Section>

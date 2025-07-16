@@ -25,7 +25,7 @@ const CheckAttendanceSection = () => {
 
   const initializeAttendanceData = (students) => {
     const initialAttendanceData = students.map((student) => ({
-      id: student.id,
+      id: student._id,
       name: student.name,
       status: 'Present', // Default to 'Present'
     }));
@@ -45,7 +45,7 @@ const CheckAttendanceSection = () => {
   const handleSubmit = async () => {
     try {
       // Send attendance data to the database
-      const formattedData = attendanceData.map(({ id, name, status }) => ({ studentId: id, name, status }));
+      const formattedData = attendanceData.map(({ id, status }) => ({ student: id, status }));
       const response = await axios.post('http://localhost:4000/api/v1/attendance', { attendanceData: formattedData });
       console.log('Attendance data submitted:', response.data);
     } catch (error) {
@@ -61,14 +61,14 @@ const CheckAttendanceSection = () => {
           <AttendanceHeader>Attendance</AttendanceHeader>
           <AttendanceList>
             {students.map((student, index) => (
-              <React.Fragment key={student.id}>
+              <React.Fragment key={student._id}>
                 <AttendanceItem>
                   <StudentName>{student.name}</StudentName>
                   <CheckboxLabel>
                     <input
                       type="checkbox"
                       checked={attendanceData[index]?.status === 'Present'}
-                      onChange={() => handleStatusChange(student.id, 'Present')}
+                      onChange={() => handleStatusChange(student._id, 'Present')}
                     />
                     Present
                   </CheckboxLabel>
@@ -76,7 +76,7 @@ const CheckAttendanceSection = () => {
                     <input
                       type="checkbox"
                       checked={attendanceData[index]?.status === 'Absent'}
-                      onChange={() => handleStatusChange(student.id, 'Absent')}
+                      onChange={() => handleStatusChange(student._id, 'Absent')}
                     />
                     Absent
                   </CheckboxLabel>
@@ -84,7 +84,7 @@ const CheckAttendanceSection = () => {
                     <input
                       type="checkbox"
                       checked={attendanceData[index]?.status === 'Absent with apology'}
-                      onChange={() => handleStatusChange(student.id, 'Absent with apology')}
+                      onChange={() => handleStatusChange(student._id, 'Absent with apology')}
                     />
                     Absent with apology
                   </CheckboxLabel>

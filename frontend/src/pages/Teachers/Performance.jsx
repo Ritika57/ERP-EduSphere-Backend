@@ -1,38 +1,51 @@
 // CheckPerformanceSection.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import { PerformanceContainer, Content, PerformanceContent, PerformanceHeader, SchoolPerformance, IndividualPerformance } 
 from '../../styles/PerformanceStyles'; 
+import AddPerformanceForm from '../../components/AddPerformanceForm';
 
 const CheckPerformanceSection = () => {
-  // Sample data for school performance
-  const schoolPerformanceData = {
-    averageScore: 85,
-    totalStudents: 100,
+  const [performanceData, setPerformanceData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchPerformance = () => {
+    setLoading(true);
+    fetch('/api/v1/performance')
+      .then(res => res.json())
+      .then(data => {
+        setPerformanceData(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   };
 
-  // Sample data for individual student performance
-  const individualPerformanceData = [
-    { id: 1, name: 'John Doe', score: 90 },
-    { id: 2, name: 'Jane Smith', score: 85 },
-    { id: 3, name: 'Michael Johnson', score: 92 },
-  ];
+  useEffect(() => {
+    fetchPerformance();
+  }, []);
+
+  // Calculate school performance
+  const totalStudents = performanceData.length;
+  const averageScore = totalStudents > 0 ? (performanceData.reduce((sum, p) => sum + p.score, 0) / totalStudents).toFixed(2) : 0;
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <PerformanceContainer>
       <Sidebar />
       <Content>
+        <AddPerformanceForm onSuccess={fetchPerformance} />
         <PerformanceContent>
           <PerformanceHeader>School Performance</PerformanceHeader>
           <SchoolPerformance>
-            <p>Average Score: {schoolPerformanceData.averageScore}</p>
-            <p>Total Students: {schoolPerformanceData.totalStudents}</p>
+            <p>Average Score: {averageScore}</p>
+            <p>Total Students: {totalStudents}</p>
           </SchoolPerformance>
           <PerformanceHeader>Individual Performance</PerformanceHeader>
           <IndividualPerformance>
-            {individualPerformanceData.map((student) => (
-              <p key={student.id}>
-                {student.name}: {student.score}
+            {performanceData.map((record) => (
+              <p key={record._id}>
+                {record.student?.name || record.student}: {record.score} {record.subject && `(${record.subject})`}
               </p>
             ))}
           </IndividualPerformance>

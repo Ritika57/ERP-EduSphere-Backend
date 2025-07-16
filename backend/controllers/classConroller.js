@@ -29,4 +29,13 @@ export const getAllClasses = async (req, res, next) => {
     next(err);
   }
 };
+
+export const getClassCount = async (req, res, next) => {
+  try {
+    const count = await Class.countDocuments();
+    res.status(200).json({ count });
+  } catch (err) {
+    next(err);
+  }
+};
  

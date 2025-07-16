@@ -18,8 +18,8 @@ const CheckExamSection = () => {
 
   const fetchExams = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/v1/exam');
-      setExamData(response.data);
+      const response = await axios.get('http://localhost:4000/api/v1/exam/getall');
+      setExamData(response.data.exams);
     } catch (error) {
       console.error('Error fetching exams:', error);
     }

@@ -1,5 +1,8 @@
-import { Teacher } from "../models/teacherSchema.js";
+import Teacher from "../models/teacherSchema.js";
 import { handleValidationError } from "../middlewares/errorHandler.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 // 👇 UPDATED: takes password too
 export const createTeacher = async (req, res, next) => {
@@ -57,9 +60,105 @@ export const teacherSignIn = async (req, res, next) => {
       return res.status(401).json({ success: false, message: "Invalid email or password" });
     }
 
+    // Generate JWT token
+    const token = jwt.sign(
+      { id: existingTeacher._id, email: existingTeacher.email },
+      process.env.SECRET_KEY,
+      { expiresIn: "7d" }
+    );
+
     res.status(200).json({
       success: true,
-      message: "Teacher signed in successfully"
+      message: "Teacher signed in successfully",
+      token,
+      teacher: {
+        id: existingTeacher._id,
+        email: existingTeacher.email,
+        name: existingTeacher.name || '',
+        phone: existingTeacher.phone || '',
+        address: existingTeacher.address || '',
+        qualification: existingTeacher.qualification || '',
+        subject: existingTeacher.subject || ''
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getTeacherCount = async (req, res, next) => {
+  try {
+    const count = await Teacher.countDocuments();
+    res.status(200).json({ count });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Middleware to get teacher from JWT
+export const getTeacherFromToken = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ success: false, message: "No token provided" });
+  }
+  const token = authHeader.split(" ")[1];
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    req.teacher = await Teacher.findById(decoded.id);
+    if (!req.teacher) {
+      return res.status(401).json({ success: false, message: "Teacher not found" });
+    }
+    next();
+  } catch (err) {
+    return res.status(401).json({ success: false, message: "Invalid token" });
+  }
+};
+
+// GET /api/v1/teacher/profile
+export const getTeacherProfile = async (req, res, next) => {
+  try {
+    const teacher = req.teacher;
+    res.status(200).json({
+      success: true,
+      teacher: {
+        id: teacher._id,
+        email: teacher.email,
+        name: teacher.name || '',
+        phone: teacher.phone || '',
+        address: teacher.address || '',
+        qualification: teacher.qualification || '',
+        subject: teacher.subject || ''
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// PUT /api/v1/teacher/profile
+export const updateTeacherProfile = async (req, res, next) => {
+  try {
+    const teacher = req.teacher;
+    const { email, password, name, phone, address, qualification, subject } = req.body;
+    if (email) teacher.email = email;
+    if (password) teacher.password = password;
+    if (name !== undefined) teacher.name = name;
+    if (phone !== undefined) teacher.phone = phone;
+    if (address !== undefined) teacher.address = address;
+    if (qualification !== undefined) teacher.qualification = qualification;
+    if (subject !== undefined) teacher.subject = subject;
+    await teacher.save();
+    res.status(200).json({
+      success: true,
+      teacher: {
+        id: teacher._id,
+        email: teacher.email,
+        name: teacher.name || '',
+        phone: teacher.phone || '',
+        address: teacher.address || '',
+        qualification: teacher.qualification || '',
+        subject: teacher.subject || ''
+      }
     });
   } catch (err) {
     next(err);
