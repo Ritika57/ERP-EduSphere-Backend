@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AdminRegisterContainer, FormContainer, InputField, SubmitButton } from '../styles/AdminRegisterStyles';
+import { AdminRegisterContainer, FormCard, Title, FormContainer, InputField, SubmitButton } from '../styles/AdminRegisterStyles';
 import { useFlashMessage } from '../context/FlashMessageContext';
 import axios from 'axios'; // Import axios
 
@@ -53,27 +53,28 @@ const AdminRegister = () => {
 
   return (
     <AdminRegisterContainer>
-      <h2>Admin Register</h2>
-      <FormContainer>
-        <InputField
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <InputField
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <SubmitButton onClick={(e) => handleRegister(e)} disabled={isLoading}>
-          {isLoading ? 'Registering...' : 'Register'}
-        </SubmitButton>
-
-      </FormContainer>
+      <FormCard>
+        <Title>Admin Register</Title>
+        <FormContainer>
+          <InputField
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <InputField
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <SubmitButton onClick={(e) => handleRegister(e)} disabled={isLoading}>
+            {isLoading ? 'Registering...' : 'Register'}
+          </SubmitButton>
+        </FormContainer>
+      </FormCard>
     </AdminRegisterContainer>
   );
 };
