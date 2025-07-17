@@ -4,6 +4,10 @@ import axios from 'axios';
 import Sidebar from './Sidebar';
 import { StudentDashboardContainer, Content, Section, SectionTitle, CardContainer, Card, CardTitle, CardContent } 
 from '../../styles/DashboardStyles';
+import { FaUserGraduate, FaChartLine, FaCalendarAlt, FaCheckCircle, FaBullhorn } from 'react-icons/fa';
+import { ActivityPanel, ActivityItem } from '../../styles/DashboardStyles';
+import { useTheme } from '../../App';
+import { OverviewPanel } from '../../styles/DashboardStyles';
 
 const StudentDashboard = () => {
   const [assignmentCount, setAssignmentCount] = useState(0);
@@ -11,6 +15,7 @@ const StudentDashboard = () => {
   const [term, setTerm] = useState('-');
   const [recentActivities, setRecentActivities] = useState([]);
   const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const theme = useTheme()?.theme || {};
 
   // Assume studentId is stored in localStorage after login
   const studentId = localStorage.getItem('studentId');
@@ -66,47 +71,80 @@ const StudentDashboard = () => {
     <StudentDashboardContainer>
       <Sidebar />
       <Content>
-        <Section>
+        <OverviewPanel style={{ marginBottom: 32 }}>
           <SectionTitle>Overview</SectionTitle>
           <CardContainer>
             <Card>
-              <CardTitle>Assignments</CardTitle>
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
+                <FaUserGraduate size={28} color={theme.primary || '#2563eb'} style={{ marginRight: 12 }} />
+                <CardTitle>Assignments</CardTitle>
+              </div>
               <CardContent>{assignmentCount}</CardContent>
             </Card>
             <Card>
-              <CardTitle>Performance</CardTitle>
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
+                <FaChartLine size={28} color={theme.primary || '#2563eb'} style={{ marginRight: 12 }} />
+                <CardTitle>Performance</CardTitle>
+              </div>
               <CardContent>{performanceScore}</CardContent>
             </Card>
             <Card>
-              <CardTitle>Term</CardTitle>
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
+                <FaCalendarAlt size={28} color={theme.primary || '#2563eb'} style={{ marginRight: 12 }} />
+                <CardTitle>Term</CardTitle>
+              </div>
               <CardContent>{term}</CardContent>
             </Card>
           </CardContainer>
-        </Section>
+        </OverviewPanel>
 
-        <Section>
+        <OverviewPanel style={{ marginBottom: 32 }}>
           <SectionTitle>Recent Activity</SectionTitle>
-          <ul>
-            {recentActivities.length === 0 && <li>No recent activities.</li>}
-            {recentActivities.map((activity, idx) => (
-              <li key={idx}>
-                [{activity.type}] {activity.title} {activity.score ? `(Score: ${activity.score})` : ''} {activity.date ? `(${new Date(activity.date).toLocaleDateString()})` : ''}
-              </li>
-            ))}
-          </ul>
-        </Section>
+          <ActivityPanel>
+            {recentActivities.length === 0 && <ActivityItem>No recent activities.</ActivityItem>}
+            {recentActivities.map((activity, idx) => {
+              let icon = <FaCheckCircle color={theme.primary || '#2563eb'} size={20} />;
+              if (activity.type === 'Assignment') icon = <FaUserGraduate color={theme.primary || '#2563eb'} size={20} />;
+              if (activity.type === 'Performance') icon = <FaChartLine color={theme.primary || '#2563eb'} size={20} />;
+              if (activity.type === 'Event') icon = <FaBullhorn color={theme.primary || '#2563eb'} size={20} />;
+              let label = `[${activity.type}]`;
+              if (activity.type === 'Assignment') {
+                label += ` ${activity.title}`;
+              } else if (activity.type === 'Performance') {
+                label += ` ${activity.title}`;
+              } else if (activity.type === 'Event') {
+                label += ` ${activity.title}`;
+              }
+              return (
+                <ActivityItem key={idx} style={{ animation: 'fadeIn 0.5s', animationDelay: `${idx * 0.05}s`, animationFillMode: 'backwards' }}>
+                  {icon}
+                  <span style={{ flex: 1 }}>
+                    <b>{label}</b> {activity.score ? <span style={{ color: theme.accent, fontWeight: 600 }}>(Score: {activity.score})</span> : ''}
+                  </span>
+                  <span style={{ fontSize: '0.95em', color: theme.text, opacity: 0.7 }}>
+                    {activity.date ? new Date(activity.date).toLocaleDateString() : ''}
+                  </span>
+                </ActivityItem>
+              );
+            })}
+          </ActivityPanel>
+        </OverviewPanel>
 
-        <Section>
+        <OverviewPanel>
           <SectionTitle>Upcoming Events</SectionTitle>
-          <ul>
-            {upcomingEvents.length === 0 && <li>No upcoming events.</li>}
+          <ActivityPanel>
+            {upcomingEvents.length === 0 && <ActivityItem>No upcoming events.</ActivityItem>}
             {upcomingEvents.map((event, idx) => (
-              <li key={idx}>
-                {event.events} ({event.date ? new Date(event.date).toLocaleDateString() : 'No date'})
-              </li>
+              <ActivityItem key={idx} style={{ animation: 'fadeIn 0.5s', animationDelay: `${idx * 0.05}s`, animationFillMode: 'backwards' }}>
+                <FaCalendarAlt color={theme.primary || '#2563eb'} size={20} />
+                <span style={{ flex: 1 }}><b>{event.events}</b></span>
+                <span style={{ fontSize: '0.95em', color: theme.text, opacity: 0.7 }}>
+                  {event.date ? new Date(event.date).toLocaleDateString() : 'No date'}
+                </span>
+              </ActivityItem>
             ))}
-          </ul>
-        </Section>
+          </ActivityPanel>
+        </OverviewPanel>
 
         {/* Add more sections for other parts of the admin dashboard */}
       </Content>

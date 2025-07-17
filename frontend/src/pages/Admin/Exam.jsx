@@ -69,9 +69,7 @@ const Exam = () => {
 
   return (
     <ExamContainer>
-      <SidebarContainer>
-        <Sidebar />
-      </SidebarContainer>
+      <Sidebar />
       <Content>
         <ExamHeader>Exam Details</ExamHeader>
         <ExamForm onSubmit={handleAddExam}>

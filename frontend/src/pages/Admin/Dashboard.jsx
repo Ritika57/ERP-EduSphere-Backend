@@ -16,7 +16,12 @@ import {
   Card,
   CardTitle,
   CardContent,
+  TopPanel,
+  OverviewPanel,
+  EventPanel,
 } from '../../styles/DashboardStyles';
+import { FaUserGraduate, FaChalkboardTeacher, FaSchool } from 'react-icons/fa';
+import { useTheme } from '../../App';
 
 const AdminDashboard = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -24,6 +29,7 @@ const AdminDashboard = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [studentPerformance, setStudentPerformance] = useState([]);
   const [counts, setCounts] = useState({ students: 0, teachers: 0, classes: 0 });
+  const theme = useTheme()?.theme || {};
 
   useEffect(() => {
     fetchEvents();
@@ -80,33 +86,48 @@ const AdminDashboard = () => {
     <AdminDashboardContainer>
       <Sidebar />
       <Content isOpen={isOpen}>
-        <TopContent>
-          <Section>
+        <TopPanel>
+          <OverviewPanel>
             <SectionTitle>Overview</SectionTitle>
             <CardContainer>
               <Card>
-                <CardTitle>Total Students</CardTitle>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
+                  <FaUserGraduate size={28} color={theme.primary || '#2563eb'} style={{ marginRight: 12 }} />
+                  <CardTitle>Total Students</CardTitle>
+                </div>
                 <CardContent>{counts.students}</CardContent>
               </Card>
               <Card>
-                <CardTitle>Total Teachers</CardTitle>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
+                  <FaChalkboardTeacher size={28} color={theme.primary || '#2563eb'} style={{ marginRight: 12 }} />
+                  <CardTitle>Total Teachers</CardTitle>
+                </div>
                 <CardContent>{counts.teachers}</CardContent>
               </Card>
               <Card>
-                <CardTitle>Total Classes</CardTitle>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
+                  <FaSchool size={28} color={theme.primary || '#2563eb'} style={{ marginRight: 12 }} />
+                  <CardTitle>Total Classes</CardTitle>
+                </div>
                 <CardContent>{counts.classes}</CardContent>
               </Card>
             </CardContainer>
-          </Section>
-
-          <Section>
+          </OverviewPanel>
+          <EventPanel>
+            <SectionTitle>Events</SectionTitle>
             <EventCalendar events={events} />
-          </Section>
-        </TopContent>
+          </EventPanel>
+        </TopPanel>
 
         <BottomContent>
-          <Performance studentPerformance={studentPerformance} />
-          <Announcement announcements={announcements} />
+          <OverviewPanel style={{ flex: 1, marginRight: 18 }}>
+            <SectionTitle>Performance</SectionTitle>
+            <Performance studentPerformance={studentPerformance} />
+          </OverviewPanel>
+          <OverviewPanel style={{ flex: 1, marginLeft: 18 }}>
+            <SectionTitle>Announcements</SectionTitle>
+            <Announcement announcements={announcements} />
+          </OverviewPanel>
         </BottomContent>
       </Content>
     </AdminDashboardContainer>

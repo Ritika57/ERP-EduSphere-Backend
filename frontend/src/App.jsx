@@ -41,20 +41,40 @@ import CheckExamSection from '../src/pages/Teachers/Exams';
 
 // Theme setup
 const lightTheme = {
-  background: '#f5f5f5',
-  text: '#222',
+  background: '#f3f4f8', // slightly darker for contrast
   card: '#fff',
-  primary: '#007bff',
-  sidebar: '#2c3e50',
+  text: '#222',
+  primary: '#2563eb', // blue
+  accent: '#10b981', // green
+  border: '#e5e7eb',
+  sidebar: '#23272f',
   sidebarText: '#fff',
+  sidebarActive: '#2563eb',
+  buttonBg: '#2563eb',
+  buttonText: '#fff',
+  buttonHover: '#1d4ed8',
+  inputBg: '#f3f4f6',
+  inputBorder: '#e5e7eb',
+  shadow: '0 2px 8px rgba(0,0,0,0.04)',
+  transition: 'all 0.2s cubic-bezier(.4,0,.2,1)',
 };
 const darkTheme = {
   background: '#18191a',
-  text: '#f5f5f5',
-  card: '#242526',
-  primary: '#007bff',
+  card: '#23272f',
+  text: '#f5f6fa',
+  primary: '#2563eb',
+  accent: '#10b981',
+  border: '#23272f',
   sidebar: '#18191a',
   sidebarText: '#fff',
+  sidebarActive: '#2563eb',
+  buttonBg: '#2563eb',
+  buttonText: '#fff',
+  buttonHover: '#1d4ed8',
+  inputBg: '#23272f',
+  inputBorder: '#23272f',
+  shadow: '0 2px 8px rgba(0,0,0,0.16)',
+  transition: 'all 0.2s cubic-bezier(.4,0,.2,1)',
 };
 
 const GlobalStyle = createGlobalStyle`
@@ -62,6 +82,10 @@ const GlobalStyle = createGlobalStyle`
     background: ${({ theme }) => theme.background};
     color: ${({ theme }) => theme.text};
     transition: background 0.3s, color 0.3s;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
   }
 `;
 
