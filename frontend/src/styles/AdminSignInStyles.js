@@ -31,22 +31,21 @@ export const InputField = styled.input`
   border-radius: 4px;
 `;
 
-export const SubmitButton = styled(Link)`
+export const SubmitButton = styled.button`
   width: 100%;
   padding: 12px;
   margin-top: 20px;
   border: none;
   border-radius: 8px;
-  background-color: #FF4500;
+  background-color: ${props => props.disabled ? '#ccc' : '#FF4500'};
   color: white;
   font-size: 18px;
-  text-decoration: none;
   text-align: center;
-  cursor: pointer;
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #FF6347;
+    background-color: ${props => props.disabled ? '#ccc' : '#FF6347'};
   }
   
   @media screen and (max-width: 768px) {
