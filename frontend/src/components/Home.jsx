@@ -1,6 +1,6 @@
 // Home.js
 import React from 'react';
-import { Navbar, Logo, NavigationLinks, NavLink, ButtonsContainer, LoginButton, GuestButton, HomeContainer, SchoolInfo, SchoolImage, Title, LoremTextContainer, AdminRegisterLink } 
+import { Navbar, Logo, NavigationLinks, NavLink, ButtonsContainer, LoginButton, GuestButton, HomeContainer, SchoolInfo, SchoolImage, Title, LoremTextContainer, AdminRegisterLink, ThemeToggleButton, HeroDivider } 
 from '../styles/styles'
 import { LoremIpsum } from 'lorem-ipsum';
 import bg from "../assets/bg.png";
@@ -28,30 +28,13 @@ const Home = () => {
           <NavLink href="#">Products</NavLink>
           <NavLink href="#">Contact Us</NavLink>
         </NavigationLinks>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <ButtonsContainer>
-            <LoginButton onClick={handleLoginClick}>Sign In</LoginButton>
-            <GuestButton onClick={handleLoginClick}>Guest Mode</GuestButton>
-          </ButtonsContainer>
-          <button
-            onClick={toggleTheme}
-            style={{
-              background: 'none',
-              border: '1px solid #ccc',
-              borderRadius: '20px',
-              padding: '6px 18px',
-              fontSize: '1rem',
-              cursor: 'pointer',
-              color: themeMode === 'dark' ? '#fff' : '#222',
-              backgroundColor: themeMode === 'dark' ? '#222' : '#fff',
-              transition: 'all 0.2s',
-              marginLeft: '12px',
-            }}
-            aria-label="Toggle theme"
-          >
-            {themeMode === 'dark' ? '🌙 Dark' : '☀️ Light'}
-          </button>
-        </div>
+        <ButtonsContainer>
+          <LoginButton onClick={handleLoginClick}>Sign In</LoginButton>
+          <GuestButton onClick={handleLoginClick}>Guest Mode</GuestButton>
+          <ThemeToggleButton themeMode={themeMode} onClick={toggleTheme} aria-label="Toggle theme">
+            {themeMode === 'dark' ? '🌙' : '☀️'}
+          </ThemeToggleButton>
+        </ButtonsContainer>
       </Navbar>
       <HomeContainer>
         <SchoolInfo>
@@ -61,6 +44,7 @@ const Home = () => {
           </LoremTextContainer>
           <AdminRegisterLink to="/admin/register">Admin Register</AdminRegisterLink>
         </SchoolInfo>
+        <HeroDivider />
         <SchoolImage src={bg} alt="pupils" />
       </HomeContainer>
     </>
