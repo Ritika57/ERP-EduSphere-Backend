@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import { Bar } from 'react-chartjs-2'; 
 import {
@@ -11,19 +11,51 @@ import {
   ExamResult,
   ExamChartContainer,
 } from '../../styles/ExamStyles'; 
+import 'chart.js/auto';
+import axios from 'axios';
 
 const ExamSection = () => {
+  console.log('ExamSection component loaded');
   const chartRef = useRef(null);
+  const [examResults, setExamResults] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Sample exam results data
-  const examResultsData = {
-    subjects: ['Math', 'Science', 'English', 'History'],
-    results: [80, 75, 90, 85] // Sample results out of 100
-  };
+  useEffect(() => {
+    console.log('useEffect running');
+    const fetchExams = async () => {
+      setLoading(true);
+      try {
+        const studentInfo = JSON.parse(localStorage.getItem('studentInfo'));
+        console.log('Student info:', studentInfo);
+        if (!studentInfo || !studentInfo.email) {
+          console.log('No studentInfo or email');
+          setExamResults([]);
+          setLoading(false);
+          return;
+        }
+        const response = await axios.get('/api/v1/exam/getall');
+        console.log('Fetched exams:', response.data.exams);
+        const allExams = response.data.exams || [];
+        const studentExams = allExams.filter(
+          exam => exam.email && exam.email.trim().toLowerCase() === studentInfo.email.trim().toLowerCase()
+        );
+        console.log('Filtered exams:', studentExams);
+        setExamResults(studentExams);
+      } catch (error) {
+        console.error('Error in fetchExams:', error);
+        setExamResults([]);
+      }
+      setLoading(false);
+    };
+    fetchExams();
+  }, []);
 
-  // Bar chart data
+  // Prepare data for chart
+  const subjects = examResults.map(exam => exam.name);
+  const results = examResults.map(exam => exam.marks);
+
   const barChartData = {
-    labels: examResultsData.subjects,
+    labels: subjects,
     datasets: [
       {
         label: 'Exam Results',
@@ -32,12 +64,11 @@ const ExamSection = () => {
         borderWidth: 1,
         hoverBackgroundColor: '#0056b3',
         hoverBorderColor: '#0056b3',
-        data: examResultsData.results
+        data: results
       }
     ]
   };
 
-  // Chart options
   const chartOptions = {
     scales: {
       y: {
@@ -56,19 +87,27 @@ const ExamSection = () => {
       <Content>
         <ExamHeader>Exam Results</ExamHeader>
         <ExamResultsContainer>
-          {examResultsData.subjects.map((subject, index) => (
-            <div key={index}>
-              <ExamSubject>{subject}</ExamSubject>
-              <ExamResult>Score: {examResultsData.results[index]}%</ExamResult>
-            </div>
-          ))}
-          <ExamChartContainer>
-            <Bar
-              ref={chartRef}
-              data={barChartData}
-              options={chartOptions}
-            />
-          </ExamChartContainer>
+          {loading ? (
+            <div>Loading...</div>
+          ) : examResults.length === 0 ? (
+            <div>No exam results found.</div>
+          ) : (
+            <>
+              {examResults.map((exam, index) => (
+                <div key={index}>
+                  <ExamSubject>{exam.name}</ExamSubject>
+                  <ExamResult>Score: {exam.marks}%</ExamResult>
+                </div>
+              ))}
+              <ExamChartContainer>
+                <Bar
+                  ref={chartRef}
+                  data={barChartData}
+                  options={chartOptions}
+                />
+              </ExamChartContainer>
+            </>
+          )}
         </ExamResultsContainer>
       </Content>
     </ExamContainer>

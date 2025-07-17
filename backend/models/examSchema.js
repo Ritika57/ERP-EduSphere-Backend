@@ -16,6 +16,10 @@ const examSchema = new mongoose.Schema({
   marks: {
     type: Number,
     required: true
+  },
+  email: {                // <-- Add this block
+    type: String,
+    required: false
   }
 });
 

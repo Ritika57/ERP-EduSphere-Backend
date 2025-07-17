@@ -18,7 +18,8 @@ const StudentSignIn = () => {
         password
       });
       
-      if (response.data.success) {
+      if (response.data.success && response.data.student) {
+        localStorage.setItem('studentInfo', JSON.stringify(response.data.student));
         navigate('/student/dashboard');
       }
     } catch (error) {

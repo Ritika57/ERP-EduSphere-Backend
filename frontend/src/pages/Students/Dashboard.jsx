@@ -17,7 +17,7 @@ const StudentDashboard = () => {
 
   useEffect(() => {
     // Fetch assignments for this student
-    axios.get('http://localhost:4000/api/v1/assignments')
+    axios.get('http://localhost:4000/api/v1/assignments/getall')
       .then(res => {
         // If assignments are filtered by student, filter here
         const assignments = res.data.assignments || [];

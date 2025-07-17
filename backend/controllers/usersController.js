@@ -136,6 +136,13 @@ export const studentSignIn = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Student signed in successfully",
+      student: {
+        id: existingStudent._id,
+        email: existingStudent.email,
+        registrationNumber: existingStudent.registrationNumber,
+        name: existingStudent.name,
+        grade: existingStudent.grade
+      }
     });
   } catch (err) {
     next(err);

@@ -19,6 +19,7 @@ const Exam = () => {
   const [registrationNumber, setRegistrationNumber] = useState('');
   const [className, setClassName] = useState('');
   const [marks, setMarks] = useState('');
+  const [email, setEmail] = useState('');
 
   useEffect(() => {
     fetchExams();
@@ -27,30 +28,31 @@ const Exam = () => {
   const fetchExams = async () => {
     try {
       const response = await axios.get('http://localhost:4000/api/v1/exam/getall');
-      if (Array.isArray(response.data)) {
-        setExamData(response.data);
+      if (Array.isArray(response.data.exams)) {
+        setExamData(response.data.exams);
       } else {
-        setExamData([response.data]); // Wrap non-array response in an array
+        setExamData([]);
       }
     } catch (error) {
       console.error('Error fetching exams:', error);
+      setExamData([]);
     }
   };
 
   const handleAddExam = async (e) => {
     e.preventDefault();
-    const newExam = { name, registrationNumber, className, marks: parseInt(marks) };
+    const newExam = { name, registrationNumber, className, marks: parseInt(marks), email };
     try {
       const response = await axios.post('http://localhost:4000/api/v1/exam', newExam);
-      // Ensure response data is always an object
-      if (typeof response.data === 'object') {
-        setExamData([...examData, response.data]);
+      if (response.data && response.data.exam) {
+        setExamData([...examData, response.data.exam]);
         setName('');
         setRegistrationNumber('');
         setClassName('');
         setMarks('');
+        setEmail('');
       } else {
-        console.error('Error: API response data is not an object');
+        console.error('Error: API response does not contain exam');
       }
     } catch (error) {
       console.error('Error adding exam:', error);
@@ -101,6 +103,13 @@ const Exam = () => {
             onChange={(e) => setMarks(e.target.value)}
             required
           />
+          <FormLabel>Email:</FormLabel>
+          <FormInput
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
           <AddButton type="submit">Add Exam</AddButton>
         </ExamForm>
         <h2>Total Marks: {calculateTotalMarks()}</h2>
@@ -108,7 +117,7 @@ const Exam = () => {
         <ul>
           {examData.map((exam, index) => (
             <li key={index}>
-              Name: {exam.name}, Registration Number: {exam.registrationNumber}, Class: {exam.className}, Marks: {exam.marks}
+              Name: {exam.name}, Registration Number: {exam.registrationNumber}, Class: {exam.className}, Marks: {exam.marks}, Email: {exam.email}
             </li>
           ))}
         </ul>
