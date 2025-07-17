@@ -1,7 +1,7 @@
 // PerformanceSection.js
 import React from 'react';
 import Sidebar from './Sidebar';
-// import { Line } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import {
   PerformanceContainer,
   SidebarContainer,
