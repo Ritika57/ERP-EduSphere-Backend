@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import {
   ProfileContainer,
   SidebarContainer,
@@ -23,6 +24,7 @@ const SettingsProfile = () => {
     address: '',
     qualification: '',
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -94,6 +96,12 @@ const SettingsProfile = () => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('adminInfo');
+    localStorage.removeItem('adminToken');
+    navigate('/admin-signIn');
+  };
+
   if (!adminInfo) {
     return <div>Loading...</div>;
   }
@@ -104,6 +112,8 @@ const SettingsProfile = () => {
         <Sidebar />
       </SidebarContainer>
       <Content>
+        <ProfileHeader>Profile</ProfileHeader>
+        <button onClick={handleLogout} style={{margin: '20px', padding: '10px 20px'}}>Logout</button>
         <ProfileHeader>Profile Details</ProfileHeader>
         <ProfileDetails>
           <ProfileLabel>Name:</ProfileLabel>

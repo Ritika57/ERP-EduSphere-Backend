@@ -4,6 +4,7 @@ import Sidebar from './Sidebar';
 import axios from 'axios';
 import { ProfileContainer, SidebarContainer, Content, ProfileHeader, ProfileDetails, ProfileLabel, ProfileInfo, EditButton } 
 from '../../styles/SettingsProfileStyles'; 
+import { useNavigate } from 'react-router-dom';
 
 const TeacherProfileSection = () => {
   const [teacherInfo, setTeacherInfo] = useState(null);
@@ -16,6 +17,7 @@ const TeacherProfileSection = () => {
     qualification: '',
     subject: '',
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -93,6 +95,12 @@ const TeacherProfileSection = () => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('teacherInfo');
+    localStorage.removeItem('teacherToken');
+    navigate('/teacher-signIn');
+  };
+
   if (!teacherInfo) {
     return <div>Loading...</div>;
   }
@@ -103,6 +111,8 @@ const TeacherProfileSection = () => {
         <Sidebar />
       </SidebarContainer>
       <Content>
+        <ProfileHeader>Profile</ProfileHeader>
+        <button onClick={handleLogout} style={{margin: '20px', padding: '10px 20px'}}>Logout</button>
         <ProfileHeader>Profile Details</ProfileHeader>
         <ProfileDetails>
           <ProfileLabel>Name:</ProfileLabel>

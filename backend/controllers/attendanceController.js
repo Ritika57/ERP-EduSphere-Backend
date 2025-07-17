@@ -4,13 +4,14 @@ import { handleValidationError } from "../middlewares/errorHandler.js";
 export const markAttendance = async (req, res, next) => {
   const { attendanceData } = req.body;
   try {
+    console.log('Received attendanceData:', attendanceData); // <-- log incoming data
     if (!attendanceData || !Array.isArray(attendanceData) || attendanceData.length === 0) {
       return next(handleValidationError("Attendance data is missing or invalid!", 400));
     }
-    console.log("Received attendanceData:", attendanceData);
     const attendanceRecords = await Promise.all(attendanceData.map(async (record) => {
-      const { student, status } = record;
-      return await Attendance.create({ student, status });
+      const { student, status, date, email } = record;
+      // Now also save the email
+      return await Attendance.create({ student, status, date, email });
     }));
     res.status(200).json({
       success: true,
@@ -18,6 +19,7 @@ export const markAttendance = async (req, res, next) => {
       attendanceRecords
     });
   } catch (err) {
+    console.error('Error in markAttendance:', err); // <-- log error
     next(err);
   }
 };

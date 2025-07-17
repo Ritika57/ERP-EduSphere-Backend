@@ -45,7 +45,17 @@ const CheckAttendanceSection = () => {
   const handleSubmit = async () => {
     try {
       // Send attendance data to the database
-      const formattedData = attendanceData.map(({ id, status }) => ({ student: id, status }));
+      const formattedData = attendanceData.map(({ id, status }) => {
+        const studentObj = students.find(s => s._id === id);
+        if (studentObj && studentObj.email) {
+          return {
+            student: id,
+            status,
+            email: studentObj.email
+          };
+        }
+        return null;
+      }).filter(Boolean); // Remove any nulls
       const response = await axios.post('http://localhost:4000/api/v1/attendance', { attendanceData: formattedData });
       console.log('Attendance data submitted:', response.data);
     } catch (error) {
