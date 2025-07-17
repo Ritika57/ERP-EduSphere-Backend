@@ -29,11 +29,12 @@ const Home = () => {
           <NavLink href="#">Contact Us</NavLink>
         </NavigationLinks>
         <ButtonsContainer>
-          <LoginButton onClick={handleLoginClick}>Sign In</LoginButton>
-          <GuestButton onClick={handleLoginClick}>Guest Mode</GuestButton>
-          <ThemeToggleButton themeMode={themeMode} onClick={toggleTheme} aria-label="Toggle theme">
+        <ThemeToggleButton themeMode={themeMode} onClick={toggleTheme} aria-label="Toggle theme">
             {themeMode === 'dark' ? '🌙' : '☀️'}
           </ThemeToggleButton>
+          <LoginButton onClick={handleLoginClick}>Sign In</LoginButton>
+          {/* <GuestButton onClick={handleLoginClick}>Guest Mode</GuestButton> */}
+         
         </ButtonsContainer>
       </Navbar>
       <HomeContainer>

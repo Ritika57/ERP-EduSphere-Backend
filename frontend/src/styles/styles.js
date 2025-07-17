@@ -11,11 +11,13 @@ export const Navbar = styled.nav`
   align-items: center;
   justify-content: space-between;
   padding: 18px 36px;
-  background: #fff;
-  color: #222;
+  background: linear-gradient(135deg, #2563eb 0%, #10b981 50%, #3b82f6 100%);
+  color: #fff;
   font-family: 'Inter', Arial, sans-serif;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 20px rgba(37,99,235,0.15);
   z-index: 1000;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
 
   @media screen and (max-width: 900px) {
     flex-direction: column;
@@ -28,12 +30,13 @@ export const Logo = styled.img`
   height: 64px;
   border-radius: 16px;
   object-fit: cover;
-  box-shadow: 0 2px 8px rgba(37,99,235,0.10);
-  background: #f3f4f8;
-  @media screen and (max-width: 900px) {
-    margin-bottom: 10px;
-    width: 48px;
-    height: 48px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  border: 2px solid rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
   }
 `;
 
@@ -48,29 +51,37 @@ export const NavigationLinks = styled.div`
 `;
 
 export const NavLink = styled.a`
-  color: #222;
+  color: rgba(255,255,255,0.9);
   text-decoration: none;
   font-size: 1.08rem;
   font-weight: 600;
   position: relative;
-  padding: 4px 0;
-  transition: color 0.18s;
-  &:hover {
-    color: #2563eb;
-  }
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+
   &::after {
     content: '';
-    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
     width: 0;
     height: 2px;
-    background: #2563eb;
-    transition: width 0.2s;
-    position: absolute;
-    left: 0;
-    bottom: 0;
+    background: #fff;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
   }
-  &:hover::after {
-    width: 100%;
+  
+  &:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+    
+    &::after {
+      width: 80%;
+    }
   }
 `;
 
@@ -86,39 +97,88 @@ export const ButtonsContainer = styled.div`
 `;
 
 export const LoginButton = styled.button`
-  background: #2563eb;
-  color: #fff;
-  border: none;
+  background: rgba(255,255,255,0.9);
+  color: #2563eb;
+  border: 2px solid rgba(255,255,255,0.3);
   padding: 12px 32px;
-  border-radius: 999px;
+  border-radius: 12px;
   font-size: 1.08rem;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
   cursor: pointer;
-  transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s ease;
+  }
+
   &:hover {
-    background: #1d4ed8;
-    transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 6px 18px rgba(37,99,235,0.12);
+    background: #fff;
+    color: #1d4ed8;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    border-color: rgba(255,255,255,0.5);
+    
+    &::before {
+      left: 100%;
+    }
+  }
+
+  &:active {
+    transform: translateY(-1px);
   }
 `;
 
 export const GuestButton = styled.button`
-  background: #fff;
-  color: #2563eb;
-  border: 2px solid #2563eb;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: 2px solid rgba(255,255,255,0.3);
   padding: 12px 32px;
-  border-radius: 999px;
+  border-radius: 12px;
   font-size: 1.08rem;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(37,99,235,0.04);
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
   cursor: pointer;
-  transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.18s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.6s ease;
+  }
+
   &:hover {
-    background: #2563eb;
+    background: rgba(255,255,255,0.2);
     color: #fff;
-    transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 6px 18px rgba(37,99,235,0.10);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    border-color: rgba(255,255,255,0.5);
+    
+    &::before {
+      left: 100%;
+    }
+  }
+
+  &:active {
+    transform: translateY(-1px);
   }
 `;
 
@@ -270,25 +330,27 @@ export const AdminRegisterLink = styled(Link)`
     padding: 10px 24px;
   }
 `;
+  // margin-left: 8px;
 
 export const ThemeToggleButton = styled.button`
-  background: ${({ themeMode }) => themeMode === 'dark' ? '#23272f' : '#f3f4f8'};
-  border: none;
-  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
   width: 40px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   cursor: pointer;
-  margin-left: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
-  animation: ${float} 3s ease-in-out infinite;
+
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+
   &:hover {
-    background: #e0e7ff;
-    transform: scale(1.08);
-    box-shadow: 0 6px 18px rgba(37,99,235,0.10);
+    background: rgba(255,255,255,0.2);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   }
 `;
