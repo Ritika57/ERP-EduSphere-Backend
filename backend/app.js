@@ -21,12 +21,16 @@ import  { errorHandler } from "./middlewares/errorHandler.js";
 
 const app = express();
 config({path: "./config/config.env"});
- 
+
+// Handle preflight requests
+app.options('*', cors());
+
 app.use( 
     cors({
-        origin: [process.env.FRONTEND_URL],
+        origin: [process.env.FRONTEND_URL, "http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:5173", "http://127.0.0.1:3000"],
         methods: ["GET", "POST", "PUT", "DELETE"], 
-    
+        credentials: true,
+        optionsSuccessStatus: 200
     }) 
 );
 
