@@ -19,8 +19,44 @@ import {
   TopPanel,
   OverviewPanel,
   EventPanel,
+  WelcomeSection,
+  WelcomeTitle,
+  WelcomeSubtitle,
+  StatsGrid,
+  StatCard,
+  StatIcon,
+  StatInfo,
+  StatNumber,
+  StatLabel,
+  StatTrend,
+  QuickActions,
+  ActionButton,
+  RecentActivity,
+  ActivityItem,
+  ActivityIcon,
+  ActivityContent,
+  ActivityTime,
+  PerformanceChart,
+  ChartContainer,
+  MetricCard,
+  MetricValue,
+  MetricLabel,
+  MetricIcon,
 } from '../../styles/DashboardStyles';
-import { FaUserGraduate, FaChalkboardTeacher, FaSchool } from 'react-icons/fa';
+import { 
+  FaUserGraduate, 
+  FaChalkboardTeacher, 
+  FaSchool, 
+  FaChartLine,
+  FaCalendarAlt,
+  FaBell,
+  FaPlus,
+  FaEye,
+  FaEdit,
+  FaTrash,
+  FaArrowUp,
+  FaArrowDown
+} from 'react-icons/fa';
 import { useTheme } from '../../App';
 
 const AdminDashboard = () => {
@@ -82,51 +118,156 @@ const AdminDashboard = () => {
     }
   };
 
+  const getCurrentTime = () => {
+    const now = new Date();
+    const hours = now.getHours();
+    if (hours < 12) return 'Good Morning';
+    if (hours < 17) return 'Good Afternoon';
+    return 'Good Evening';
+  };
+
   return (
     <AdminDashboardContainer>
       <Sidebar />
       <Content isOpen={isOpen}>
+        {/* Welcome Section */}
+        <WelcomeSection>
+          <div>
+            <WelcomeTitle>{getCurrentTime()}, Admin!</WelcomeTitle>
+            <WelcomeSubtitle>Here's what's happening in your school today</WelcomeSubtitle>
+          </div>
+          <QuickActions>
+            <ActionButton>
+              <FaPlus size={16} />
+              Add Student
+            </ActionButton>
+            <ActionButton>
+              <FaCalendarAlt size={16} />
+              Schedule Event
+            </ActionButton>
+            <ActionButton>
+              <FaBell size={16} />
+              Send Announcement
+            </ActionButton>
+          </QuickActions>
+        </WelcomeSection>
+
+        {/* Stats Grid */}
+        <StatsGrid>
+          <StatCard>
+            <StatIcon style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+              <FaUserGraduate size={24} color="white" />
+            </StatIcon>
+            <StatInfo>
+              <StatNumber>{counts.students}</StatNumber>
+              <StatLabel>Total Students</StatLabel>
+              <StatTrend positive>
+                <FaArrowUp size={12} />
+                +12% this month
+              </StatTrend>
+            </StatInfo>
+          </StatCard>
+
+          <StatCard>
+            <StatIcon style={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}>
+              <FaChalkboardTeacher size={24} color="white" />
+            </StatIcon>
+            <StatInfo>
+              <StatNumber>{counts.teachers}</StatNumber>
+              <StatLabel>Total Teachers</StatLabel>
+              <StatTrend positive>
+                <FaArrowUp size={12} />
+                +5% this month
+              </StatTrend>
+            </StatInfo>
+          </StatCard>
+
+          <StatCard>
+            <StatIcon style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}>
+              <FaSchool size={24} color="white" />
+            </StatIcon>
+            <StatInfo>
+              <StatNumber>{counts.classes}</StatNumber>
+              <StatLabel>Total Classes</StatLabel>
+              <StatTrend positive>
+                <FaArrowUp size={12} />
+                +3% this month
+              </StatTrend>
+            </StatInfo>
+          </StatCard>
+
+          <StatCard>
+            <StatIcon style={{ background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }}>
+              <FaChartLine size={24} color="white" />
+            </StatIcon>
+            <StatInfo>
+              <StatNumber>85%</StatNumber>
+              <StatLabel>Average Performance</StatLabel>
+              <StatTrend positive>
+                <FaArrowUp size={12} />
+                +8% this month
+              </StatTrend>
+            </StatInfo>
+          </StatCard>
+        </StatsGrid>
+
+        {/* Main Content Panels */}
         <TopPanel>
           <OverviewPanel>
-            <SectionTitle>Overview</SectionTitle>
-            <CardContainer>
-              <Card>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
-                  <FaUserGraduate size={28} color={theme.primary || '#2563eb'} style={{ marginRight: 12 }} />
-                  <CardTitle>Total Students</CardTitle>
-                </div>
-                <CardContent>{counts.students}</CardContent>
-              </Card>
-              <Card>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
-                  <FaChalkboardTeacher size={28} color={theme.primary || '#2563eb'} style={{ marginRight: 12 }} />
-                  <CardTitle>Total Teachers</CardTitle>
-                </div>
-                <CardContent>{counts.teachers}</CardContent>
-              </Card>
-              <Card>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 12 }}>
-                  <FaSchool size={28} color={theme.primary || '#2563eb'} style={{ marginRight: 12 }} />
-                  <CardTitle>Total Classes</CardTitle>
-                </div>
-                <CardContent>{counts.classes}</CardContent>
-              </Card>
-            </CardContainer>
+            <SectionTitle>Performance Overview</SectionTitle>
+            <Performance studentPerformance={studentPerformance} />
           </OverviewPanel>
           <EventPanel>
-            <SectionTitle>Events</SectionTitle>
+            <SectionTitle>Upcoming Events</SectionTitle>
             <EventCalendar events={events} />
           </EventPanel>
         </TopPanel>
 
         <BottomContent>
           <OverviewPanel style={{ flex: 1, marginRight: 18 }}>
-            <SectionTitle>Performance</SectionTitle>
-            <Performance studentPerformance={studentPerformance} />
+            <SectionTitle>Recent Announcements</SectionTitle>
+            <Announcement announcements={announcements} />
           </OverviewPanel>
           <OverviewPanel style={{ flex: 1, marginLeft: 18 }}>
-            <SectionTitle>Announcements</SectionTitle>
-            <Announcement announcements={announcements} />
+            <SectionTitle>Quick Metrics</SectionTitle>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <MetricCard>
+                <MetricIcon style={{ background: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)' }}>
+                  <FaUserGraduate size={16} color="white" />
+                </MetricIcon>
+                <div>
+                  <MetricValue>92%</MetricValue>
+                  <MetricLabel>Attendance Rate</MetricLabel>
+                </div>
+              </MetricCard>
+              <MetricCard>
+                <MetricIcon style={{ background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)' }}>
+                  <FaChartLine size={16} color="white" />
+                </MetricIcon>
+                <div>
+                  <MetricValue>78%</MetricValue>
+                  <MetricLabel>Pass Rate</MetricLabel>
+                </div>
+              </MetricCard>
+              <MetricCard>
+                <MetricIcon style={{ background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)' }}>
+                  <FaCalendarAlt size={16} color="white" />
+                </MetricIcon>
+                <div>
+                  <MetricValue>15</MetricValue>
+                  <MetricLabel>Events This Month</MetricLabel>
+                </div>
+              </MetricCard>
+              <MetricCard>
+                <MetricIcon style={{ background: 'linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)' }}>
+                  <FaBell size={16} color="white" />
+                </MetricIcon>
+                <div>
+                  <MetricValue>8</MetricValue>
+                  <MetricLabel>New Announcements</MetricLabel>
+                </div>
+              </MetricCard>
+            </div>
           </OverviewPanel>
         </BottomContent>
       </Content>
