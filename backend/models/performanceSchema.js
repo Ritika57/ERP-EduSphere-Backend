@@ -17,6 +17,10 @@ const performanceSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now
+  },
+  email: {
+    type: String,
+    required: false
   }
 });
 

@@ -5,7 +5,8 @@ const AddPerformanceForm = ({ onSuccess }) => {
     student: '',
     score: '',
     subject: '',
-    date: ''
+    date: '',
+    email: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -25,7 +26,14 @@ const AddPerformanceForm = ({ onSuccess }) => {
   }, []);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    // If student is changed, auto-fill email
+    if (name === 'student') {
+      const selectedStudent = students.find(s => s._id === value);
+      setForm({ ...form, student: value, email: selectedStudent ? selectedStudent.email : '' });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -41,12 +49,13 @@ const AddPerformanceForm = ({ onSuccess }) => {
           student: form.student,
           score: Number(form.score),
           subject: form.subject,
-          date: form.date || undefined
+          date: form.date || undefined,
+          email: form.email
         })
       });
       if (!res.ok) throw new Error('Failed to add performance');
       setSuccess(true);
-      setForm({ student: '', score: '', subject: '', date: '' });
+      setForm({ student: '', score: '', subject: '', date: '', email: '' });
       if (onSuccess) onSuccess();
     } catch (err) {
       setError(err.message);
@@ -72,6 +81,10 @@ const AddPerformanceForm = ({ onSuccess }) => {
             ))}
           </select>
         )}
+      </div>
+      <div>
+        <label>Email:</label>
+        <input name="email" type="email" value={form.email} onChange={handleChange} required  />
       </div>
       <div>
         <label>Score:</label>
