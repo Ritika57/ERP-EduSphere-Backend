@@ -213,11 +213,11 @@ const AdminDashboard = () => {
 
         {/* Main Content Panels */}
         <TopPanel>
-          <OverviewPanel>
+          <OverviewPanel style={{ flex: 1.2 }}>
             <SectionTitle>Performance Overview</SectionTitle>
             <Performance studentPerformance={studentPerformance} />
           </OverviewPanel>
-          <EventPanel>
+          <EventPanel style={{ flex: 0.8 }}>
             <SectionTitle>Upcoming Events</SectionTitle>
             <EventCalendar events={events} />
           </EventPanel>
