@@ -11,7 +11,7 @@ export const createStudent = async (req, res, next) => {
   }
   
   // Create student record
-  const student = await Student.create({ name, registrationNumber, grade });
+  const student = await Student.create({ name, registrationNumber, grade, email });
   
   // Create user account for authentication
   await StudentUser.create({ email, password });
