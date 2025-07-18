@@ -8,6 +8,10 @@ export const TeachersContainer = styled.div`
 
 export const Content = styled.div`
   flex: 1;
+  margin-left: 250px;
+  @media (max-width: 700px) {
+    margin-left: 0;
+  }
 `;
 
 export const TeachersContent = styled.div`
