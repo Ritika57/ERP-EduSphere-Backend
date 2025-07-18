@@ -5,6 +5,7 @@ from '../styles/styles'
 import { LoremIpsum } from 'lorem-ipsum';
 import bg from "../assets/bg.png";
 import bg1 from "../assets/bg1.png";
+import schoolimg from "../assets/schoolimg.jpg";
 import { Link, useNavigate } from 'react-router-dom'; 
 import { useTheme } from '../App';
 
@@ -22,7 +23,7 @@ const Home = () => {
   return (
     <>
       <Navbar>
-        <Logo src={bg1} alt="Logo" />
+        <Logo src={schoolimg} alt="Logo" />
         <NavigationLinks>
           <NavLink href="#">About Us</NavLink>
           <NavLink href="#">Products</NavLink>
