@@ -95,7 +95,7 @@ const Performance = () => {
   return (
     <PerformanceContainer>
       <Sidebar />
-      <Content>
+    
         <PerformanceContent>
           {/* Header */}
           <PerformanceHeader>
@@ -219,14 +219,14 @@ const Performance = () => {
           </PerformanceGrid>
 
           {/* Performance Chart Placeholder */}
-          <PerformanceChart>
+          {/* <PerformanceChart>
             <h3>Performance Trends</h3>
             <ChartContainer>
               <p>Chart visualization coming soon...</p>
             </ChartContainer>
-          </PerformanceChart>
+          </PerformanceChart> */}
         </PerformanceContent>
-      </Content>
+    
     </PerformanceContainer>
   );
 };

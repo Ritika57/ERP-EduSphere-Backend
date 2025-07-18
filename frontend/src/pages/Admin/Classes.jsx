@@ -2,21 +2,29 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import axios from 'axios';
+import { FaChalkboard } from 'react-icons/fa';
 import {
   ClassesContainer,
   Content,
   ClassesContent,
   ClassesHeader,
   ClassList,
-  ClassItem,
+  // ClassItem, // (not used)
+  ClassCard,
   AddClassForm,
   AddClassInput,
   AddClassButton,
+  ClassHeaderRow,
+  ClassHeaderIcon,
+  ClassIcon,
+  MessageBox,
+  ClassListCard
 } from '../../styles/ClassesStyles';
 
 const Classes = () => {
   const [newClassName, setNewClassName] = useState('');
   const [classes, setClasses] = useState([]);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     fetchClasses();
@@ -40,16 +48,16 @@ const Classes = () => {
     if (newClassName.trim() !== '') {
       try {
         const response = await axios.post('http://localhost:4000/api/v1/class', { grade: newClassName });
-        console.log('Response data:', response.data); // Log the response data
         setClasses(prevClasses => {
           if (Array.isArray(prevClasses)) {
-            return [...prevClasses, response.data]; // Use callback function to update state
+            return [...prevClasses, response.data];
           } else {
-            console.error('Error adding class: Invalid state for classes:', prevClasses);
-            return []; // Reset classes state to an empty array
+            return [];
           }
         });
         setNewClassName('');
+        setShowSuccess(true);
+        setTimeout(() => setShowSuccess(false), 2000);
       } catch (error) {
         console.error('Error adding class:', error);
       }
@@ -60,8 +68,27 @@ const Classes = () => {
     <ClassesContainer>
       <Sidebar />
       <Content>
+        {showSuccess && (
+          <MessageBox success style={{
+            position: 'fixed',
+            top: 32,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 9999,
+            minWidth: 220,
+            textAlign: 'center',
+            fontWeight: 700
+          }}>
+            Class added successfully!
+          </MessageBox>
+        )}
         <ClassesContent>
-          <ClassesHeader>Classes</ClassesHeader>
+          <ClassHeaderRow>
+            <ClassHeaderIcon><FaChalkboard /></ClassHeaderIcon>
+            <ClassesHeader>Classes</ClassesHeader>
+          </ClassHeaderRow>
+          {/* Placeholder for future success/error messages */}
+          {/* <MessageBox success>Class added successfully!</MessageBox> */}
           <AddClassForm onSubmit={handleAddClass}>
             <AddClassInput
               type="text"
@@ -71,12 +98,28 @@ const Classes = () => {
             />
             <AddClassButton type="submit">Add Class</AddClassButton>
           </AddClassForm>
-          <ClassList>
-            {/* Ensure that classes is an array before mapping over it */}
-            {Array.isArray(classes) && classes.map((classItem, index) => (
-              <ClassItem key={index}>{classItem.grade}</ClassItem>
-            ))}
-          </ClassList>
+          <div style={{ height: 18 }} />
+          {/* Card for already added classes */}
+          <ClassListCard>
+            <h3 style={{
+              fontWeight: 800,
+              fontSize: '1.2rem',
+              color: '#1976d2',
+              margin: 0,
+              marginBottom: 18,
+              letterSpacing: 1
+            }}>
+              Classes That Were Added
+            </h3>
+            <ClassList>
+              {Array.isArray(classes) && classes.map((classItem, index) => (
+                <ClassCard key={index}>
+                  <ClassIcon><FaChalkboard /></ClassIcon>
+                  {classItem.grade}
+                </ClassCard>
+              ))}
+            </ClassList>
+          </ClassListCard>
         </ClassesContent>
       </Content>
     </ClassesContainer>
