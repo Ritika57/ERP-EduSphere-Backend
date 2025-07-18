@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { FaUserCircle } from 'react-icons/fa';
 import {
   ProfileContainer,
   SidebarContainer,
@@ -12,6 +13,9 @@ import {
   ProfileLabel,
   ProfileInfo,
   EditButton,
+  ProfileCard,
+  ProfileAvatar,
+  Divider
 } from '../../styles/SettingsProfileStyles';
 
 const SettingsProfile = () => {
@@ -112,79 +116,93 @@ const SettingsProfile = () => {
         <Sidebar />
       </SidebarContainer>
       <Content>
-        <ProfileHeader>Profile</ProfileHeader>
-        <button onClick={handleLogout} style={{margin: '20px', padding: '10px 20px'}}>Logout</button>
-        <ProfileHeader>Profile Details</ProfileHeader>
-        <ProfileDetails>
-          <ProfileLabel>Name:</ProfileLabel>
-          {editMode ? (
-            <input
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Name"
-            />
-          ) : (
-            <ProfileInfo>{adminInfo.name || '-'}</ProfileInfo>
-          )}
+        <ProfileCard>
+          <ProfileAvatar>
+            <FaUserCircle />
+          </ProfileAvatar>
+          <ProfileHeader>Admin Profile</ProfileHeader>
+          <EditButton onClick={handleLogout} style={{ margin: '0 auto 18px auto', display: 'block', background: '#fff', color: '#1976d2', border: '2px solid #1976d2' }}>Logout</EditButton>
+          <Divider />
+          <ProfileHeader style={{ fontSize: '1.3rem', marginBottom: 10 }}>Profile Details</ProfileHeader>
+          <ProfileDetails>
+            <ProfileLabel>Name:</ProfileLabel>
+            {editMode ? (
+              <input
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                placeholder="Name"
+                style={{ marginBottom: 10, padding: '8px 12px', borderRadius: 6, border: '1px solid #e3f0ff', fontSize: '1rem' }}
+              />
+            ) : (
+              <ProfileInfo>{adminInfo.name || '-'}</ProfileInfo>
+            )}
 
-          <ProfileLabel>Email:</ProfileLabel>
-          {editMode ? (
-            <input
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="Email"
-              type="email"
-            />
-          ) : (
-            <ProfileInfo>{adminInfo.email}</ProfileInfo>
-          )}
+            <ProfileLabel>Email:</ProfileLabel>
+            {editMode ? (
+              <input
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="Email"
+                type="email"
+                style={{ marginBottom: 10, padding: '8px 12px', borderRadius: 6, border: '1px solid #e3f0ff', fontSize: '1rem' }}
+              />
+            ) : (
+              <ProfileInfo>{adminInfo.email}</ProfileInfo>
+            )}
 
-          <ProfileLabel>Phone:</ProfileLabel>
-          {editMode ? (
-            <input
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              placeholder="Phone"
-            />
-          ) : (
-            <ProfileInfo>{adminInfo.phone || '-'}</ProfileInfo>
-          )}
+            <ProfileLabel>Phone:</ProfileLabel>
+            {editMode ? (
+              <input
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                placeholder="Phone"
+                style={{ marginBottom: 10, padding: '8px 12px', borderRadius: 6, border: '1px solid #e3f0ff', fontSize: '1rem' }}
+              />
+            ) : (
+              <ProfileInfo>{adminInfo.phone || '-'}</ProfileInfo>
+            )}
 
-          <ProfileLabel>Address:</ProfileLabel>
-          {editMode ? (
-            <input
-              name="address"
-              value={form.address}
-              onChange={handleChange}
-              placeholder="Address"
-            />
-          ) : (
-            <ProfileInfo>{adminInfo.address || '-'}</ProfileInfo>
-          )}
+            <ProfileLabel>Address:</ProfileLabel>
+            {editMode ? (
+              <input
+                name="address"
+                value={form.address}
+                onChange={handleChange}
+                placeholder="Address"
+                style={{ marginBottom: 10, padding: '8px 12px', borderRadius: 6, border: '1px solid #e3f0ff', fontSize: '1rem' }}
+              />
+            ) : (
+              <ProfileInfo>{adminInfo.address || '-'}</ProfileInfo>
+            )}
 
-          <ProfileLabel>Qualification:</ProfileLabel>
-          {editMode ? (
-            <input
-              name="qualification"
-              value={form.qualification}
-              onChange={handleChange}
-              placeholder="Qualification"
-            />
-          ) : (
-            <ProfileInfo>{adminInfo.qualification || '-'}</ProfileInfo>
-          )}
-        </ProfileDetails>
-        {editMode ? (
-          <>
-            <EditButton onClick={handleSave}>Save</EditButton>
-            <EditButton onClick={handleCancel}>Cancel</EditButton>
-          </>
-        ) : (
-          <EditButton onClick={handleEdit}>Edit Profile</EditButton>
-        )}
+            <ProfileLabel>Qualification:</ProfileLabel>
+            {editMode ? (
+              <input
+                name="qualification"
+                value={form.qualification}
+                onChange={handleChange}
+                placeholder="Qualification"
+                style={{ marginBottom: 10, padding: '8px 12px', borderRadius: 6, border: '1px solid #e3f0ff', fontSize: '1rem' }}
+              />
+            ) : (
+              <ProfileInfo>{adminInfo.qualification || '-'}</ProfileInfo>
+            )}
+          </ProfileDetails>
+          <Divider />
+          <div style={{ textAlign: 'center' }}>
+            {editMode ? (
+              <>
+                <EditButton onClick={handleSave}>Save</EditButton>
+                <EditButton onClick={handleCancel} style={{ background: '#fff', color: '#1976d2', border: '2px solid #1976d2' }}>Cancel</EditButton>
+              </>
+            ) : (
+              <EditButton onClick={handleEdit}>Edit Profile</EditButton>
+            )}
+          </div>
+        </ProfileCard>
       </Content>
     </ProfileContainer>
   );
