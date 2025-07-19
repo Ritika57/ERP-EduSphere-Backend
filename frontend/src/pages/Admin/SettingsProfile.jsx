@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { FaUserCircle } from 'react-icons/fa';
+import { FaUserCircle, FaUserCog } from 'react-icons/fa';
 import {
   ProfileContainer,
   SidebarContainer,
@@ -116,6 +116,52 @@ const SettingsProfile = () => {
         <Sidebar />
       </SidebarContainer>
       <Content>
+        {/* Profile Banner */}
+        <div style={{
+          width: 'auto',
+          maxWidth: '100%',
+          background: 'rgba(255, 255, 255, 0.15)',
+          backdropFilter: 'blur(10px)',
+          color: '#fff',
+          marginBottom: '24px',
+          padding: '16px 24px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '16px',
+          borderRadius: '12px',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          animation: 'bounceIn 0.8s ease-out'
+        }}>
+          <div style={{
+            fontSize: '1.8rem',
+            background: 'rgba(255, 255, 255, 0.2)',
+            borderRadius: '50%',
+            padding: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <FaUserCog />
+          </div>
+          <div>
+            <h3 style={{
+              fontSize: '1.2rem',
+              fontWeight: '700',
+              margin: '0 0 4px 0',
+              letterSpacing: '0.5px'
+            }}>
+              Profile Management
+            </h3>
+            <div style={{
+              fontSize: '0.95rem',
+              fontWeight: '400',
+              opacity: '0.9'
+            }}>
+              "Manage your account settings and personal information."
+            </div>
+          </div>
+        </div>
+
         <ProfileCard>
           <ProfileAvatar>
             <FaUserCircle />

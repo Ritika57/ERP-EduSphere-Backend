@@ -3,6 +3,7 @@ import Sidebar from './Sidebar';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FaBullhorn, FaCalendarAlt } from 'react-icons/fa';
 import {
   AnnouncementContainer,
   Content,
@@ -15,6 +16,15 @@ import {
   AnnouncementList,
   AnnouncementItem,
   AnnouncementContent,
+  AnnouncementBanner,
+  BannerIcon,
+  BannerText,
+  BannerTitle,
+  BannerSubtitle,
+  Card,
+  AnnouncementListCard,
+  AnnouncementMeta,
+  AnnouncementDate,
 } from '../../styles/AnnouncementStyles';
 
 const Announcement = () => {
@@ -57,37 +67,73 @@ const Announcement = () => {
     }
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
   return (
     <AnnouncementContainer>
       <ToastContainer />
       <Sidebar />
       <Content>
-        <Title>Announcement</Title>
-        {/* Announcement Form */}
-        <AnnouncementForm onSubmit={handleSubmit}>
-          <FormGroup>
-            <Label htmlFor="announcement">Announcement:</Label>
-            <TextArea
-              id="announcement"
-              value={announcement}
-              onChange={(e) => setAnnouncement(e.target.value)}
-              required
-              rows={4}
-              cols={50}
-            />
-          </FormGroup>
-          <Button type="submit">Send Announcement</Button>
-        </AnnouncementForm>
+        <Title>Announcements</Title>
+        
+        <AnnouncementBanner>
+          <BannerIcon><FaBullhorn /></BannerIcon>
+          <BannerText>
+            <BannerTitle>Communication Hub</BannerTitle>
+            <BannerSubtitle>"Keep everyone informed with important updates and announcements."</BannerSubtitle>
+          </BannerText>
+        </AnnouncementBanner>
 
-        {/* Display Announcements */}
-        <h2>Announcements</h2>
-        <AnnouncementList>
-          {announcements.map((announcement) => (
-            <AnnouncementItem key={announcement._id}>
-              <AnnouncementContent>{announcement.announcement}</AnnouncementContent>
-            </AnnouncementItem>
-          ))}
-        </AnnouncementList>
+        <Card>
+          <AnnouncementForm onSubmit={handleSubmit}>
+            <FormGroup>
+              <Label htmlFor="announcement">Announcement Message:</Label>
+              <TextArea
+                id="announcement"
+                value={announcement}
+                onChange={(e) => setAnnouncement(e.target.value)}
+                required
+                placeholder="Enter your announcement here..."
+              />
+            </FormGroup>
+            <Button type="submit">Send Announcement</Button>
+          </AnnouncementForm>
+        </Card>
+
+        <AnnouncementListCard>
+          <div style={{
+            fontWeight: 700,
+            color: '#667eea',
+            fontSize: '1.1rem',
+            marginBottom: 16,
+            letterSpacing: 0.5
+          }}>
+            Recent Announcements
+          </div>
+          <AnnouncementList>
+            {announcements.map((announcement, index) => (
+              <AnnouncementItem key={announcement._id} style={{ animationDelay: `${index * 0.1}s` }}>
+                <AnnouncementContent>{announcement.announcement}</AnnouncementContent>
+                <AnnouncementMeta>
+                  <FaCalendarAlt />
+                  <AnnouncementDate>
+                    {formatDate(announcement.createdAt || new Date())}
+                  </AnnouncementDate>
+                </AnnouncementMeta>
+              </AnnouncementItem>
+            ))}
+          </AnnouncementList>
+        </AnnouncementListCard>
       </Content>
     </AnnouncementContainer>
   );

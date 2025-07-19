@@ -20,7 +20,7 @@ export const Content = styled.div`
   padding: 40px 32px;
   margin-left: 250px;
   min-height: 100vh;
-  background: #f7f9fc;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
   align-items: flex-start;
   justify-content: center;

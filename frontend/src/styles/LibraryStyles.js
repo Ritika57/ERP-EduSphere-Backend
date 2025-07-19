@@ -8,6 +8,8 @@ export const LibraryContainer = styled.div`
 export const Content = styled.div`
   flex: 1;
   padding: 48px 40px 40px 260px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
   @media (max-width: 768px) {
     padding-left: 0;
     padding-right: 10px;

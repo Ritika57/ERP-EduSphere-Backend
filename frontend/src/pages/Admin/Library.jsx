@@ -78,12 +78,7 @@ Library = () => {
   return (
     <LibraryContainer>
       <Sidebar />
-      <Content style={{ 
-          background: 'linear-gradient(120deg, #e0ecff 0%, #f8fbff 100%)', 
-          minHeight: '100vh', 
-          position: 'relative',
-          zIndex: 1
-        }}>
+      <Content>
           {/* Subtle pattern overlay */}
           <div style={{
             position: 'absolute',
