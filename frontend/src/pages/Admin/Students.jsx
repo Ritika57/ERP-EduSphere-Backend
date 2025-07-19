@@ -492,10 +492,10 @@ const Students = () => {
   };
 
   const filteredStudents = students.filter(student =>
-    student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.registrationNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.grade.toLowerCase().includes(searchTerm.toLowerCase())
+    (student.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (student.email || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (student.registrationNumber || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (student.grade || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const getRandomStats = (index) => ({
@@ -635,17 +635,17 @@ const Students = () => {
                       <StudentAvatar>
                         <FaUserGraduate />
                       </StudentAvatar>
-                      <StudentInfo>
-                        <StudentName>{student.name}</StudentName>
-                        <StudentEmail>
-                          <FaEnvelope size={12} />
-                          {student.email}
-                        </StudentEmail>
-                        <div style={{ marginTop: '8px' }}>
-                          <StudentRegNumber>{student.registrationNumber}</StudentRegNumber>
-                          <StudentGrade>{student.grade}</StudentGrade>
-                        </div>
-                      </StudentInfo>
+                                             <StudentInfo>
+                         <StudentName>{student.name || 'Unknown Student'}</StudentName>
+                         <StudentEmail>
+                           <FaEnvelope size={12} />
+                           {student.email || 'No email provided'}
+                         </StudentEmail>
+                         <div style={{ marginTop: '8px' }}>
+                           <StudentRegNumber>{student.registrationNumber || 'N/A'}</StudentRegNumber>
+                           <StudentGrade>{student.grade || 'N/A'}</StudentGrade>
+                         </div>
+                       </StudentInfo>
                     </StudentHeader>
                     <StudentStats>
                       <Stat>
@@ -675,17 +675,17 @@ const Students = () => {
                   <StudentAvatar style={{ width: '80px', height: '80px', fontSize: '2rem' }}>
                     <FaUserGraduate />
                   </StudentAvatar>
-                  <StudentInfo>
-                    <StudentName style={{ fontSize: '1.5rem' }}>{modalStudent.name}</StudentName>
-                    <StudentEmail style={{ fontSize: '1rem' }}>
-                      <FaEnvelope size={14} />
-                      {modalStudent.email}
-                    </StudentEmail>
-                    <div style={{ marginTop: '12px' }}>
-                      <StudentRegNumber>{modalStudent.registrationNumber}</StudentRegNumber>
-                      <StudentGrade>{modalStudent.grade}</StudentGrade>
-                    </div>
-                  </StudentInfo>
+                                     <StudentInfo>
+                     <StudentName style={{ fontSize: '1.5rem' }}>{modalStudent.name || 'Unknown Student'}</StudentName>
+                     <StudentEmail style={{ fontSize: '1rem' }}>
+                       <FaEnvelope size={14} />
+                       {modalStudent.email || 'No email provided'}
+                     </StudentEmail>
+                     <div style={{ marginTop: '12px' }}>
+                       <StudentRegNumber>{modalStudent.registrationNumber || 'N/A'}</StudentRegNumber>
+                       <StudentGrade>{modalStudent.grade || 'N/A'}</StudentGrade>
+                     </div>
+                   </StudentInfo>
                 </StudentHeader>
                 <StudentStats style={{ marginTop: '24px' }}>
                   <Stat>
