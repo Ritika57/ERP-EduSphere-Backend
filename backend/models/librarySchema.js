@@ -4,17 +4,26 @@ import validator from "validator";
 const librarySchema = new mongoose.Schema({
   bookname: {
     type: String,
-    required: true
+    required: true,
   },
   author: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+  },
+  isBorrowed: {
+    type: Boolean,
+    default: false,
+  },
+  borrowedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Student",
+    default: null,
+  },
+  borrowedAt: {
+    type: Date,
+    default: null,
   },
 });
 
-
-export const  Book = mongoose.model('Library', librarySchema);
-
-
-
+export const Book = mongoose.model("Library", librarySchema);
