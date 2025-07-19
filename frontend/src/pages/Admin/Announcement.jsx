@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -27,10 +28,11 @@ import {
   AnnouncementDate,
 } from '../../styles/AnnouncementStyles';
 
-const Announcement = () => {
+const Announcement = ({ announcements: propAnnouncements }) => {
   // State for managing announcement
   const [announcement, setAnnouncement] = useState('');
   const [announcements, setAnnouncements] = useState([]);
+  const navigate = useNavigate();
 
   // Function to fetch announcements
   const fetchAnnouncements = async () => {
@@ -44,8 +46,13 @@ const Announcement = () => {
   
 
   useEffect(() => {
-    fetchAnnouncements();
-  }, []);
+    if (!propAnnouncements) {
+      fetchAnnouncements();
+    }
+  }, [propAnnouncements]);
+
+  // Use prop announcements if provided, otherwise use local state
+  const displayAnnouncements = propAnnouncements || announcements;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -79,6 +86,107 @@ const Announcement = () => {
     });
   };
 
+  const handleViewMoreClick = () => {
+    navigate('/admin/communication');
+  };
+
+  const handleAddAnnouncementClick = () => {
+    navigate('/admin/communication');
+  };
+
+  // If this is being used in dashboard (with prop announcements)
+  if (propAnnouncements) {
+    return (
+      <div>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 16
+        }}>
+          <div style={{
+            fontWeight: 700,
+            color: '#667eea',
+            fontSize: '1.1rem',
+            letterSpacing: 0.5
+          }}>
+            Recent Announcements
+          </div>
+          <button
+            onClick={handleAddAnnouncementClick}
+            style={{
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '8px 16px',
+              fontSize: '0.9rem',
+              fontWeight: '600',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              transition: 'all 0.2s ease',
+              boxShadow: '0 2px 8px rgba(102, 126, 234, 0.3)'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = 'translateY(-1px)';
+              e.target.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = 'translateY(0)';
+              e.target.style.boxShadow = '0 2px 8px rgba(102, 126, 234, 0.3)';
+            }}
+          >
+            <FaBullhorn size={12} />
+            Add Announcement
+          </button>
+        </div>
+        <AnnouncementList>
+          {displayAnnouncements.length > 0 ? (
+            displayAnnouncements.slice(0, 3).map((announcement, index) => (
+              <AnnouncementItem key={announcement._id} style={{ animationDelay: `${index * 0.1}s` }}>
+                <AnnouncementContent>{announcement.announcement}</AnnouncementContent>
+                <AnnouncementMeta>
+                  <FaCalendarAlt />
+                  <AnnouncementDate>
+                    {formatDate(announcement.createdAt || new Date())}
+                  </AnnouncementDate>
+                </AnnouncementMeta>
+              </AnnouncementItem>
+            ))
+          ) : (
+            <div style={{ 
+              textAlign: 'center', 
+              padding: '20px', 
+              color: '#718096',
+              fontStyle: 'italic'
+            }}>
+              No announcements yet
+            </div>
+          )}
+        </AnnouncementList>
+        
+        {displayAnnouncements.length > 3 && (
+          <div 
+            onClick={handleViewMoreClick}
+            style={{ 
+              textAlign: 'center', 
+              marginTop: '16px', 
+              color: '#667eea', 
+              fontSize: '0.9rem',
+              fontWeight: '500',
+              cursor: 'pointer'
+            }}
+          >
+            View {displayAnnouncements.length - 3} more announcements
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Standalone version
   return (
     <AnnouncementContainer>
       <ToastContainer />
@@ -121,7 +229,7 @@ const Announcement = () => {
             Recent Announcements
           </div>
           <AnnouncementList>
-            {announcements.map((announcement, index) => (
+            {displayAnnouncements.map((announcement, index) => (
               <AnnouncementItem key={announcement._id} style={{ animationDelay: `${index * 0.1}s` }}>
                 <AnnouncementContent>{announcement.announcement}</AnnouncementContent>
                 <AnnouncementMeta>

@@ -67,9 +67,10 @@ export const Content = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 32px 0;
+  padding: 32px 24px;
   @media (max-width: 700px) {
     margin-left: 0;
+    padding: 24px 16px;
   }
 `;
 
@@ -84,8 +85,8 @@ export const Title = styled.h1`
 
 // Unique banner for Announcements
 export const AnnouncementBanner = styled.div`
-  width: auto;
-  max-width: 100%;
+  width: 100%;
+  max-width: 800px;
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
   color: #fff;
@@ -135,7 +136,7 @@ export const Card = styled.div`
   padding: 32px 28px 24px 28px;
   margin-bottom: 32px;
   width: 100%;
-  max-width: 600px;
+  max-width: 800px;
   display: flex;
   flex-direction: column;
   align-items: stretch;
