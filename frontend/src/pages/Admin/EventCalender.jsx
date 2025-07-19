@@ -1,5 +1,6 @@
 // EventCalendar.js
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import axios from 'axios';
 import {
@@ -51,6 +52,7 @@ const EventCalendar = ({ events: propEvents }) => {
   const [selectedDate, setSelectedDate] = useState('');
   const [currentTime, setCurrentTime] = useState(new Date());
   const theme = useTheme()?.theme || {};
+  const navigate = useNavigate();
 
   // Update current time every second
   useEffect(() => {
@@ -132,6 +134,14 @@ const EventCalendar = ({ events: propEvents }) => {
     });
   };
 
+  const handleEventClick = () => {
+    navigate('/admin/events');
+  };
+
+  const handleViewMoreClick = () => {
+    navigate('/admin/events');
+  };
+
   // If this is being used as a standalone page (not in dashboard)
   if (!propEvents) {
     return (
@@ -202,15 +212,24 @@ const EventCalendar = ({ events: propEvents }) => {
     <div>
       {/* Event Statistics */}
       <EventStats>
-        <StatItem>
+        <StatItem 
+          onClick={handleEventClick}
+          style={{ cursor: 'pointer' }}
+        >
           <StatNumber>{totalEvents}</StatNumber>
           <StatLabel>Total Events</StatLabel>
         </StatItem>
-        <StatItem>
+        <StatItem 
+          onClick={handleEventClick}
+          style={{ cursor: 'pointer' }}
+        >
           <StatNumber>{upcomingEvents}</StatNumber>
           <StatLabel>Upcoming</StatLabel>
         </StatItem>
-        <StatItem>
+        <StatItem 
+          onClick={handleEventClick}
+          style={{ cursor: 'pointer' }}
+        >
           <StatNumber>{todayEvents}</StatNumber>
           <StatLabel>Today</StatLabel>
         </StatItem>
@@ -226,7 +245,11 @@ const EventCalendar = ({ events: propEvents }) => {
       <EventList>
         {displayEvents.length > 0 ? (
           displayEvents.slice(0, 5).map((event, index) => (
-            <EventCard key={index}>
+            <EventCard 
+              key={index}
+              onClick={handleEventClick}
+              style={{ cursor: 'pointer' }}
+            >
               <EventIcon style={{ 
                 background: `linear-gradient(135deg, ${['#667eea', '#f093fb', '#4facfe', '#43e97b', '#ffecd2'][index % 5]}, ${['#764ba2', '#f5576c', '#00f2fe', '#38f9d7', '#fcb69f'][index % 5]})` 
               }}>
@@ -257,14 +280,17 @@ const EventCalendar = ({ events: propEvents }) => {
 
       {/* Show more events indicator */}
       {displayEvents.length > 5 && (
-        <div style={{ 
-          textAlign: 'center', 
-          marginTop: '16px', 
-          color: theme.primary, 
-          fontSize: '0.9rem',
-          fontWeight: 500,
-          cursor: 'pointer'
-        }}>
+        <div 
+          onClick={handleViewMoreClick}
+          style={{ 
+            textAlign: 'center', 
+            marginTop: '16px', 
+            color: theme.primary, 
+            fontSize: '0.9rem',
+            fontWeight: 500,
+            cursor: 'pointer'
+          }}
+        >
           View {displayEvents.length - 5} more events
         </div>
       )}
