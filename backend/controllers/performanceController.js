@@ -1,13 +1,16 @@
-import Performance from '../models/performanceSchema.js';
-import Student from '../models/studentSchema.js';
+import Performance from "../models/performanceSchema.js";
+import Student from "../models/studentSchema.js";
 
 // Get all performance records
 export const getAllPerformance = async (req, res) => {
   try {
-    const performances = await Performance.find().populate('student', 'name');
+    const performances = await Performance.find().populate(
+      "student",
+      "name email"
+    );
     res.status(200).json(performances);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching performance data', error });
+    res.status(500).json({ message: "Error fetching performance data", error });
   }
 };
 
@@ -19,6 +22,8 @@ export const createPerformance = async (req, res) => {
     await newPerformance.save();
     res.status(201).json(newPerformance);
   } catch (error) {
-    res.status(500).json({ message: 'Error creating performance record', error });
+    res
+      .status(500)
+      .json({ message: "Error creating performance record", error });
   }
-}; 
+};

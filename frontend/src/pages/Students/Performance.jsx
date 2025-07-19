@@ -33,7 +33,7 @@ const PerformanceSection = () => {
         console.log('All performances:', allPerformances);
         // Filter for this student (student field may be an object or string)
         const studentPerformances = allPerformances.filter(
-          perf => perf.email && perf.email.trim().toLowerCase() === studentInfo.email.trim().toLowerCase()
+          perf => perf.student.email && perf.student.email.trim().toLowerCase() === studentInfo.email.trim().toLowerCase()
         );
         console.log('Student performances:', studentPerformances);
         setPerformanceData(studentPerformances);
