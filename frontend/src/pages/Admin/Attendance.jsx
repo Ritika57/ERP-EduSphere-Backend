@@ -34,6 +34,7 @@ const Attendance = () => {
   const [error, setError] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [existingAttendance, setExistingAttendance] = useState([]);
+  const [activeTab, setActiveTab] = useState('all');
 
   useEffect(() => {
     fetchStudents();
@@ -180,12 +181,100 @@ const Attendance = () => {
     setError(null);
   };
 
+  // Group students by attendance status
+  const getStudentsByStatus = () => {
+    const grouped = {
+      all: students,
+      present: students.filter(student => {
+        const record = attendanceData.find(s => s.id === student._id);
+        return record && record.status === 'Present';
+      }),
+      absent: students.filter(student => {
+        const record = attendanceData.find(s => s.id === student._id);
+        return record && record.status === 'Absent';
+      }),
+      absentWithApology: students.filter(student => {
+        const record = attendanceData.find(s => s.id === student._id);
+        return record && record.status === 'Absent with apology';
+      }),
+      unmarked: students.filter(student => {
+        const record = attendanceData.find(s => s.id === student._id);
+        return !record || !record.status;
+      })
+    };
+    return grouped;
+  };
+
+  const studentsByStatus = getStudentsByStatus();
+
+  const renderStudentList = (studentList) => {
+    return (
+      <AttendanceList key={`attendance-${selectedDate}-${activeTab}`}>
+        {studentList.map((student, index) => {
+          const existingRecord = existingAttendance.find(
+            record => {
+              const recordStudentId = typeof record.student === 'object' ? record.student._id : record.student;
+              return recordStudentId === student._id;
+            }
+          );
+          const hasExistingRecord = !!existingRecord;
+          
+          return (
+            <React.Fragment key={`${student._id}-${selectedDate}`}>
+              <AttendanceItem>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <StudentName>{student.name}</StudentName>
+                  {hasExistingRecord && (
+                    <span style={{
+                      fontSize: '0.75rem',
+                      color: '#28a745',
+                      fontWeight: '600',
+                      padding: '2px 6px',
+                      backgroundColor: '#e8f5e9',
+                      borderRadius: '4px',
+                      border: '1px solid #c8e6c9'
+                    }}>
+                      ✓ Marked
+                    </span>
+                  )}
+                </div>
+                <StatusGroup>
+                  {['Present', 'Absent', 'Absent with apology'].map((status) => (
+                    <StatusLabel
+                      key={status}
+                      status={status}
+                    >
+                      <StatusRadio
+                        type="radio"
+                        name={`status-${student._id}-${selectedDate}`}
+                        checked={attendanceData.find(s => s.id === student._id)?.status === status}
+                        onChange={() => handleStatusChange(student._id, status)}
+                        disabled={submitting}
+                      />
+                      {status}
+                      {attendanceData.find(s => s.id === student._id)?.status === status && (
+                        <AnimatedCheck>
+                          <FaCheckCircle color="#28a745" size={20} />
+                        </AnimatedCheck>
+                      )}
+                    </StatusLabel>
+                  ))}
+                </StatusGroup>
+              </AttendanceItem>
+              {index !== studentList.length - 1 && <Divider />}
+            </React.Fragment>
+          );
+        })}
+      </AttendanceList>
+    );
+  };
+
   return (
     <AttendanceContainer>
       <BackgroundImage src={bgImg} alt="background" />
       <Sidebar />
       <Content>
-        <div style={{ maxWidth: 700, margin: '40px auto', padding: '0 12px' }}>
+        <div style={{ maxWidth: 900, margin: '40px auto', padding: '0 12px' }}>
           <Card style={{ padding: '38px 36px 32px 36px', boxShadow: '0 8px 32px rgba(0,0,0,0.13)' }}>
             <AttendanceContent>
               <AttendanceHeader>Attendance</AttendanceHeader>
@@ -257,63 +346,97 @@ const Attendance = () => {
                     </MessageBox>
                   )}
                   
-                  <AttendanceList key={`attendance-${selectedDate}`}>
-                    {students.map((student, index) => {
-                      const existingRecord = existingAttendance.find(
-                        record => {
-                          const recordStudentId = typeof record.student === 'object' ? record.student._id : record.student;
-                          return recordStudentId === student._id;
-                        }
-                      );
-                      const hasExistingRecord = !!existingRecord;
-                      
-                      return (
-                        <React.Fragment key={`${student._id}-${selectedDate}`}>
-                          <AttendanceItem>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              <StudentName>{student.name}</StudentName>
-                              {hasExistingRecord && (
-                                <span style={{
-                                  fontSize: '0.75rem',
-                                  color: '#28a745',
-                                  fontWeight: '600',
-                                  padding: '2px 6px',
-                                  backgroundColor: '#e8f5e9',
-                                  borderRadius: '4px',
-                                  border: '1px solid #c8e6c9'
-                                }}>
-                                  ✓ Marked
-                                </span>
-                              )}
-                            </div>
-                            <StatusGroup>
-                              {['Present', 'Absent', 'Absent with apology'].map((status) => (
-                                <StatusLabel
-                                  key={status}
-                                  status={status}
-                                >
-                                  <StatusRadio
-                                    type="radio"
-                                    name={`status-${student._id}-${selectedDate}`}
-                                    checked={attendanceData.find(s => s.id === student._id)?.status === status}
-                                    onChange={() => handleStatusChange(student._id, status)}
-                                    disabled={submitting}
-                                  />
-                                  {status}
-                                  {attendanceData.find(s => s.id === student._id)?.status === status && (
-                                    <AnimatedCheck>
-                                      <FaCheckCircle color="#28a745" size={20} />
-                                    </AnimatedCheck>
-                                  )}
-                                </StatusLabel>
-                              ))}
-                            </StatusGroup>
-                          </AttendanceItem>
-                          {index !== students.length - 1 && <Divider />}
-                        </React.Fragment>
-                      );
-                    })}
-                  </AttendanceList>
+                  {/* Status Tabs */}
+                  <div style={{ 
+                    display: 'flex', 
+                    gap: '8px', 
+                    marginBottom: '24px',
+                    flexWrap: 'wrap'
+                  }}>
+                    <button
+                      onClick={() => setActiveTab('all')}
+                      style={{
+                        padding: '10px 16px',
+                        backgroundColor: activeTab === 'all' ? '#007bff' : '#f8f9fa',
+                        color: activeTab === 'all' ? 'white' : '#6c757d',
+                        border: '1px solid #dee2e6',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        fontWeight: '600',
+                        fontSize: '0.9rem',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      All Students ({studentsByStatus.all.length})
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('present')}
+                      style={{
+                        padding: '10px 16px',
+                        backgroundColor: activeTab === 'present' ? '#28a745' : '#f8f9fa',
+                        color: activeTab === 'present' ? 'white' : '#28a745',
+                        border: '1px solid #dee2e6',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        fontWeight: '600',
+                        fontSize: '0.9rem',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      Present ({studentsByStatus.present.length})
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('absent')}
+                      style={{
+                        padding: '10px 16px',
+                        backgroundColor: activeTab === 'absent' ? '#dc3545' : '#f8f9fa',
+                        color: activeTab === 'absent' ? 'white' : '#dc3545',
+                        border: '1px solid #dee2e6',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        fontWeight: '600',
+                        fontSize: '0.9rem',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      Absent ({studentsByStatus.absent.length})
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('absentWithApology')}
+                      style={{
+                        padding: '10px 16px',
+                        backgroundColor: activeTab === 'absentWithApology' ? '#ffc107' : '#f8f9fa',
+                        color: activeTab === 'absentWithApology' ? 'white' : '#856404',
+                        border: '1px solid #dee2e6',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        fontWeight: '600',
+                        fontSize: '0.9rem',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      Absent with Apology ({studentsByStatus.absentWithApology.length})
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('unmarked')}
+                      style={{
+                        padding: '10px 16px',
+                        backgroundColor: activeTab === 'unmarked' ? '#6c757d' : '#f8f9fa',
+                        color: activeTab === 'unmarked' ? 'white' : '#6c757d',
+                        border: '1px solid #dee2e6',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        fontWeight: '600',
+                        fontSize: '0.9rem',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      Unmarked ({studentsByStatus.unmarked.length})
+                    </button>
+                  </div>
+
+                  {/* Student List based on active tab */}
+                  {renderStudentList(studentsByStatus[activeTab])}
                   
                   <SubmitButton 
                     onClick={handleSubmit}
