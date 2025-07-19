@@ -158,6 +158,86 @@ const AdminDashboard = () => {
           </QuickActions>
         </WelcomeSection>
 
+
+        {/* Quick Metrics Section - Between Performance and Events */}
+        <div style={{ 
+          marginBottom: '32px',
+          background: 'white',
+          borderRadius: '20px',
+          padding: '24px',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+          border: '1px solid #e2e8f0'
+        }}>
+          <SectionTitle style={{ 
+            marginBottom: '20px',
+            fontSize: '1.3rem',
+            fontWeight: '700',
+            color: '#2d3748',
+            position: 'relative'
+          }}>
+            Quick Metrics
+            <div style={{
+              position: 'absolute',
+              bottom: '-8px',
+              left: '0',
+              width: '60px',
+              height: '3px',
+              background: 'linear-gradient(90deg, #20bf6b, #0fb9b1)',
+              borderRadius: '2px'
+            }}></div>
+          </SectionTitle>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
+            <MetricCard 
+              onClick={() => handleCardClick('/admin/attendance')}
+              style={{ cursor: 'pointer' }}
+            >
+              <MetricIcon style={{ background: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)' }}>
+                <FaUserGraduate size={16} color="white" />
+              </MetricIcon>
+              <div>
+                <MetricValue>92%</MetricValue>
+                <MetricLabel>Attendance Rate</MetricLabel>
+              </div>
+            </MetricCard>
+            <MetricCard 
+              onClick={() => handleCardClick('/admin/performance')}
+              style={{ cursor: 'pointer' }}
+            >
+              <MetricIcon style={{ background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)' }}>
+                <FaChartLine size={16} color="white" />
+              </MetricIcon>
+              <div>
+                <MetricValue>78%</MetricValue>
+                <MetricLabel>Pass Rate</MetricLabel>
+              </div>
+            </MetricCard>
+            <MetricCard 
+              onClick={() => handleCardClick('/admin/events')}
+              style={{ cursor: 'pointer' }}
+            >
+              <MetricIcon style={{ background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)' }}>
+                <FaCalendarAlt size={16} color="white" />
+              </MetricIcon>
+              <div>
+                <MetricValue>15</MetricValue>
+                <MetricLabel>Events This Month</MetricLabel>
+              </div>
+            </MetricCard>
+            <MetricCard 
+              onClick={() => handleCardClick('/admin/communication')}
+              style={{ cursor: 'pointer' }}
+            >
+              <MetricIcon style={{ background: 'linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)' }}>
+                <FaBell size={16} color="white" />
+              </MetricIcon>
+              <div>
+                <MetricValue>8</MetricValue>
+                <MetricLabel>New Announcements</MetricLabel>
+              </div>
+            </MetricCard>
+          </div>
+        </div>
+
         {/* Stats Grid */}
         <StatsGrid>
           <StatCard 
@@ -233,72 +313,22 @@ const AdminDashboard = () => {
         <TopPanel>
           <OverviewPanel style={{ flex: 1.2 }}>
             <SectionTitle>Performance Overview</SectionTitle>
-            <Performance studentPerformance={studentPerformance} />
+            <Performance hideAddPerformanceForm />
           </OverviewPanel>
-          <EventPanel style={{ flex: 0.8 }}>
+          <div style={{ flex: 0.8 }}>
+          <EventPanel >
             <SectionTitle>Upcoming Events</SectionTitle>
             <EventCalendar events={events} />
           </EventPanel>
-        </TopPanel>
-
-        <BottomContent>
-          <OverviewPanel style={{ flex: 1, marginRight: 18 }}>
+            <OverviewPanel style={{ marginTop: '40px' }}>
             <SectionTitle>Recent Announcements</SectionTitle>
             <Announcement announcements={announcements} />
           </OverviewPanel>
-          <OverviewPanel style={{ flex: 1, marginLeft: 18 }}>
-            <SectionTitle>Quick Metrics</SectionTitle>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <MetricCard 
-                onClick={() => handleCardClick('/admin/attendance')}
-                style={{ cursor: 'pointer' }}
-              >
-                <MetricIcon style={{ background: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)' }}>
-                  <FaUserGraduate size={16} color="white" />
-                </MetricIcon>
-                <div>
-                  <MetricValue>92%</MetricValue>
-                  <MetricLabel>Attendance Rate</MetricLabel>
-                </div>
-              </MetricCard>
-              <MetricCard 
-                onClick={() => handleCardClick('/admin/performance')}
-                style={{ cursor: 'pointer' }}
-              >
-                <MetricIcon style={{ background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)' }}>
-                  <FaChartLine size={16} color="white" />
-                </MetricIcon>
-                <div>
-                  <MetricValue>78%</MetricValue>
-                  <MetricLabel>Pass Rate</MetricLabel>
-                </div>
-              </MetricCard>
-              <MetricCard 
-                onClick={() => handleCardClick('/admin/events')}
-                style={{ cursor: 'pointer' }}
-              >
-                <MetricIcon style={{ background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)' }}>
-                  <FaCalendarAlt size={16} color="white" />
-                </MetricIcon>
-                <div>
-                  <MetricValue>15</MetricValue>
-                  <MetricLabel>Events This Month</MetricLabel>
-                </div>
-              </MetricCard>
-              <MetricCard 
-                onClick={() => handleCardClick('/admin/communication')}
-                style={{ cursor: 'pointer' }}
-              >
-                <MetricIcon style={{ background: 'linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)' }}>
-                  <FaBell size={16} color="white" />
-                </MetricIcon>
-                <div>
-                  <MetricValue>8</MetricValue>
-                  <MetricLabel>New Announcements</MetricLabel>
-                </div>
-              </MetricCard>
-            </div>
-          </OverviewPanel>
+          </div>
+        </TopPanel>
+
+        <BottomContent>
+     
         </BottomContent>
       </Content>
     </AdminDashboardContainer>

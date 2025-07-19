@@ -45,7 +45,8 @@ import {
 } from 'react-icons/fa';
 import { useTheme } from '../../App';
 
-const Performance = () => {
+// eslint-disable-next-line react/prop-types
+const Performance = ({hideAddPerformanceForm = false}) => {
   const [performanceData, setPerformanceData] = useState([]);
   const [loading, setLoading] = useState(true);
   const theme = useTheme()?.theme || {};
@@ -115,7 +116,9 @@ const Performance = () => {
           </PerformanceHeader>
 
           {/* Add Performance Form */}
-          <AddPerformanceForm onSuccess={fetchPerformance} />
+          {!hideAddPerformanceForm && (
+            <AddPerformanceForm onSuccess={fetchPerformance} />
+          )}
 
           {/* Stats Grid */}
           <StatsGrid>
