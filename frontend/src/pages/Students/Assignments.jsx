@@ -373,15 +373,40 @@ const StudentAssignments = () => {
 
   useEffect(() => {
     fetchAssignments();
+    fetchSubmittedAssignments();
   }, []);
 
   const fetchAssignments = async () => {
     try {
       const response = await axios.get('http://localhost:4000/api/v1/assignments/getall');
-      setAssignments(response.data.assignments || []);
+      const assignmentsData = response.data.assignments || [];
+      console.log('Fetched assignments:', assignmentsData);
+      setAssignments(assignmentsData);
     } catch (error) {
       console.error('Error fetching assignments:', error);
       showNotification('Error fetching assignments', false);
+    }
+  };
+
+  const fetchSubmittedAssignments = async () => {
+    try {
+      const studentInfo = JSON.parse(localStorage.getItem('studentInfo'));
+      if (!studentInfo || !studentInfo.id) {
+        return;
+      }
+
+      const response = await axios.get(`http://localhost:4000/api/v1/assignments/submissions/${studentInfo.id}`);
+      if (response.data.success) {
+        const submissions = response.data.submissions.map(sub => ({
+          id: sub.assignmentId._id,
+          title: sub.assignmentId.title,
+          answer: sub.answer,
+          submittedAt: new Date(sub.submittedAt).toLocaleString()
+        }));
+        setSubmittedAssignments(submissions);
+      }
+    } catch (error) {
+      console.error('Error fetching submitted assignments:', error);
     }
   };
 
@@ -389,27 +414,70 @@ const StudentAssignments = () => {
     try {
       setLoading(true);
       
-      // Simulate API call (replace with actual API endpoint)
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Get student info from localStorage
+      const studentInfo = JSON.parse(localStorage.getItem('studentInfo'));
+      console.log('Student info from localStorage:', studentInfo);
       
-      const newSubmission = {
-        id: assignmentId,
-        title: assignments.find(a => a.id === assignmentId)?.title || 'Assignment',
-        answer: answer,
-        submittedAt: new Date().toLocaleString()
-      };
-      
-      setSubmittedAssignments(prev => [...prev, newSubmission]);
-      showNotification('Assignment submitted successfully!', true);
-      
-      // Clear the form
-      const form = document.querySelector(`form[data-assignment-id="${assignmentId}"]`);
-      if (form) {
-        form.reset();
+      if (!studentInfo || !studentInfo.id) {
+        showNotification('Please sign in to submit assignments', false);
+        return;
+      }
+
+      // Debug logging
+      console.log('Submitting assignment with data:', {
+        assignmentId,
+        studentId: studentInfo.id,
+        answer,
+        studentInfo
+      });
+
+      // Validate data before sending
+      if (!assignmentId || !answer.trim()) {
+        showNotification('Please provide an answer for the assignment', false);
+        return;
+      }
+
+      // Validate assignmentId format (should be a valid MongoDB ObjectId)
+      if (!assignmentId.match(/^[0-9a-fA-F]{24}$/)) {
+        console.error('Invalid assignment ID format:', assignmentId);
+        showNotification('Invalid assignment ID format', false);
+        return;
+      }
+
+      // Validate studentId format
+      if (!studentInfo.id.match(/^[0-9a-fA-F]{24}$/)) {
+        console.error('Invalid student ID format:', studentInfo.id);
+        showNotification('Invalid student ID format', false);
+        return;
+      }
+
+      // Call backend API to submit assignment
+      const response = await axios.post('http://localhost:4000/api/v1/assignments/submit', {
+        assignmentId: assignmentId,
+        studentId: studentInfo.id,
+        answer: answer.trim()
+      });
+
+      console.log('Backend response:', response.data);
+
+      if (response.data.success) {
+        showNotification('Assignment submitted successfully!', true);
+        
+        // Clear the specific form
+        const form = document.querySelector(`form[data-assignment-id="${assignmentId}"]`);
+        if (form) {
+          form.reset();
+        }
+
+        // Refresh submitted assignments from backend
+        await fetchSubmittedAssignments();
+      } else {
+        showNotification(response.data.message || 'Failed to submit assignment', false);
       }
     } catch (error) {
       console.error('Error submitting assignment:', error);
-      showNotification('Error submitting assignment', false);
+      console.error('Error response:', error.response?.data);
+      showNotification(error.response?.data?.message || 'Error submitting assignment', false);
     } finally {
       setLoading(false);
     }
@@ -475,11 +543,18 @@ const StudentAssignments = () => {
 
         <AssignmentsGrid>
           {assignments.map((assignment) => {
-            const isSubmitted = isAssignmentSubmitted(assignment.id);
-            const submittedAssignment = getSubmittedAssignment(assignment.id);
+            const isSubmitted = isAssignmentSubmitted(assignment._id);
+            const submittedAssignment = getSubmittedAssignment(assignment._id);
+            
+            console.log('Rendering assignment:', {
+              assignment,
+              id: assignment._id,
+              isSubmitted,
+              submittedAssignment
+            });
             
             return (
-              <AssignmentCard key={assignment.id} completed={isSubmitted}>
+              <AssignmentCard key={assignment._id} completed={isSubmitted}>
                 <AssignmentHeader>
                   <AssignmentTitle>{assignment.title}</AssignmentTitle>
                   <StatusBadge completed={isSubmitted}>
@@ -512,10 +587,10 @@ const StudentAssignments = () => {
                       const formData = new FormData(e.target);
                       const answer = formData.get('answer');
                       if (answer.trim()) {
-                        handleSubmitAssignment(assignment.id, answer);
+                        handleSubmitAssignment(assignment._id, answer);
                       }
                     }}
-                    data-assignment-id={assignment.id}
+                    data-assignment-id={assignment._id}
                   >
                     <TextArea
                       name="answer"
