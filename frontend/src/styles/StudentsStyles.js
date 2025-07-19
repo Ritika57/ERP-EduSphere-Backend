@@ -1,5 +1,58 @@
 // StudentsStyles.js
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+// Animations for Students page
+export const slideInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+export const bounceIn = keyframes`
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+`;
+
+export const slideInRight = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
+export const pulseGlow = keyframes`
+  0% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(102, 126, 234, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+  }
+`;
 
 export const StudentsContainer = styled.div`
   display: flex;
@@ -14,7 +67,7 @@ export const Content = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  background: #f6f8fa;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   @media (max-width: 700px) {
     margin-left: 0;
   }
@@ -67,9 +120,14 @@ export const AddStudentForm = styled.form`
   grid-template-columns: 1fr 1fr;
   gap: 12px 16px;
   align-items: center;
-  animation: fadeInStudentCard 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  animation: ${bounceIn} 0.8s ease-out;
   position: relative;
   z-index: 1;
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+  }
   @media (max-width: 700px) {
     grid-template-columns: 1fr;
     max-width: 98vw;
@@ -99,8 +157,8 @@ export const AddStudentButton = styled.button`
   cursor: pointer;
   font-weight: 600;
   font-size: 1rem;
-  box-shadow: none;
-  transition: background 0.18s, transform 0.13s;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2);
+  transition: all 0.3s ease;
   grid-column: span 2;
   width: 100%;
   @media (max-width: 700px) {
@@ -108,7 +166,8 @@ export const AddStudentButton = styled.button`
   }
   &:hover {
     background-color: #125ea6;
-    transform: translateY(-1px) scale(1.02);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 16px rgba(25, 118, 210, 0.3);
   }
   &:active {
     background-color: #0d3c6e;
@@ -126,9 +185,14 @@ export const StudentsListCard = styled.div`
   margin-top: 18px;
   width: 100%;
   max-width: 520px;
-  animation: fadeInStudentCard 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+  animation: ${slideInUp} 0.6s ease-out;
   position: relative;
   z-index: 1;
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.12);
+  }
   @media (max-width: 700px) {
     max-width: 98vw;
     padding: 18px 6vw 12px 6vw;
@@ -166,10 +230,12 @@ export const StudentItem = styled.li`
   align-items: center;
   gap: 0 10px;
   border-bottom: 1.5px solid #e3e8ee;
-  animation: fadeInStudentCard 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-  transition: background 0.18s;
+  animation: ${slideInRight} 0.5s ease-out;
+  transition: all 0.3s ease;
   &:hover {
-    background: #f6f8fa;
+    background: #f0f4ff;
+    transform: translateX(8px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
   }
   &:last-child {
     border-bottom: none;
@@ -206,6 +272,12 @@ export const StudentAvatar = styled.div`
   color: #1976d2;
   margin-right: 8px;
   box-shadow: none;
+  transition: all 0.3s ease;
+  &:hover {
+    background: #667eea;
+    color: #fff;
+    transform: scale(1.1);
+  }
 `;
 
 export const GradeBadge = styled.span`

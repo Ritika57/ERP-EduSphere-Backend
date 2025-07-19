@@ -1,5 +1,58 @@
 // ClassesStyles.js
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+// Animations for Classes page
+export const slideInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+export const bounceIn = keyframes`
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+`;
+
+export const slideInRight = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
+export const pulseGlow = keyframes`
+  0% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(102, 126, 234, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+  }
+`;
 
 export const ClassesContainer = styled.div`
   display: flex;
@@ -18,7 +71,7 @@ export const Content = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  background: #f6f8fa;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   position: relative;
   z-index: 1;
 `;
@@ -57,9 +110,14 @@ export const AddClassForm = styled.form`
   display: flex;
   gap: 10px;
   align-items: center;
-  animation: fadeInClassCard 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  animation: ${bounceIn} 0.8s ease-out;
   position: relative;
   z-index: 1;
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+  }
 `;
 
 export const AddClassInput = styled.input`
@@ -86,10 +144,12 @@ export const AddClassButton = styled.button`
   font-weight: 600;
   font-size: 1rem;
   box-shadow: none;
-  transition: background 0.18s, transform 0.13s;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2);
   &:hover {
     background-color: #125ea6;
-    transform: translateY(-1px) scale(1.02);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 16px rgba(25, 118, 210, 0.3);
   }
   &:active {
     background-color: #0d3c6e;
@@ -117,9 +177,14 @@ export const ClassListCard = styled.div`
   padding: 22px 22px 10px 22px;
   margin-bottom: 32px;
   margin-top: 8px;
-  animation: fadeInClassCard 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  animation: ${slideInUp} 0.6s ease-out;
   position: relative;
   z-index: 1;
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.12);
+  }
 `;
 
 export const ClassList = styled.ul`
@@ -145,10 +210,12 @@ export const ClassCard = styled.li`
   align-items: center;
   gap: 12px;
   border-bottom: 1.5px solid #e3e8ee;
-  animation: fadeInClassCard 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-  transition: background 0.18s;
+  animation: ${slideInRight} 0.5s ease-out;
+  transition: all 0.3s ease;
   &:hover {
-    background: #f6f8fa;
+    background: #f0f4ff;
+    transform: translateX(8px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
   }
   &:last-child {
     border-bottom: none;
@@ -167,6 +234,12 @@ export const ClassIcon = styled.div`
   color: #1976d2;
   margin-right: 8px;
   box-shadow: none;
+  transition: all 0.3s ease;
+  &:hover {
+    background: #667eea;
+    color: #fff;
+    transform: scale(1.1);
+  }
 `;
 
 export const ClassItem = styled.li`

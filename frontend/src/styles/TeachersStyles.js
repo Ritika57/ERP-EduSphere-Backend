@@ -42,7 +42,7 @@ export const TeachersContent = styled.div`
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  background: #f7f9fb;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 `;
 
 export const TeachersHeader = styled.h2`
