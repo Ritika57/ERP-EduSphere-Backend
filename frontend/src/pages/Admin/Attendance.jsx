@@ -1,26 +1,12 @@
 // Attendance.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import axios from 'axios';
-import { FaCheckCircle, FaSpinner } from 'react-icons/fa';
+import { FaSpinner } from 'react-icons/fa';
 import bgImg from '../../assets/bg.png';
 import {
   AttendanceContainer,
   Content,
-  AttendanceContent,
-  AttendanceHeader,
-  AttendanceList,
-  AttendanceItem,
-  StudentName,
-  Divider,
-  SubmitButton,
-  StatusGroup,
-  StatusRadio,
-  StatusLabel,
-  Card,
-  LoadingSpinner,
-  MessageBox,
-  AnimatedCheck,
   BackgroundImage
 } from '../../styles/AttendanceStyles';
 
@@ -209,8 +195,18 @@ const Attendance = () => {
 
   const renderStudentList = (studentList) => {
     return (
-      <AttendanceList key={`attendance-${selectedDate}-${activeTab}`}>
-        {studentList.map((student, index) => {
+      <div style={{
+        display: 'grid',
+        gap: '16px',
+        maxHeight: '60vh',
+        overflowY: 'auto',
+        padding: '8px',
+        borderRadius: '16px',
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+        backdropFilter: 'blur(10px)',
+        border: '1px solid rgba(255,255,255,0.2)'
+      }}>
+        {studentList.map((student) => {
           const existingRecord = existingAttendance.find(
             record => {
               const recordStudentId = typeof record.student === 'object' ? record.student._id : record.student;
@@ -218,54 +214,202 @@ const Attendance = () => {
             }
           );
           const hasExistingRecord = !!existingRecord;
+          const currentStatus = attendanceData.find(s => s.id === student._id)?.status;
           
           return (
-            <React.Fragment key={`${student._id}-${selectedDate}`}>
-              <AttendanceItem>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <StudentName>{student.name}</StudentName>
-                  {hasExistingRecord && (
-                    <span style={{
-                      fontSize: '0.75rem',
-                      color: '#28a745',
-                      fontWeight: '600',
-                      padding: '2px 6px',
-                      backgroundColor: '#e8f5e9',
-                      borderRadius: '4px',
-                      border: '1px solid #c8e6c9'
+            <div
+              key={`${student._id}-${selectedDate}`}
+              style={{
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                borderRadius: '20px',
+                padding: '24px',
+                boxShadow: '0 8px 32px rgba(102, 126, 234, 0.15)',
+                border: '1px solid rgba(255,255,255,0.2)',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-4px) scale(1.02)';
+                e.currentTarget.style.boxShadow = '0 16px 48px rgba(102, 126, 234, 0.25)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                e.currentTarget.style.boxShadow = '0 8px 32px rgba(102, 126, 234, 0.15)';
+              }}
+            >
+              {/* Background Pattern */}
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%)',
+                pointerEvents: 'none'
+              }} />
+              
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'space-between',
+                  marginBottom: '20px'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      fontWeight: 'bold',
+                      fontSize: '1.2rem',
+                      boxShadow: '0 4px 16px rgba(255, 107, 107, 0.3)'
                     }}>
-                      ✓ Marked
-                    </span>
+                      {student.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <h3 style={{
+                        margin: 0,
+                        color: 'white',
+                        fontSize: '1.4rem',
+                        fontWeight: '700',
+                        textShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                      }}>
+                        {student.name}
+                      </h3>
+                      <p style={{
+                        margin: '4px 0 0 0',
+                        color: 'rgba(255,255,255,0.8)',
+                        fontSize: '0.9rem',
+                        fontWeight: '500'
+                      }}>
+                        ID: {student.registrationNumber}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {hasExistingRecord && (
+                    <div style={{
+                      background: 'linear-gradient(135deg, #00b894 0%, #00a085 100%)',
+                      color: 'white',
+                      padding: '8px 16px',
+                      borderRadius: '20px',
+                      fontSize: '0.85rem',
+                      fontWeight: '600',
+                      boxShadow: '0 4px 16px rgba(0, 184, 148, 0.3)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}>
+                      <span style={{ fontSize: '1.1rem' }}>✓</span>
+                      Marked
+                    </div>
                   )}
                 </div>
-                <StatusGroup>
-                  {['Present', 'Absent', 'Absent with apology'].map((status) => (
-                    <StatusLabel
-                      key={status}
-                      status={status}
-                    >
-                      <StatusRadio
-                        type="radio"
-                        name={`status-${student._id}-${selectedDate}`}
-                        checked={attendanceData.find(s => s.id === student._id)?.status === status}
-                        onChange={() => handleStatusChange(student._id, status)}
-                        disabled={submitting}
-                      />
-                      {status}
-                      {attendanceData.find(s => s.id === student._id)?.status === status && (
-                        <AnimatedCheck>
-                          <FaCheckCircle color="#28a745" size={20} />
-                        </AnimatedCheck>
-                      )}
-                    </StatusLabel>
-                  ))}
-                </StatusGroup>
-              </AttendanceItem>
-              {index !== studentList.length - 1 && <Divider />}
-            </React.Fragment>
+                
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+                  gap: '12px'
+                }}>
+                  {['Present', 'Absent', 'Absent with apology'].map((status) => {
+                    const isSelected = currentStatus === status;
+                    const getStatusColors = (status) => {
+                      switch(status) {
+                        case 'Present':
+                          return {
+                            bg: isSelected ? 'linear-gradient(135deg, #00b894 0%, #00a085 100%)' : 'rgba(0, 184, 148, 0.1)',
+                            color: isSelected ? 'white' : '#00b894',
+                            border: isSelected ? 'none' : '2px solid rgba(0, 184, 148, 0.3)'
+                          };
+                        case 'Absent':
+                          return {
+                            bg: isSelected ? 'linear-gradient(135deg, #e17055 0%, #d63031 100%)' : 'rgba(225, 112, 85, 0.1)',
+                            color: isSelected ? 'white' : '#e17055',
+                            border: isSelected ? 'none' : '2px solid rgba(225, 112, 85, 0.3)'
+                          };
+                        case 'Absent with apology':
+                          return {
+                            bg: isSelected ? 'linear-gradient(135deg, #fdcb6e 0%, #e17055 100%)' : 'rgba(253, 203, 110, 0.1)',
+                            color: isSelected ? 'white' : '#fdcb6e',
+                            border: isSelected ? 'none' : '2px solid rgba(253, 203, 110, 0.3)'
+                          };
+                        default:
+                          return {
+                            bg: 'rgba(255,255,255,0.1)',
+                            color: 'white',
+                            border: '2px solid rgba(255,255,255,0.3)'
+                          };
+                      }
+                    };
+                    
+                    const colors = getStatusColors(status);
+                    
+                    return (
+                      <label
+                        key={status}
+                        style={{
+                          background: colors.bg,
+                          color: colors.color,
+                          border: colors.border,
+                          borderRadius: '16px',
+                          padding: '12px 16px',
+                          cursor: 'pointer',
+                          fontWeight: '600',
+                          fontSize: '0.95rem',
+                          textAlign: 'center',
+                          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                          position: 'relative',
+                          overflow: 'hidden',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '8px'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!isSelected) {
+                            e.currentTarget.style.transform = 'translateY(-2px) scale(1.05)';
+                            e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.15)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isSelected) {
+                            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                            e.currentTarget.style.boxShadow = 'none';
+                          }
+                        }}
+                      >
+                        <input
+                          type="radio"
+                          name={`status-${student._id}-${selectedDate}`}
+                          checked={isSelected}
+                          onChange={() => handleStatusChange(student._id, status)}
+                          disabled={submitting}
+                          style={{ display: 'none' }}
+                        />
+                        {status}
+                        {isSelected && (
+                          <span style={{
+                            fontSize: '1.2rem',
+                            animation: 'popIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)'
+                          }}>
+                            ✓
+                          </span>
+                        )}
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           );
         })}
-      </AttendanceList>
+      </div>
     );
   };
 
@@ -274,193 +418,318 @@ const Attendance = () => {
       <BackgroundImage src={bgImg} alt="background" />
       <Sidebar />
       <Content>
-        <div style={{ maxWidth: 900, margin: '40px auto', padding: '0 12px' }}>
-          <Card style={{ padding: '38px 36px 32px 36px', boxShadow: '0 8px 32px rgba(0,0,0,0.13)' }}>
-            <AttendanceContent>
-              <AttendanceHeader>Attendance</AttendanceHeader>
+        <div style={{ 
+          maxWidth: 1000, 
+          margin: '40px auto', 
+          padding: '0 20px' 
+        }}>
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)',
+            borderRadius: '32px',
+            padding: '40px',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.1)',
+            border: '1px solid rgba(255,255,255,0.3)',
+            backdropFilter: 'blur(20px)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            {/* Decorative Elements */}
+            <div style={{
+              position: 'absolute',
+              top: -50,
+              right: -50,
+              width: '200px',
+              height: '200px',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              borderRadius: '50%',
+              opacity: 0.1,
+              filter: 'blur(40px)'
+            }} />
+            <div style={{
+              position: 'absolute',
+              bottom: -30,
+              left: -30,
+              width: '150px',
+              height: '150px',
+              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              borderRadius: '50%',
+              opacity: 0.1,
+              filter: 'blur(30px)'
+            }} />
+            
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <div style={{
+                textAlign: 'center',
+                marginBottom: '40px'
+              }}>
+                <h1 style={{
+                  fontSize: '3rem',
+                  fontWeight: '800',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  margin: '0 0 8px 0',
+                  textShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                }}>
+                  Attendance Management
+                </h1>
+                <p style={{
+                  fontSize: '1.1rem',
+                  color: '#666',
+                  margin: 0,
+                  fontWeight: '500'
+                }}>
+                  Track and manage student attendance with ease
+                </p>
+              </div>
               
               {/* Date Selector */}
               <div style={{ 
-                marginBottom: '24px', 
+                marginBottom: '32px', 
                 display: 'flex', 
                 alignItems: 'center', 
-                gap: '12px' 
+                justifyContent: 'center',
+                gap: '16px',
+                flexWrap: 'wrap'
               }}>
                 <label style={{ 
-                  fontWeight: '600', 
-                  color: '#2d3748',
-                  fontSize: '0.95rem'
+                  fontWeight: '700', 
+                  color: '#333',
+                  fontSize: '1.1rem'
                 }}>
-                  Date:
+                  Select Date:
                 </label>
                 <input
                   type="date"
                   value={selectedDate}
                   onChange={(e) => handleDateChange(e.target.value)}
                   style={{
-                    padding: '8px 12px',
-                    border: '2px solid #e2e8f0',
-                    borderRadius: '8px',
-                    fontSize: '0.95rem',
-                    backgroundColor: '#fff'
+                    padding: '12px 20px',
+                    border: '2px solid #e1e8ed',
+                    borderRadius: '16px',
+                    fontSize: '1rem',
+                    backgroundColor: 'white',
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.05)',
+                    transition: 'all 0.3s ease',
+                    outline: 'none'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#667eea';
+                    e.target.style.boxShadow = '0 4px 20px rgba(102, 126, 234, 0.2)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#e1e8ed';
+                    e.target.style.boxShadow = '0 4px 16px rgba(0,0,0,0.05)';
                   }}
                 />
                 {dateLoading && (
-                  <span style={{
-                    fontSize: '0.85rem',
-                    color: '#007bff',
-                    fontWeight: '500',
-                    marginLeft: '12px',
+                  <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '4px'
+                    gap: '8px',
+                    padding: '8px 16px',
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    color: 'white',
+                    borderRadius: '20px',
+                    fontSize: '0.9rem',
+                    fontWeight: '600'
                   }}>
-                    <FaSpinner size={12} style={{ animation: 'spin 1s linear infinite' }} />
+                    <FaSpinner size={14} style={{ animation: 'spin 1s linear infinite' }} />
                     Loading...
-                  </span>
+                  </div>
                 )}
                 {!dateLoading && existingAttendance.length > 0 && (
-                  <span style={{
-                    fontSize: '0.85rem',
-                    color: '#28a745',
-                    fontWeight: '500',
-                    marginLeft: '12px'
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '8px 16px',
+                    background: 'linear-gradient(135deg, #00b894 0%, #00a085 100%)',
+                    color: 'white',
+                    borderRadius: '20px',
+                    fontSize: '0.9rem',
+                    fontWeight: '600'
                   }}>
-                    ✓ Attendance already marked for this date ({existingAttendance.length} records)
-                  </span>
+                    <span>✓</span>
+                    {existingAttendance.length} records found
+                  </div>
                 )}
               </div>
 
               {loading ? (
-                <LoadingSpinner />
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  padding: '60px 20px'
+                }}>
+                  <div style={{
+                    width: '60px',
+                    height: '60px',
+                    border: '4px solid #f3f3f3',
+                    borderTop: '4px solid #667eea',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite'
+                  }} />
+                </div>
               ) : (
                 <>
                   {message && (
-                    <MessageBox success onClick={clearMessages} style={{ cursor: 'pointer' }}>
+                    <div style={{
+                      padding: '16px 24px',
+                      background: 'linear-gradient(135deg, #00b894 0%, #00a085 100%)',
+                      color: 'white',
+                      borderRadius: '16px',
+                      marginBottom: '24px',
+                      fontWeight: '600',
+                      textAlign: 'center',
+                      cursor: 'pointer',
+                      boxShadow: '0 8px 24px rgba(0, 184, 148, 0.3)'
+                    }} onClick={clearMessages}>
                       {message}
-                    </MessageBox>
+                    </div>
                   )}
                   {error && (
-                    <MessageBox onClick={clearMessages} style={{ cursor: 'pointer' }}>
+                    <div style={{
+                      padding: '16px 24px',
+                      background: 'linear-gradient(135deg, #e17055 0%, #d63031 100%)',
+                      color: 'white',
+                      borderRadius: '16px',
+                      marginBottom: '24px',
+                      fontWeight: '600',
+                      textAlign: 'center',
+                      cursor: 'pointer',
+                      boxShadow: '0 8px 24px rgba(225, 112, 85, 0.3)'
+                    }} onClick={clearMessages}>
                       {error}
-                    </MessageBox>
+                    </div>
                   )}
                   
                   {/* Status Tabs */}
                   <div style={{ 
                     display: 'flex', 
-                    gap: '8px', 
-                    marginBottom: '24px',
-                    flexWrap: 'wrap'
+                    gap: '12px', 
+                    marginBottom: '32px',
+                    flexWrap: 'wrap',
+                    justifyContent: 'center'
                   }}>
-                    <button
-                      onClick={() => setActiveTab('all')}
-                      style={{
-                        padding: '10px 16px',
-                        backgroundColor: activeTab === 'all' ? '#007bff' : '#f8f9fa',
-                        color: activeTab === 'all' ? 'white' : '#6c757d',
-                        border: '1px solid #dee2e6',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                        fontWeight: '600',
-                        fontSize: '0.9rem',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      All Students ({studentsByStatus.all.length})
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('present')}
-                      style={{
-                        padding: '10px 16px',
-                        backgroundColor: activeTab === 'present' ? '#28a745' : '#f8f9fa',
-                        color: activeTab === 'present' ? 'white' : '#28a745',
-                        border: '1px solid #dee2e6',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                        fontWeight: '600',
-                        fontSize: '0.9rem',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      Present ({studentsByStatus.present.length})
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('absent')}
-                      style={{
-                        padding: '10px 16px',
-                        backgroundColor: activeTab === 'absent' ? '#dc3545' : '#f8f9fa',
-                        color: activeTab === 'absent' ? 'white' : '#dc3545',
-                        border: '1px solid #dee2e6',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                        fontWeight: '600',
-                        fontSize: '0.9rem',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      Absent ({studentsByStatus.absent.length})
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('absentWithApology')}
-                      style={{
-                        padding: '10px 16px',
-                        backgroundColor: activeTab === 'absentWithApology' ? '#ffc107' : '#f8f9fa',
-                        color: activeTab === 'absentWithApology' ? 'white' : '#856404',
-                        border: '1px solid #dee2e6',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                        fontWeight: '600',
-                        fontSize: '0.9rem',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      Absent with Apology ({studentsByStatus.absentWithApology.length})
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('unmarked')}
-                      style={{
-                        padding: '10px 16px',
-                        backgroundColor: activeTab === 'unmarked' ? '#6c757d' : '#f8f9fa',
-                        color: activeTab === 'unmarked' ? 'white' : '#6c757d',
-                        border: '1px solid #dee2e6',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                        fontWeight: '600',
-                        fontSize: '0.9rem',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      Unmarked ({studentsByStatus.unmarked.length})
-                    </button>
+                    {[
+                      { key: 'all', label: 'All Students', color: '#667eea', count: studentsByStatus.all.length },
+                      { key: 'present', label: 'Present', color: '#00b894', count: studentsByStatus.present.length },
+                      { key: 'absent', label: 'Absent', color: '#e17055', count: studentsByStatus.absent.length },
+                      { key: 'absentWithApology', label: 'Absent with Apology', color: '#fdcb6e', count: studentsByStatus.absentWithApology.length },
+                      { key: 'unmarked', label: 'Unmarked', color: '#636e72', count: studentsByStatus.unmarked.length }
+                    ].map((tab) => (
+                      <button
+                        key={tab.key}
+                        onClick={() => setActiveTab(tab.key)}
+                        style={{
+                          padding: '12px 20px',
+                          background: activeTab === tab.key 
+                            ? `linear-gradient(135deg, ${tab.color} 0%, ${tab.color}dd 100%)`
+                            : 'rgba(255,255,255,0.8)',
+                          color: activeTab === tab.key ? 'white' : tab.color,
+                          border: `2px solid ${activeTab === tab.key ? 'transparent' : tab.color + '40'}`,
+                          borderRadius: '20px',
+                          cursor: 'pointer',
+                          fontWeight: '700',
+                          fontSize: '0.95rem',
+                          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                          boxShadow: activeTab === tab.key 
+                            ? `0 8px 24px ${tab.color}40`
+                            : '0 4px 16px rgba(0,0,0,0.05)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (activeTab !== tab.key) {
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = `0 8px 24px ${tab.color}30`;
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (activeTab !== tab.key) {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.05)';
+                          }
+                        }}
+                      >
+                        <span>{tab.label}</span>
+                        <span style={{
+                          background: activeTab === tab.key ? 'rgba(255,255,255,0.2)' : tab.color + '20',
+                          color: activeTab === tab.key ? 'white' : tab.color,
+                          padding: '4px 8px',
+                          borderRadius: '12px',
+                          fontSize: '0.8rem',
+                          fontWeight: '800',
+                          minWidth: '24px',
+                          textAlign: 'center'
+                        }}>
+                          {tab.count}
+                        </span>
+                      </button>
+                    ))}
                   </div>
 
-                  {/* Student List based on active tab */}
+                  {/* Student List */}
                   {renderStudentList(studentsByStatus[activeTab])}
                   
-                  <SubmitButton 
-                    onClick={handleSubmit}
-                    disabled={submitting || loading}
-                    style={{
-                      opacity: submitting ? 0.7 : 1,
-                      cursor: submitting ? 'not-allowed' : 'pointer'
-                    }}
-                  >
-                    {submitting ? (
-                      <>
-                        <FaSpinner size={16} style={{ animation: 'spin 1s linear infinite' }} />
-                        Submitting...
-                      </>
-                    ) : existingAttendance.length > 0 ? (
-                      'Update Attendance'
-                    ) : (
-                      'Submit Attendance'
-                    )}
-                  </SubmitButton>
+                  {/* Submit Button */}
+                  <div style={{ textAlign: 'center', marginTop: '32px' }}>
+                    <button
+                      onClick={handleSubmit}
+                      disabled={submitting || loading}
+                      style={{
+                        padding: '16px 40px',
+                        background: submitting 
+                          ? 'linear-gradient(135deg, #b2bec3 0%, #95a5a6 100%)'
+                          : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '25px',
+                        cursor: submitting ? 'not-allowed' : 'pointer',
+                        fontSize: '1.1rem',
+                        fontWeight: '700',
+                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                        boxShadow: submitting 
+                          ? '0 4px 16px rgba(0,0,0,0.1)'
+                          : '0 8px 32px rgba(102, 126, 234, 0.3)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '12px',
+                        minWidth: '200px',
+                        justifyContent: 'center'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!submitting) {
+                          e.currentTarget.style.transform = 'translateY(-4px) scale(1.05)';
+                          e.currentTarget.style.boxShadow = '0 12px 40px rgba(102, 126, 234, 0.4)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!submitting) {
+                          e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                          e.currentTarget.style.boxShadow = '0 8px 32px rgba(102, 126, 234, 0.3)';
+                        }
+                      }}
+                    >
+                      {submitting ? (
+                        <>
+                          <FaSpinner size={18} style={{ animation: 'spin 1s linear infinite' }} />
+                          Submitting...
+                        </>
+                      ) : existingAttendance.length > 0 ? (
+                        'Update Attendance'
+                      ) : (
+                        'Submit Attendance'
+                      )}
+                    </button>
+                  </div>
                 </>
               )}
-            </AttendanceContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </Content>
     </AttendanceContainer>
