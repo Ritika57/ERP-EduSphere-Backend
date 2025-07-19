@@ -1,5 +1,6 @@
 // AdminDashboard.js
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import EventCalendar from './EventCalender';
 import Announcement from './Announcement';
@@ -8,14 +9,8 @@ import axios from 'axios';
 import {
   AdminDashboardContainer,
   Content,
-  TopContent,
   BottomContent,
-  Section,
   SectionTitle,
-  CardContainer,
-  Card,
-  CardTitle,
-  CardContent,
   TopPanel,
   OverviewPanel,
   EventPanel,
@@ -31,13 +26,6 @@ import {
   StatTrend,
   QuickActions,
   ActionButton,
-  RecentActivity,
-  ActivityItem,
-  ActivityIcon,
-  ActivityContent,
-  ActivityTime,
-  PerformanceChart,
-  ChartContainer,
   MetricCard,
   MetricValue,
   MetricLabel,
@@ -51,21 +39,15 @@ import {
   FaCalendarAlt,
   FaBell,
   FaPlus,
-  FaEye,
-  FaEdit,
-  FaTrash,
   FaArrowUp,
-  FaArrowDown
 } from 'react-icons/fa';
-import { useTheme } from '../../App';
 
 const AdminDashboard = () => {
-  const [isOpen, setIsOpen] = useState(true);
   const [events, setEvents] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
   const [studentPerformance, setStudentPerformance] = useState([]);
   const [counts, setCounts] = useState({ students: 0, teachers: 0, classes: 0 });
-  const theme = useTheme()?.theme || {};
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchEvents();
@@ -126,15 +108,19 @@ const AdminDashboard = () => {
     return 'Good Evening';
   };
 
+  const handleCardClick = (route) => {
+    navigate(route);
+  };
+
   return (
     <AdminDashboardContainer>
       <Sidebar />
-      <Content isOpen={isOpen}>
+      <Content isOpen={true}>
         {/* Welcome Section */}
         <WelcomeSection>
           <div>
             <WelcomeTitle>{getCurrentTime()}, Admin!</WelcomeTitle>
-            <WelcomeSubtitle>Here's what's happening in your school today</WelcomeSubtitle>
+            <WelcomeSubtitle>Here&apos;s what&apos;s happening in your school today</WelcomeSubtitle>
           </div>
           <QuickActions>
             <ActionButton>
@@ -154,7 +140,10 @@ const AdminDashboard = () => {
 
         {/* Stats Grid */}
         <StatsGrid>
-          <StatCard>
+          <StatCard 
+            onClick={() => handleCardClick('/admin/students')}
+            style={{ cursor: 'pointer' }}
+          >
             <StatIcon style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
               <FaUserGraduate size={24} color="white" />
             </StatIcon>
@@ -168,7 +157,10 @@ const AdminDashboard = () => {
             </StatInfo>
           </StatCard>
 
-          <StatCard>
+          <StatCard 
+            onClick={() => handleCardClick('/admin/teachers')}
+            style={{ cursor: 'pointer' }}
+          >
             <StatIcon style={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}>
               <FaChalkboardTeacher size={24} color="white" />
             </StatIcon>
@@ -182,7 +174,10 @@ const AdminDashboard = () => {
             </StatInfo>
           </StatCard>
 
-          <StatCard>
+          <StatCard 
+            onClick={() => handleCardClick('/admin/classes')}
+            style={{ cursor: 'pointer' }}
+          >
             <StatIcon style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}>
               <FaSchool size={24} color="white" />
             </StatIcon>
@@ -196,7 +191,10 @@ const AdminDashboard = () => {
             </StatInfo>
           </StatCard>
 
-          <StatCard>
+          <StatCard 
+            onClick={() => handleCardClick('/admin/performance')}
+            style={{ cursor: 'pointer' }}
+          >
             <StatIcon style={{ background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }}>
               <FaChartLine size={24} color="white" />
             </StatIcon>
@@ -231,7 +229,10 @@ const AdminDashboard = () => {
           <OverviewPanel style={{ flex: 1, marginLeft: 18 }}>
             <SectionTitle>Quick Metrics</SectionTitle>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <MetricCard>
+              <MetricCard 
+                onClick={() => handleCardClick('/admin/attendance')}
+                style={{ cursor: 'pointer' }}
+              >
                 <MetricIcon style={{ background: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)' }}>
                   <FaUserGraduate size={16} color="white" />
                 </MetricIcon>
@@ -240,7 +241,10 @@ const AdminDashboard = () => {
                   <MetricLabel>Attendance Rate</MetricLabel>
                 </div>
               </MetricCard>
-              <MetricCard>
+              <MetricCard 
+                onClick={() => handleCardClick('/admin/performance')}
+                style={{ cursor: 'pointer' }}
+              >
                 <MetricIcon style={{ background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)' }}>
                   <FaChartLine size={16} color="white" />
                 </MetricIcon>
@@ -249,7 +253,10 @@ const AdminDashboard = () => {
                   <MetricLabel>Pass Rate</MetricLabel>
                 </div>
               </MetricCard>
-              <MetricCard>
+              <MetricCard 
+                onClick={() => handleCardClick('/admin/events')}
+                style={{ cursor: 'pointer' }}
+              >
                 <MetricIcon style={{ background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)' }}>
                   <FaCalendarAlt size={16} color="white" />
                 </MetricIcon>
@@ -258,7 +265,10 @@ const AdminDashboard = () => {
                   <MetricLabel>Events This Month</MetricLabel>
                 </div>
               </MetricCard>
-              <MetricCard>
+              <MetricCard 
+                onClick={() => handleCardClick('/admin/communication')}
+                style={{ cursor: 'pointer' }}
+              >
                 <MetricIcon style={{ background: 'linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)' }}>
                   <FaBell size={16} color="white" />
                 </MetricIcon>
