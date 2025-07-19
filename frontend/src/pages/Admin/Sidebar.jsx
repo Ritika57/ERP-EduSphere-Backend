@@ -223,7 +223,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate('/admin-signIn');
+    navigate('/choose-user');
   };
 
   return (
