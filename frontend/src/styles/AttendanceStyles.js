@@ -1,5 +1,10 @@
 // AttendanceStyles.js
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const spin = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
 
 export const AttendanceContainer = styled.div`
   display: flex;
@@ -68,9 +73,24 @@ export const SubmitButton = styled.button`
   margin-top: 24px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   transition: background 0.2s, transform 0.15s;
-  &:hover {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  
+  &:hover:not(:disabled) {
     background-color: #0056b3;
     transform: translateY(-2px) scale(1.03);
+  }
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  svg {
+    animation: ${spin} 1s linear infinite;
   }
 `;
 

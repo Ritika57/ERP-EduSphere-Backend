@@ -17,7 +17,7 @@ const attendanceSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: true
+    required: false // Made optional to handle students without emails
   }
 });
 
