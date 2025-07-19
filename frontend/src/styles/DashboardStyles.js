@@ -34,6 +34,16 @@ export const Content = styled.div`
   background: ${({ theme }) => theme.background};
   min-height: 100vh;
   overflow-y: auto;
+  
+  @media (max-width: 700px) {
+    margin-left: ${({ isOpen }) => (isOpen ? '160px' : '0')};
+    padding: 20px 16px;
+  }
+  
+  @media (max-width: 480px) {
+    margin-left: ${({ isOpen }) => (isOpen ? '140px' : '0')};
+    padding: 16px 12px;
+  }
 `;
 
 // Welcome Section
@@ -423,6 +433,9 @@ export const ChartContainer = styled.div`
 
 // Legacy containers
 export const StudentDashboardContainer = styled.div`
+  display: flex;
+  min-height: 100vh;
+  background: ${({ theme }) => theme.background};
 `;
 
 export const TeacherDashboardContainer = styled.div`

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom'; 
 import { BsGraphUp, BsFileText, BsBook, BsGraphDown, BsCalendar, BsGear, BsChatDots, BsBoxArrowRight } from 'react-icons/bs';
@@ -29,6 +29,11 @@ const SidebarContainer = styled.div`
   @media (max-width: 700px) {
     width: ${({ isOpen }) => (isOpen ? '160px' : '0')};
     min-width: 0;
+    z-index: 1000;
+  }
+  
+  @media (max-width: 480px) {
+    width: ${({ isOpen }) => (isOpen ? '140px' : '0')};
   }
 `;
 
@@ -41,6 +46,12 @@ const ProfileSection = styled.div`
   min-height: 72px;
   transition: padding 0.25s;
   margin-top: 35px;
+  
+  @media (max-width: 700px) {
+    padding: 16px 12px 12px 12px;
+    gap: 10px;
+    min-height: 60px;
+  }
 `;
 
 const Avatar = styled.img`
@@ -50,6 +61,11 @@ const Avatar = styled.img`
   object-fit: cover;
   background: ${({ theme }) => theme.card};
   border: 2px solid ${({ theme }) => theme.primary};
+  
+  @media (max-width: 700px) {
+    width: 36px;
+    height: 36px;
+  }
 `;
 
 const ProfileInfo = styled.div`
@@ -92,9 +108,16 @@ const SidebarNavItem = styled.li`
   box-shadow: ${({ active, theme }) => (active ? `4px 0 0 0 ${theme.primary}` : 'none')};
   position: relative;
   transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  overflow: hidden;
   &:hover {
     background: ${({ theme }) => theme.sidebarActive + '18'};
     color: ${({ theme }) => theme.primary};
+  }
+  
+  @media (max-width: 700px) {
+    padding: 10px 12px;
+    margin: 0 6px 4px 6px;
+    font-size: 1rem;
   }
 `;
 
@@ -193,7 +216,7 @@ const navLinks = [
   { to: '/student/settings', icon: <BsGear />, label: 'Profile' },
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ onToggle }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [tooltip, setTooltip] = useState('');
   const theme = useTheme();
@@ -207,8 +230,19 @@ const Sidebar = () => {
     avatar: avatarImg,
   };
 
+  // Sync initial state with parent
+  useEffect(() => {
+    if (onToggle) {
+      onToggle(isOpen);
+    }
+  }, []);
+
   const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+    const newState = !isOpen;
+    setIsOpen(newState);
+    if (onToggle) {
+      onToggle(newState);
+    }
   };
 
   const handleLogout = () => {
