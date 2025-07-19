@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { FaUserGraduate, FaEnvelope, FaStar, FaBook, FaCalendarAlt, FaPlus, FaCheck, FaExclamationTriangle } from 'react-icons/fa';
 
@@ -191,6 +192,7 @@ const AddPerformanceForm = ({ onSuccess }) => {
   const [success, setSuccess] = useState(false);
   const [students, setStudents] = useState([]);
   const [studentsLoading, setStudentsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch students for dropdown
@@ -242,8 +244,13 @@ const AddPerformanceForm = ({ onSuccess }) => {
     }
   };
 
+  const handleFormClick = () => {
+    // Navigate to the full performance page for more detailed form
+    navigate('/admin/performance');
+  };
+
   return (
-    <FormContainer>
+    <FormContainer onClick={handleFormClick} style={{ cursor: 'pointer' }}>
       <FormTitle>
         <FaPlus size={20} />
         Add Performance Record

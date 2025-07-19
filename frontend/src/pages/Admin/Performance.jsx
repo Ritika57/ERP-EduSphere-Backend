@@ -1,5 +1,6 @@
 // Performance.js
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import {
   PerformanceContainer,
@@ -48,6 +49,7 @@ const Performance = () => {
   const [performanceData, setPerformanceData] = useState([]);
   const [loading, setLoading] = useState(true);
   const theme = useTheme()?.theme || {};
+  const navigate = useNavigate();
 
   const fetchPerformance = () => {
     setLoading(true);
@@ -77,6 +79,15 @@ const Performance = () => {
   const topPerformers = performanceData
     .sort((a, b) => b.score - a.score)
     .slice(0, 5);
+
+  const handleStatCardClick = () => {
+    navigate('/admin/performance');
+  };
+
+  const handleStudentClick = (studentId) => {
+    // Navigate to student details or performance details
+    navigate(`/admin/performance?student=${studentId}`);
+  };
 
   if (loading) {
     return (
@@ -108,7 +119,10 @@ const Performance = () => {
 
           {/* Stats Grid */}
           <StatsGrid>
-            <StatCard>
+            <StatCard 
+              onClick={handleStatCardClick}
+              style={{ cursor: 'pointer' }}
+            >
               <StatIcon style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
                 <FaChartLine size={24} color="white" />
               </StatIcon>
@@ -118,7 +132,10 @@ const Performance = () => {
               </StatInfo>
             </StatCard>
 
-            <StatCard>
+            <StatCard 
+              onClick={handleStatCardClick}
+              style={{ cursor: 'pointer' }}
+            >
               <StatIcon style={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}>
                 <FaUserGraduate size={24} color="white" />
               </StatIcon>
@@ -128,7 +145,10 @@ const Performance = () => {
               </StatInfo>
             </StatCard>
 
-            <StatCard>
+            <StatCard 
+              onClick={handleStatCardClick}
+              style={{ cursor: 'pointer' }}
+            >
               <StatIcon style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}>
                 <FaTrophy size={24} color="white" />
               </StatIcon>
@@ -138,7 +158,10 @@ const Performance = () => {
               </StatInfo>
             </StatCard>
 
-            <StatCard>
+            <StatCard 
+              onClick={handleStatCardClick}
+              style={{ cursor: 'pointer' }}
+            >
               <StatIcon style={{ background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }}>
                 <FaCalendarAlt size={24} color="white" />
               </StatIcon>
@@ -160,7 +183,11 @@ const Performance = () => {
               {topPerformers.length > 0 ? (
                 <StudentList>
                   {topPerformers.map((record, index) => (
-                    <StudentItem key={record._id}>
+                    <StudentItem 
+                      key={record._id}
+                      onClick={() => handleStudentClick(record.student?._id || record.student)}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <StudentAvatar>
                         {index === 0 && <FaMedal size={16} color="#fbbf24" />}
                         {index === 1 && <FaMedal size={16} color="#9ca3af" />}
@@ -193,7 +220,11 @@ const Performance = () => {
               {performanceData.length > 0 ? (
                 <StudentList>
                   {performanceData.map((record) => (
-                    <StudentItem key={record._id}>
+                    <StudentItem 
+                      key={record._id}
+                      onClick={() => handleStudentClick(record.student?._id || record.student)}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <StudentAvatar>
                         <FaUserGraduate size={16} />
                       </StudentAvatar>
