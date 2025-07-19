@@ -112,26 +112,46 @@ const AdminDashboard = () => {
     navigate(route);
   };
 
+  const handleWelcomeClick = () => {
+    // Navigate to dashboard or refresh the current page
+    navigate('/admin/dashboard');
+  };
+
+  const handleAddStudentClick = () => {
+    navigate('/admin/students');
+  };
+
+  const handleScheduleEventClick = () => {
+    navigate('/admin/events');
+  };
+
+  const handleSendAnnouncementClick = () => {
+    navigate('/admin/communication');
+  };
+
   return (
     <AdminDashboardContainer>
       <Sidebar />
       <Content isOpen={true}>
         {/* Welcome Section */}
         <WelcomeSection>
-          <div>
+          <div 
+            onClick={handleWelcomeClick}
+            style={{ cursor: 'pointer' }}
+          >
             <WelcomeTitle>{getCurrentTime()}, Admin!</WelcomeTitle>
             <WelcomeSubtitle>Here&apos;s what&apos;s happening in your school today</WelcomeSubtitle>
           </div>
           <QuickActions>
-            <ActionButton>
+            <ActionButton onClick={handleAddStudentClick}>
               <FaPlus size={16} />
               Add Student
             </ActionButton>
-            <ActionButton>
+            <ActionButton onClick={handleScheduleEventClick}>
               <FaCalendarAlt size={16} />
               Schedule Event
             </ActionButton>
-            <ActionButton>
+            <ActionButton onClick={handleSendAnnouncementClick}>
               <FaBell size={16} />
               Send Announcement
             </ActionButton>
