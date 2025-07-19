@@ -554,7 +554,7 @@ const SettingsProfile = () => {
   const handleLogout = () => {
     localStorage.removeItem('adminInfo');
     localStorage.removeItem('adminToken');
-    navigate('/admin-signIn');
+    navigate('/choose-user');
   };
 
   if (loading && !adminInfo) {
