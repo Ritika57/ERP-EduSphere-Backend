@@ -39,8 +39,9 @@ const SidebarContainer = styled.div`
 
 const ProfileSection = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 8px;
   padding: 24px 18px 18px 18px;
   border-bottom: 1px solid ${({ theme }) => theme.border};
   min-height: 72px;
@@ -49,7 +50,7 @@ const ProfileSection = styled.div`
   
   @media (max-width: 700px) {
     padding: 16px 12px 12px 12px;
-    gap: 10px;
+    gap: 6px;
     min-height: 60px;
   }
 `;
@@ -70,18 +71,19 @@ const Avatar = styled.img`
 
 const ProfileInfo = styled.div`
   display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
+  text-align: center;
 `;
 
 const ProfileName = styled.div`
   font-weight: 700;
   font-size: 1.1rem;
-  color: ${({ theme }) => theme.primary};
+  color: #3b82f6;
 `;
 
 const ProfileRole = styled.div`
   font-size: 0.95rem;
-  color: ${({ theme }) => theme.text};
-  opacity: 0.7;
+  color: #374151;
+  font-weight: 500;
 `;
 
 const SidebarHeader = styled.div`
@@ -247,7 +249,7 @@ const Sidebar = ({ onToggle }) => {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate('/student-signIn');
+    navigate('/choose-user');
   };
 
   return (
@@ -259,7 +261,7 @@ const Sidebar = ({ onToggle }) => {
         <Avatar src={profile.avatar} alt="Avatar" />
         <ProfileInfo isOpen={isOpen}>
           <ProfileName>{profile.name}</ProfileName>
-          <ProfileRole>{profile.role}</ProfileRole>
+       
         </ProfileInfo>
       </ProfileSection>
       <SidebarNav>

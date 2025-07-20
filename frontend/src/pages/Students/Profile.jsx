@@ -23,7 +23,7 @@ const ProfileSection = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('studentInfo');
-    navigate('/student-signIn');
+    navigate('/choose-user');
   };
 
   useEffect(() => {
@@ -100,7 +100,7 @@ const ProfileSection = () => {
                 padding: '24px',
                 height: 'fit-content'
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 24 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 24 }}>
                   <div style={{
                     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                     borderRadius: '50%',
@@ -109,16 +109,16 @@ const ProfileSection = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginRight: 16
+                    marginBottom: 12
                   }}>
                     <FaUserCircle size={40} color="#fff" />
                   </div>
-                  <div>
-                    <h3 style={{ fontSize: 20, fontWeight: 700, color: '#374151', margin: '0 0 4px 0' }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <h3 style={{ fontSize: 20, fontWeight: 700, color: '#3b82f6', margin: '0 0 4px 0' }}>
                       {studentProfile?.name || 'Student Name'}
                     </h3>
-                    <div style={{ fontSize: 14, color: '#6b7280' }}>
-                      Student Account
+                    <div style={{ fontSize: 14, color: '#374151', fontWeight: 500 }}>
+                      Student
                     </div>
                   </div>
                 </div>

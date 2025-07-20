@@ -235,7 +235,7 @@ const Sidebar = () => {
         <Avatar src={profile.avatar} alt="Avatar" />
         <ProfileInfo>
           <ProfileName>{profile.name}</ProfileName>
-          <ProfileRole>{profile.role}</ProfileRole>
+          {/* <ProfileRole>{profile.role}</ProfileRole> */}
         </ProfileInfo>
       </ProfileSection>
       <SidebarNav>
