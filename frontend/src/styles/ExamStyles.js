@@ -7,9 +7,7 @@ const fadeInUp = keyframes`
   to { opacity: 1; transform: none; }
 `;
 
-export const ExamContainer = styled.div`
-  display: flex;
-`;
+export const ExamContainer = styled.div``;
 
 export const SidebarContainer = styled.div`
   flex: 0 0 250px;

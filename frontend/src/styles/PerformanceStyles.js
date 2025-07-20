@@ -21,10 +21,7 @@ const spin = keyframes`
   }
 `;
 
-export const PerformanceContainer = styled.div`
-  display: flex;
-  min-height: 100vh;
-`;
+export const PerformanceContainer = styled.div``;
 
 export const Content = styled.div`
   flex: 1;
