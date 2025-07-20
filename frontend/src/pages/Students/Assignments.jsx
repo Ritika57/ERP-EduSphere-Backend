@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import axios from 'axios';
-import { 
+import {
   FaFileAlt, 
   FaCheckCircle, 
   FaClock, 
@@ -502,7 +502,7 @@ const StudentAssignments = () => {
 
   return (
     <AssignmentsContainer>
-      <Sidebar />
+        <Sidebar />
       <Content>
         <Header>
           <Title>Assignments</Title>
@@ -556,13 +556,13 @@ const StudentAssignments = () => {
             return (
               <AssignmentCard key={assignment._id} completed={isSubmitted}>
                 <AssignmentHeader>
-                  <AssignmentTitle>{assignment.title}</AssignmentTitle>
+            <AssignmentTitle>{assignment.title}</AssignmentTitle>
                   <StatusBadge completed={isSubmitted}>
                     {isSubmitted ? 'Completed' : 'Pending'}
                   </StatusBadge>
                 </AssignmentHeader>
                 
-                <AssignmentDescription>{assignment.description}</AssignmentDescription>
+            <AssignmentDescription>{assignment.description}</AssignmentDescription>
                 
                 <AssignmentMeta>
                   <MetaItem>
@@ -611,8 +611,8 @@ const StudentAssignments = () => {
                       )}
                     </SubmitButton>
                   </AssignmentForm>
-                )}
-              </AssignmentCard>
+            )}
+          </AssignmentCard>
             );
           })}
         </AssignmentsGrid>

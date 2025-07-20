@@ -146,12 +146,12 @@ const AttendanceSection = () => {
                   <h3 style={{ fontSize: 16, fontWeight: 700, color: '#374151', margin: 0 }}>Attendance Overview</h3>
                 </div>
                 
-                {loading ? (
+        {loading ? (
                   <div style={{ textAlign: 'center', padding: '30px', color: '#666' }}>
                     <div style={{ fontSize: 20, marginBottom: 12 }}>📅</div>
                     <div>Loading attendance data...</div>
                   </div>
-                ) : error ? (
+        ) : error ? (
                   <div style={{ 
                     textAlign: 'center', 
                     padding: '30px 16px', 
@@ -168,7 +168,7 @@ const AttendanceSection = () => {
                       {error}
                     </div>
                   </div>
-                ) : attendance.length === 0 ? (
+        ) : attendance.length === 0 ? (
                   <div style={{ 
                     textAlign: 'center', 
                     padding: '30px 16px', 

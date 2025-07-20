@@ -54,9 +54,7 @@ export const pulseGlow = keyframes`
   }
 `;
 
-export const AnnouncementContainer = styled.div`
-  display: flex;
-`;
+export const AnnouncementContainer = styled.div``;
 
 export const Content = styled.div`
   flex: 1;
