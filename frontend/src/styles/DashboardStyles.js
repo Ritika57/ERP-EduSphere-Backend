@@ -1,5 +1,5 @@
 // AdminDashboardStyles.js
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from "styled-components";
 
 const fadeInUp = keyframes`
   from {
@@ -28,21 +28,17 @@ export const AdminDashboardContainer = styled.div`
 
 export const Content = styled.div`
   flex: 1;
-  padding: 32px 40px;
-  margin-left: ${({ isOpen }) => (isOpen ? '250px' : '80px')};
-  transition: margin-left 0.3s ${({ theme }) => theme.transition};
+  padding: 32px 20px;
   background: ${({ theme }) => theme.background};
   min-height: 100vh;
   overflow-y: auto;
   
   @media (max-width: 700px) {
-    margin-left: ${({ isOpen }) => (isOpen ? '160px' : '0')};
-    padding: 20px 16px;
+    padding: 20px 12px;
   }
   
   @media (max-width: 480px) {
-    margin-left: ${({ isOpen }) => (isOpen ? '140px' : '0')};
-    padding: 16px 12px;
+    padding: 16px 8px;
   }
 `;
 
@@ -53,7 +49,11 @@ export const WelcomeSection = styled.div`
   align-items: center;
   margin-bottom: 40px;
   padding: 32px;
-  background: linear-gradient(135deg, ${({ theme }) => theme.primary}15 0%, ${({ theme }) => theme.accent}15 100%);
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.primary}15 0%,
+    ${({ theme }) => theme.accent}15 100%
+  );
   border-radius: 20px;
   border: 1px solid ${({ theme }) => theme.border};
   animation: ${fadeInUp} 0.6s ease-out;
@@ -70,7 +70,11 @@ export const WelcomeTitle = styled.h1`
   font-weight: 800;
   color: ${({ theme }) => theme.text};
   margin: 0 0 8px 0;
-  background: linear-gradient(135deg, ${({ theme }) => theme.primary}, ${({ theme }) => theme.accent});
+  background: linear-gradient(
+    135deg,
+    ${({ theme }) => theme.primary},
+    ${({ theme }) => theme.accent}
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -106,13 +110,13 @@ export const ActionButton = styled.button`
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 
   &:hover {
     background: ${({ theme }) => theme.primary};
     color: white;
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(37,99,235,0.2);
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.2);
   }
 `;
 
@@ -130,7 +134,7 @@ export const StatCard = styled.div`
   border-radius: 20px;
   padding: 28px 24px;
   border: 1px solid ${({ theme }) => theme.border};
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
@@ -139,18 +143,22 @@ export const StatCard = styled.div`
   overflow: hidden;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, ${({ theme }) => theme.primary}, ${({ theme }) => theme.accent});
+    background: linear-gradient(
+      90deg,
+      ${({ theme }) => theme.primary},
+      ${({ theme }) => theme.accent}
+    );
   }
 
   &:hover {
     transform: translateY(-8px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   }
 `;
 
@@ -162,7 +170,7 @@ export const StatIcon = styled.div`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 `;
 
 export const StatInfo = styled.div`
@@ -191,7 +199,7 @@ export const StatTrend = styled.div`
   gap: 4px;
   font-size: 0.875rem;
   font-weight: 500;
-  color: ${({ positive }) => positive ? '#10b981' : '#ef4444'};
+  color: ${({ positive }) => (positive ? "#10b981" : "#ef4444")};
 `;
 
 // Main Content Panels
@@ -200,7 +208,7 @@ export const TopPanel = styled.div`
   gap: 32px;
   margin-bottom: 32px;
   align-items: flex-start;
-  
+
   @media (max-width: 1200px) {
     flex-direction: column;
     gap: 24px;
@@ -210,7 +218,7 @@ export const TopPanel = styled.div`
 export const BottomContent = styled.div`
   display: flex;
   gap: 32px;
-  
+
   @media (max-width: 1200px) {
     flex-direction: column;
     gap: 24px;
@@ -220,7 +228,7 @@ export const BottomContent = styled.div`
 export const OverviewPanel = styled.div`
   background: ${({ theme }) => theme.card};
   border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 1px solid ${({ theme }) => theme.border};
   padding: 32px;
   flex: 1;
@@ -228,14 +236,14 @@ export const OverviewPanel = styled.div`
   transition: all 0.3s ease;
 
   &:hover {
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   }
 `;
 
 export const EventPanel = styled.div`
   background: ${({ theme }) => theme.card};
   border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 1px solid ${({ theme }) => theme.border};
   padding: 32px;
   flex: 1;
@@ -243,7 +251,7 @@ export const EventPanel = styled.div`
   transition: all 0.3s ease;
 
   &:hover {
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   }
 `;
 
@@ -254,15 +262,19 @@ export const SectionTitle = styled.h2`
   font-weight: 700;
   letter-spacing: -0.5px;
   position: relative;
-  
+
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: -8px;
     left: 0;
     width: 40px;
     height: 3px;
-    background: linear-gradient(90deg, ${({ theme }) => theme.primary}, ${({ theme }) => theme.accent});
+    background: linear-gradient(
+      90deg,
+      ${({ theme }) => theme.primary},
+      ${({ theme }) => theme.accent}
+    );
     border-radius: 2px;
   }
 `;
@@ -277,11 +289,11 @@ export const MetricCard = styled.div`
   align-items: center;
   gap: 16px;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
 `;
 
@@ -330,7 +342,7 @@ export const CardContainer = styled.div`
   margin: 32px auto 0 auto;
   width: 100%;
   flex-wrap: wrap;
-  
+
   @media (max-width: 900px) {
     flex-direction: column;
     align-items: center;
@@ -344,7 +356,8 @@ export const Card = styled.div`
   padding: 20px 16px;
   border-radius: 22px;
   box-shadow: ${({ theme }) => theme.shadow};
-  transition: transform 0.25s ${({ theme }) => theme.transition}, box-shadow 0.25s ${({ theme }) => theme.transition};
+  transition: transform 0.25s ${({ theme }) => theme.transition},
+    box-shadow 0.25s ${({ theme }) => theme.transition};
   cursor: pointer;
   flex: 1 1 220px;
   max-width: 240px;
@@ -353,10 +366,10 @@ export const Card = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  
+
   &:hover {
     transform: translateY(-8px) scale(1.03);
-    box-shadow: 0 8px 24px rgba(37,99,235,0.10);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.1);
   }
 `;
 
@@ -388,7 +401,7 @@ export const ActivityItem = styled.div`
   gap: 16px;
   padding: 16px 0;
   border-bottom: 1px solid ${({ theme }) => theme.border};
-  
+
   &:last-child {
     border-bottom: none;
   }
