@@ -19,23 +19,29 @@ export const AdminRegisterContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(120deg, #ff9a9e 0%, #fad0c4 55%, #a1ffce 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #10b981 50%, #3b82f6 100%);
   font-family: 'Inter', Arial, sans-serif;
 `;
 
 export const FormCard = styled.div`
   background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 8px 32px rgba(37,99,235,0.10), 0 1.5px 8px rgba(0,0,0,0.04);
-  padding: 40px 32px 32px 32px;
+  border-radius: 28px;
+  box-shadow: 0 12px 40px rgba(37,99,235,0.13), 0 2px 12px rgba(0,0,0,0.06);
+  padding: 44px 36px 36px 36px;
   min-width: 320px;
-  max-width: 360px;
+  max-width: 380px;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   animation: ${fadeInUp} 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-  transition: box-shadow 0.3s;
+  transition: box-shadow 0.3s, transform 0.18s;
+  border: 1.5px solid #e5e7eb;
+
+  &:hover {
+    transform: scale(1.015);
+    box-shadow: 0 16px 48px rgba(37,99,235,0.18), 0 4px 16px rgba(0,0,0,0.10);
+  }
 
   @media (max-width: 500px) {
     min-width: 0;
@@ -45,11 +51,14 @@ export const FormCard = styled.div`
 `;
 
 export const Title = styled.h2`
-  font-size: 2rem;
-  font-weight: 700;
-  color: #222;
+  font-size: 2.2rem;
+  font-weight: 800;
   margin-bottom: 18px;
   letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #2563eb, #10b981);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 `;
 
 export const FormContainer = styled.form`
@@ -61,10 +70,10 @@ export const FormContainer = styled.form`
 
 export const InputField = styled.input`
   width: 100%;
-  padding: 12px 14px;
+  padding: 14px 16px;
   border: 1.5px solid #e0e7ef;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 12px;
+  font-size: 1.05rem;
   background: #f7faff;
   transition: border-color 0.25s, box-shadow 0.25s;
   outline: none;
@@ -72,30 +81,30 @@ export const InputField = styled.input`
 
   &:focus {
     border-color: #2563eb;
-    box-shadow: 0 0 0 2px #2563eb22;
+    box-shadow: 0 0 0 3px #2563eb22;
     background: #fff;
   }
 `;
 
 export const SubmitButton = styled.button`
   width: 100%;
-  padding: 14px 0;
+  padding: 16px 0;
   border: none;
-  border-radius: 8px;
-  background: linear-gradient(90deg, #2563eb 0%, #43e97b 100%);
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
   color: #fff;
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1.18rem;
+  font-weight: 700;
   letter-spacing: 0.5px;
-  margin-top: 10px;
+  margin-top: 14px;
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
-  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+  box-shadow: 0 2px 12px rgba(37,99,235,0.10);
   transition: background 0.25s, transform 0.18s, box-shadow 0.18s;
   opacity: ${props => props.disabled ? 0.7 : 1};
 
   &:hover {
-    background: linear-gradient(90deg, #1d4ed8 0%, #38f9d7 100%);
-    transform: ${props => props.disabled ? 'none' : 'translateY(-2px) scale(1.03)'};
-    box-shadow: 0 6px 18px rgba(37,99,235,0.12);
+    background: linear-gradient(135deg, #1d4ed8 0%, #10b981 100%);
+    transform: ${props => props.disabled ? 'none' : 'translateY(-2px) scale(1.04)'};
+    box-shadow: 0 8px 24px rgba(37,99,235,0.16);
   }
 `;
