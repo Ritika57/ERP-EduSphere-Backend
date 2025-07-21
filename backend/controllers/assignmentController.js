@@ -144,3 +144,40 @@ export const getStudentSubmissions = async (req, res, next) => {
     });
   }
 };
+
+export const deleteAssignment = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Assignment ID is required",
+      });
+    }
+
+    // First, delete all submissions for this assignment
+    await AssignmentSubmission.deleteMany({ assignmentId: id });
+
+    // Then delete the assignment
+    const deletedAssignment = await Assignment.findByIdAndDelete(id);
+
+    if (!deletedAssignment) {
+      return res.status(404).json({
+        success: false,
+        message: "Assignment not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Assignment deleted successfully",
+    });
+  } catch (err) {
+    console.error("Error deleting assignment:", err);
+    res.status(500).json({
+      success: false,
+      message: "Error deleting assignment",
+    });
+  }
+};
