@@ -97,46 +97,24 @@ export const ButtonsContainer = styled.div`
 `;
 
 export const LoginButton = styled.button`
-  background: rgba(255,255,255,0.9);
+  background: rgba(255, 255, 255, 0.9);
   color: #2563eb;
-  border: 2px solid rgba(255,255,255,0.3);
-  padding: 12px 32px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  height: 40px;
+  padding: 24px 33px;
   border-radius: 12px;
   font-size: 1.08rem;
   font-weight: 700;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(10px);
   position: relative;
   overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    transition: left 0.6s ease;
-  }
-
-  &:hover {
-    background: #fff;
-    color: #1d4ed8;
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    border-color: rgba(255,255,255,0.5);
-    
-    &::before {
-      left: 100%;
-    }
-  }
-
-  &:active {
-    transform: translateY(-1px);
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 50px;
 `;
 
 export const GuestButton = styled.button`
