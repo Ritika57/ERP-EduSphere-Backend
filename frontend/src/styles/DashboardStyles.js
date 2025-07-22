@@ -130,17 +130,23 @@ export const StatsGrid = styled.div`
 `;
 
 export const StatCard = styled.div`
-  background: ${({ theme }) => theme.card};
-  border-radius: 20px;
-  padding: 28px 24px;
-  border: 1px solid ${({ theme }) => theme.border};
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  background: linear-gradient(135deg, ${({ theme }) => theme.card} 80%, ${({ theme }) => theme.primary}10 100%);
+  border-radius: 24px;
+  padding: 36px 28px;
+  border: 1.5px solid ${({ theme }) => theme.border};
+  box-shadow: 0 8px 32px rgba(37,99,235,0.10), 0 1.5px 8px rgba(0,0,0,0.04);
+  transition: all 0.25s cubic-bezier(.4,2,.6,1), box-shadow 0.18s;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 28px;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.035);
+    box-shadow: 0 16px 48px rgba(37,99,235,0.16), 0 2px 12px rgba(0,0,0,0.08);
+  }
 
   &::before {
     content: "";
@@ -148,17 +154,12 @@ export const StatCard = styled.div`
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
+    height: 5px;
     background: linear-gradient(
       90deg,
       ${({ theme }) => theme.primary},
       ${({ theme }) => theme.accent}
     );
-  }
-
-  &:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   }
 `;
 
@@ -178,11 +179,13 @@ export const StatInfo = styled.div`
 `;
 
 export const StatNumber = styled.div`
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: ${({ theme }) => theme.text};
+  font-size: 3.2rem; /* Larger number */
+  font-weight: 900;
+  color: ${({ theme }) => theme.primary};
   line-height: 1;
   margin-bottom: 4px;
+  letter-spacing: -1.5px;
+  text-shadow: 0 2px 12px rgba(37,99,235,0.10);
 `;
 
 export const StatLabel = styled.div`
@@ -255,6 +258,16 @@ export const EventPanel = styled.div`
   }
 `;
 
+export const ExamPageTitle = styled.h1`
+  font-size: 3.8rem;
+  font-weight: 900;
+  color: ${({ theme }) => theme.primary};
+  letter-spacing: -2px;
+  margin-bottom: 10px;
+  line-height: 1.05;
+  text-shadow: 0 4px 16px rgba(37,99,235,0.10);
+`;
+
 export const SectionTitle = styled.h2`
   font-size: 1.75rem;
   margin-bottom: 24px;
@@ -262,6 +275,8 @@ export const SectionTitle = styled.h2`
   font-weight: 700;
   letter-spacing: -0.5px;
   position: relative;
+  line-height: 1.1;
+  text-shadow: 0 2px 8px rgba(37,99,235,0.08);
 
   &::after {
     content: "";

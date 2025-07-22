@@ -121,27 +121,134 @@ const StudentSection = () => {
     <TeacherDashboardContainer>
       <Sidebar />
       <Content isOpen={true}>
-        {/* Welcome Section */}
-        <WelcomeSection>
-          <div>
-            <WelcomeTitle>{getCurrentTime()}, Teacher!</WelcomeTitle>
-            <WelcomeSubtitle>Manage and view your students' information</WelcomeSubtitle>
+        {/* Enhanced Page Heading with Icon */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 8 }}>
+          <FaUserGraduate size={38} color="#2563eb" style={{ flexShrink: 0 }} />
+          <h1 style={{
+            fontSize: '2.7rem',
+            fontWeight: 900,
+            color: '#2563eb',
+            margin: 0,
+            letterSpacing: '-1.5px',
+            lineHeight: 1.08,
+          }}>
+            Students
+          </h1>
+        </div>
+        <div style={{
+          fontSize: '1.13rem',
+          color: '#555',
+          fontWeight: 400,
+          marginBottom: 24,
+        }}>
+          Manage and view your students' information
+        </div>
+        <div style={{
+          height: 2,
+          background: 'linear-gradient(90deg, #2563eb 0%, #3b82f6 100%)',
+          borderRadius: 2,
+          marginBottom: 24,
+        }} />
+
+        {/* Search Bar */}
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', marginBottom: 24 }}>
+          <div style={{ position: 'relative', flex: 1, minWidth: '250px' }}>
+            <FaSearch style={{
+              position: 'absolute',
+              left: '12px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              color: '#6b7280',
+            }} />
+            <input
+              type="text"
+              placeholder="Search by name or registration number..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '12px 16px 12px 40px',
+                border: '1px solid #e2e8f0',
+                borderRadius: '8px',
+                fontSize: '1rem',
+                background: '#fff',
+              }}
+            />
           </div>
-          <QuickActions>
-            <ActionButton onClick={() => navigate('/teacher/classes')}>
-              <FaSchool size={16} />
-              View Classes
-            </ActionButton>
-            <ActionButton onClick={() => navigate('/teacher/assignments')}>
-              <FaPlus size={16} />
-              Assignments
-            </ActionButton>
-            <ActionButton onClick={() => navigate('/teacher/performance')}>
-              <FaChartLine size={16} />
-              Performance
-            </ActionButton>
-          </QuickActions>
-        </WelcomeSection>
+        </div>
+
+        {/* Students List in Card Container */}
+        <div style={{
+          background: '#fff',
+          borderRadius: 18,
+          boxShadow: '0 4px 24px #2563eb11',
+          padding: 32,
+          marginBottom: 32,
+        }}>
+          <SectionTitle style={{ marginBottom: 18 }}>My Students</SectionTitle>
+          {loading ? (
+            <div style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
+              Loading students...
+            </div>
+          ) : error ? (
+            <div style={{ textAlign: 'center', padding: '40px', color: '#dc2626' }}>
+              {error}
+            </div>
+          ) : filteredStudents.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
+              <FaUserGraduate size={48} style={{ marginBottom: '16px', opacity: 0.5 }} />
+              <p>
+                {searchTerm || selectedClass
+                  ? 'No students found matching your search criteria.'
+                  : 'No students found. Add students to get started!'}
+              </p>
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '20px' }}>
+              {filteredStudents.map((student, index) => (
+                <div
+                  key={student._id}
+                  style={{
+                    background: '#f9fafb',
+                    borderRadius: 14,
+                    boxShadow: '0 2px 8px #2563eb0a',
+                    padding: 20,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 8,
+                    border: '1.5px solid #e5e7eb',
+                  }}
+                >
+                  <div style={{ fontWeight: 700, fontSize: '1.15rem', color: '#2563eb' }}>{student.name}</div>
+                  <div style={{ color: '#555', fontSize: '1rem' }}>Reg #: {student.registrationNumber}</div>
+                  <div style={{ color: '#888', fontSize: '0.98rem' }}>Grade: {student.grade}</div>
+                  <div style={{ color: '#888', fontSize: '0.98rem' }}>Email: {student.email}</div>
+                  <button
+                    onClick={() => handleDeleteStudent(student._id)}
+                    style={{
+                      marginTop: 8,
+                      alignSelf: 'flex-end',
+                      background: '#ef4444',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: 8,
+                      padding: '6px 18px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      fontSize: '0.98rem',
+                      boxShadow: '0 1px 4px #ef444422',
+                      transition: 'background 0.18s',
+                    }}
+                    onMouseOver={e => e.target.style.background = '#dc2626'}
+                    onMouseOut={e => e.target.style.background = '#ef4444'}
+                  >
+                    Delete
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Message Display */}
         {message.text && (
@@ -158,236 +265,6 @@ const StudentSection = () => {
             {message.text}
           </div>
         )}
-
-        {/* Stats Grid */}
-        <StatsGrid>
-          <StatCard>
-            <StatIcon style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
-              <FaUserGraduate size={24} color="white" />
-            </StatIcon>
-            <StatInfo>
-              <StatNumber>{students.length}</StatNumber>
-              <StatLabel>Total Students</StatLabel>
-              <StatTrend positive>
-                <FaArrowUp size={12} />
-                Enrolled students
-              </StatTrend>
-            </StatInfo>
-          </StatCard>
-
-          <StatCard>
-            <StatIcon style={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}>
-              <FaSchool size={24} color="white" />
-            </StatIcon>
-            <StatInfo>
-              <StatNumber>{classes.length}</StatNumber>
-              <StatLabel>Classes</StatLabel>
-              <StatTrend positive>
-                <FaArrowUp size={12} />
-                Active classes
-              </StatTrend>
-            </StatInfo>
-          </StatCard>
-
-          <StatCard>
-            <StatIcon style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}>
-              <FaUserFriends size={24} color="white" />
-            </StatIcon>
-            <StatInfo>
-              <StatNumber>{filteredStudents.length}</StatNumber>
-              <StatLabel>Filtered Students</StatLabel>
-              <StatTrend positive>
-                <FaArrowUp size={12} />
-                Current view
-              </StatTrend>
-            </StatInfo>
-          </StatCard>
-
-          <StatCard>
-            <StatIcon style={{ background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }}>
-              <FaChartLine size={24} color="white" />
-            </StatIcon>
-            <StatInfo>
-              <StatNumber>85%</StatNumber>
-              <StatLabel>Average Attendance</StatLabel>
-              <StatTrend positive>
-                <FaArrowUp size={12} />
-                This month
-              </StatTrend>
-            </StatInfo>
-          </StatCard>
-        </StatsGrid>
-
-        {/* Search and Filter Section */}
-        <OverviewPanel style={{ 
-          marginBottom: '20px', 
-          padding: '24px 32px', 
-          minHeight: 'auto' 
-        }}>
-          <SectionTitle>Search & Filter Students</SectionTitle>
-          <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
-            <div style={{ position: 'relative', flex: 1, minWidth: '250px' }}>
-              <FaSearch style={{ 
-                position: 'absolute', 
-                left: '12px', 
-                top: '50%', 
-                transform: 'translateY(-50%)', 
-                color: '#6b7280' 
-              }} />
-              <input
-                type="text"
-                placeholder="Search by name or registration number..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '12px 16px 12px 40px',
-                  border: '1px solid #e2e8f0',
-                  borderRadius: '8px',
-                  fontSize: '1rem',
-                  background: '#fff'
-                }}
-              />
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <FaFilter size={16} color="#6b7280" />
-              <select
-                value={selectedClass}
-                onChange={(e) => setSelectedClass(e.target.value)}
-                style={{
-                  padding: '12px 16px',
-                  border: '1px solid #e2e8f0',
-                  borderRadius: '8px',
-                  fontSize: '1rem',
-                  background: '#fff',
-                  minWidth: '150px'
-                }}
-              >
-                <option value="">All Classes</option>
-                {classes.map((classItem) => (
-                  <option key={classItem._id} value={classItem.grade}>
-                    {classItem.grade}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </OverviewPanel>
-
-        {/* Students List */}
-        <OverviewPanel>
-          <SectionTitle>My Students</SectionTitle>
-          {loading ? (
-            <div style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
-              Loading students...
-            </div>
-          ) : error ? (
-            <div style={{ textAlign: 'center', padding: '40px', color: '#dc2626' }}>
-              {error}
-            </div>
-          ) : filteredStudents.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
-              <FaUserGraduate size={48} style={{ marginBottom: '16px', opacity: 0.5 }} />
-              <p>
-                {searchTerm || selectedClass 
-                  ? 'No students found matching your search criteria.' 
-                  : 'No students found. Add students to get started!'}
-              </p>
-            </div>
-          ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '20px' }}>
-              {filteredStudents.map((student, index) => (
-                <div
-                  key={student._id || index}
-                  style={{
-                    background: '#fff',
-                    borderRadius: '12px',
-                    padding: '24px',
-                    border: '1px solid #e2e8f0',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-                    transition: 'all 0.2s ease',
-                    cursor: 'pointer'
-                  }}
-                  onMouseOver={(e) => {
-                    e.target.style.transform = 'translateY(-4px)';
-                    e.target.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.target.style.transform = 'translateY(0)';
-                    e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
-                  }}
-                  onClick={() => navigate(`/teacher/performance?student=${student._id}`)}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <div style={{
-                        width: '48px',
-                        height: '48px',
-                        borderRadius: '50%',
-                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'white',
-                        fontSize: '1.25rem',
-                        fontWeight: '600'
-                      }}>
-                        {student.name ? student.name.charAt(0).toUpperCase() : 'S'}
-                      </div>
-                      <div>
-                        <h3 style={{ margin: '0', fontSize: '1.25rem', fontWeight: '600', color: '#1f2937' }}>
-                          {student.name || 'Unknown Student'}
-                        </h3>
-                        <p style={{ margin: '4px 0 0 0', fontSize: '0.875rem', color: '#6b7280' }}>
-                          ID: {student.registrationNumber || 'N/A'}
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteStudent(student._id);
-                      }}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        color: '#dc2626',
-                        cursor: 'pointer',
-                        padding: '8px',
-                        borderRadius: '6px',
-                        fontSize: '0.875rem',
-                        transition: 'all 0.2s ease'
-                      }}
-                      onMouseOver={(e) => e.target.style.background = '#fef2f2'}
-                      onMouseOut={(e) => e.target.style.background = 'none'}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                  
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <FaSchool size={16} color="#6b7280" />
-                      <span style={{ fontSize: '0.875rem', color: '#6b7280' }}>
-                        {student.grade || 'No Class'}
-                      </span>
-                    </div>
-                    <div style={{
-                      padding: '4px 12px',
-                      background: '#f0f9ff',
-                      color: '#0369a1',
-                      borderRadius: '20px',
-                      fontSize: '0.75rem',
-                      fontWeight: '500'
-                    }}>
-                      Active
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </OverviewPanel>
       </Content>
     </TeacherDashboardContainer>
   );

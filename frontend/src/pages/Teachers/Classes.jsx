@@ -115,27 +115,59 @@ const ClassSection = () => {
     <TeacherDashboardContainer>
       <Sidebar />
       <Content isOpen={true}>
-        {/* Welcome Section */}
-        <WelcomeSection>
-          <div>
-            <WelcomeTitle>{getCurrentTime()}, Teacher!</WelcomeTitle>
-            <WelcomeSubtitle>Manage your classes and view student information</WelcomeSubtitle>
+        {/* Assignment-style Gradient Header for Classes (Compact) */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 28,
+            background: 'linear-gradient(90deg, #2563eb 0%, #1fa2ff 50%, #17c3b2 100%)',
+            borderRadius: 36,
+            boxShadow: '0 6px 32px rgba(37,99,235,0.10)',
+            padding: '22px 36px 20px 28px',
+            marginBottom: 28,
+            position: 'relative',
+            overflow: 'hidden',
+            minHeight: 80,
+          }}
+        >
+          <div style={{
+            background: 'rgba(255,255,255,0.18)',
+            borderRadius: '50%',
+            width: 60,
+            height: 60,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 2px 12px #17c3b233',
+            marginRight: 14,
+            flexShrink: 0,
+          }}>
+            <FaSchool size={32} color="#fff" />
           </div>
-          <QuickActions>
-            <ActionButton onClick={() => setShowAddForm(!showAddForm)}>
-              <FaPlus size={16} />
-              {showAddForm ? 'Cancel' : 'Add Class'}
-            </ActionButton>
-            <ActionButton onClick={() => navigate('/teacher/students')}>
-              <FaUserGraduate size={16} />
-              View Students
-            </ActionButton>
-            <ActionButton onClick={() => navigate('/teacher/assignments')}>
-              <FaBook size={16} />
-              Assignments
-            </ActionButton>
-          </QuickActions>
-        </WelcomeSection>
+          <div>
+            <h1 style={{
+              fontSize: '2.1rem',
+              fontWeight: 900,
+              color: '#fff',
+              margin: 0,
+              letterSpacing: '-1.2px',
+              textShadow: '0 2px 12px #2563eb55',
+              lineHeight: 1.08,
+            }}>
+              Classes
+            </h1>
+            <div style={{
+              fontSize: '1rem',
+              color: 'rgba(255,255,255,0.97)',
+              fontWeight: 400,
+              marginTop: 6,
+              textShadow: '0 1px 4px #17c3b233',
+            }}>
+              Manage your classes and view student information
+            </div>
+          </div>
+        </div>
 
         {/* Message Display */}
         {message.text && (

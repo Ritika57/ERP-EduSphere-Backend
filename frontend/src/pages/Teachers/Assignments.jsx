@@ -20,6 +20,7 @@ import {
   StatNumber,
   StatLabel,
   StatTrend,
+  ExamPageTitle, // <-- add this import
 } from '../../styles/DashboardStyles';
 import { 
   FaBook, 
@@ -162,27 +163,59 @@ const AssignmentSection = () => {
     <TeacherDashboardContainer>
       <Sidebar />
       <Content isOpen={true}>
-        {/* Welcome Section */}
-        <WelcomeSection>
-          <div>
-            <WelcomeTitle>{getCurrentTime()}, Teacher!</WelcomeTitle>
-            <WelcomeSubtitle>Manage assignments and track student progress</WelcomeSubtitle>
+        {/* Unique Gradient Header for Assignments */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 20,
+            background: 'linear-gradient(90deg, #2563eb 0%, #10b981 100%)',
+            borderRadius: 24,
+            boxShadow: '0 6px 32px rgba(37,99,235,0.10)',
+            padding: '32px 36px 28px 32px',
+            marginBottom: 18,
+            position: 'relative',
+            overflow: 'hidden',
+            minHeight: 90,
+          }}
+        >
+          <div style={{
+            background: 'rgba(255,255,255,0.18)',
+            borderRadius: '50%',
+            width: 70,
+            height: 70,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 2px 12px #10b98133',
+            marginRight: 18,
+            flexShrink: 0,
+          }}>
+            <FaBook size={38} color="#fff" />
           </div>
-          <QuickActions>
-            <ActionButton onClick={() => setShowAddForm(!showAddForm)}>
-              <FaPlus size={16} />
-              {showAddForm ? 'Cancel' : 'Add Assignment'}
-            </ActionButton>
-            <ActionButton onClick={() => navigate('/teacher/classes')}>
-              <FaSchool size={16} />
-              View Classes
-            </ActionButton>
-            <ActionButton onClick={() => navigate('/teacher/students')}>
-              <FaBook size={16} />
-              View Students
-            </ActionButton>
-          </QuickActions>
-        </WelcomeSection>
+          <div>
+            <h1 style={{
+              fontSize: '2.7rem',
+              fontWeight: 900,
+              color: '#fff',
+              margin: 0,
+              letterSpacing: '-1.5px',
+              textShadow: '0 2px 12px #2563eb55',
+              lineHeight: 1.08,
+            }}>
+              Assignments
+            </h1>
+            <div style={{
+              fontSize: '1.13rem',
+              color: 'rgba(255,255,255,0.93)',
+              fontWeight: 400,
+              marginTop: 6,
+              textShadow: '0 1px 4px #10b98133',
+            }}>
+              Manage assignments and track student progress
+            </div>
+          </div>
+        </div>
 
         {/* Message Display */}
         {message.text && (

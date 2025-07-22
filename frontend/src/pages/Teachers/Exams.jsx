@@ -20,6 +20,7 @@ import {
   StatNumber,
   StatLabel,
   StatTrend,
+  ExamPageTitle, // <-- add this import
 } from '../../styles/DashboardStyles';
 import { 
   FaFileAlt, 
@@ -219,28 +220,11 @@ const CheckExamSection = () => {
       <TeacherDashboardContainer>
       <Sidebar />
       <Content isOpen={true}>
-        {/* Welcome Section */}
-        <WelcomeSection>
-          <div>
-            <WelcomeTitle>{getCurrentTime()}, Teacher!</WelcomeTitle>
-            <WelcomeSubtitle>Manage exam records and track student performance</WelcomeSubtitle>
-          </div>
-          <QuickActions>
-            <ActionButton onClick={() => setShowAddForm(!showAddForm)}>
-              <FaPlus size={16} />
-              {showAddForm ? 'Cancel' : 'Add Exam Record'}
-            </ActionButton>
-            <ActionButton onClick={() => navigate('/teacher/performance')}>
-              <FaChartLine size={16} />
-              View Performance
-            </ActionButton>
-            <ActionButton onClick={() => navigate('/teacher/students')}>
-              <FaUserGraduate size={16} />
-              View Students
-            </ActionButton>
-          </QuickActions>
-        </WelcomeSection>
-
+        {/* Page Heading and Subtitle */}
+        <ExamPageTitle>Exam</ExamPageTitle>
+        <p style={{ fontSize: '1.1rem', color: '#555', marginBottom: 32 }}>
+          Manage exam records and track student performance
+        </p>
         {/* Message Display */}
         {message.text && (
           <div style={{

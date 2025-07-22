@@ -92,27 +92,26 @@ const TeacherSection = () => {
     <TeacherDashboardContainer>
       <Sidebar />
       <Content isOpen={true}>
-        {/* Welcome Section */}
-        <WelcomeSection>
-          <div>
-            <WelcomeTitle>{getCurrentTime()}, Teacher!</WelcomeTitle>
-            <WelcomeSubtitle>View and manage your fellow teachers</WelcomeSubtitle>
-          </div>
-          <QuickActions>
-            <ActionButton onClick={() => navigate('/teacher/classes')}>
-              <FaSchool size={16} />
-              View Classes
-            </ActionButton>
-            <ActionButton onClick={() => navigate('/teacher/students')}>
-              <FaUserFriends size={16} />
-              View Students
-            </ActionButton>
-            <ActionButton onClick={() => navigate('/teacher/assignments')}>
-              <FaBook size={16} />
-              Assignments
-            </ActionButton>
-          </QuickActions>
-        </WelcomeSection>
+        {/* Simple Page Heading and Subtitle */}
+        <h1 style={{
+          fontSize: '2.7rem',
+          fontWeight: 900,
+          color: '#2563eb',
+          margin: 0,
+          letterSpacing: '-1.5px',
+          lineHeight: 1.08,
+          marginBottom: 8,
+        }}>
+          Teachers
+        </h1>
+        <div style={{
+          fontSize: '1.13rem',
+          color: '#555',
+          fontWeight: 400,
+          marginBottom: 32,
+        }}>
+          View and manage your fellow teachers
+        </div>
 
         {/* Message Display */}
         {message.text && (
