@@ -1,39 +1,68 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { FaUserGraduate, FaEnvelope, FaStar, FaBook, FaCalendarAlt, FaPlus, FaCheck, FaExclamationTriangle } from 'react-icons/fa';
+
+// Animation for form entrance
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+// Animation for feedback messages
+const popIn = keyframes`
+  0% { transform: scale(0.95); opacity: 0; }
+  60% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+`;
 
 const FormContainer = styled.div`
   background: ${({ theme }) => theme.card};
-  border-radius: 20px;
-  padding: 32px;
-  margin-bottom: 40px;
-  border: 1px solid ${({ theme }) => theme.border};
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  transition: all 0.3s ease;
+  border-radius: 24px;
+  padding: 40px 36px 32px 36px;
+  margin-bottom: 48px;
+  border: 2.5px solid transparent;
+  box-shadow: 0 8px 32px rgba(37,99,235,0.10), 0 1.5px 8px rgba(0,0,0,0.04);
+  transition: box-shadow 0.3s, border 0.3s;
+  animation: ${fadeInUp} 0.7s cubic-bezier(.4,2,.6,1);
+  position: relative;
+  z-index: 1;
+  border-image: linear-gradient(90deg, ${({ theme }) => theme.primary}, ${({ theme }) => theme.accent}) 1;
 
   &:hover {
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    box-shadow: 0 16px 48px rgba(37,99,235,0.16), 0 2px 12px rgba(0,0,0,0.08);
+    border: 2.5px solid ${({ theme }) => theme.primary};
   }
 `;
 
 const FormTitle = styled.h3`
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 2.1rem;
+  font-weight: 800;
   color: ${({ theme }) => theme.text};
-  margin: 0 0 24px 0;
+  margin: 0 0 32px 0;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   position: relative;
-  
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, ${({ theme }) => theme.primary}, ${({ theme }) => theme.accent});
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
   &::after {
     content: '';
     position: absolute;
-    bottom: -8px;
+    bottom: -10px;
     left: 0;
-    width: 40px;
-    height: 3px;
+    width: 60px;
+    height: 4px;
     background: linear-gradient(90deg, ${({ theme }) => theme.primary}, ${({ theme }) => theme.accent});
     border-radius: 2px;
   }
@@ -42,8 +71,8 @@ const FormTitle = styled.h3`
 const FormGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-bottom: 24px;
+  gap: 28px 32px;
+  margin-bottom: 32px;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -54,57 +83,60 @@ const FormGrid = styled.div`
 const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 `;
 
 const Label = styled.label`
-  font-weight: 600;
+  font-weight: 700;
   color: ${({ theme }) => theme.text};
-  font-size: 0.9rem;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   gap: 8px;
+  letter-spacing: 0.1px;
 `;
 
 const Input = styled.input`
-  padding: 12px 16px;
+  padding: 14px 18px;
   border: 2px solid ${({ theme }) => theme.border};
-  border-radius: 12px;
-  font-size: 1rem;
+  border-radius: 14px;
+  font-size: 1.05rem;
   background: ${({ theme }) => theme.background};
   color: ${({ theme }) => theme.text};
-  transition: all 0.2s ease;
+  transition: border 0.2s, box-shadow 0.2s;
   width: 100%;
   box-sizing: border-box;
+  font-weight: 500;
 
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.primary};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}20;
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}22;
   }
 
   &::placeholder {
     color: ${({ theme }) => theme.text};
-    opacity: 0.5;
+    opacity: 0.45;
   }
 `;
 
 const Select = styled.select`
-  padding: 12px 16px;
+  padding: 14px 18px;
   border: 2px solid ${({ theme }) => theme.border};
-  border-radius: 12px;
-  font-size: 1rem;
+  border-radius: 14px;
+  font-size: 1.05rem;
   background: ${({ theme }) => theme.background};
   color: ${({ theme }) => theme.text};
-  transition: all 0.2s ease;
+  transition: border 0.2s, box-shadow 0.2s;
   width: 100%;
   box-sizing: border-box;
   cursor: pointer;
+  font-weight: 500;
 
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.primary};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}20;
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.primary}22;
   }
 
   option {
@@ -117,20 +149,22 @@ const SubmitButton = styled.button`
   background: linear-gradient(135deg, ${({ theme }) => theme.primary}, ${({ theme }) => theme.accent});
   color: white;
   border: none;
-  border-radius: 12px;
-  padding: 14px 32px;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 14px;
+  padding: 16px 38px;
+  font-size: 1.08rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
   display: flex;
   align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 16px rgba(37,99,235,0.2);
+  gap: 10px;
+  box-shadow: 0 4px 16px rgba(37,99,235,0.13);
+  margin-top: 8px;
 
   &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(37,99,235,0.3);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 24px rgba(37,99,235,0.18);
+    background: linear-gradient(135deg, ${({ theme }) => theme.accent}, ${({ theme }) => theme.primary});
   }
 
   &:disabled {
@@ -141,33 +175,36 @@ const SubmitButton = styled.button`
 `;
 
 const Message = styled.div`
-  padding: 12px 16px;
-  border-radius: 8px;
-  margin-top: 16px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin-top: 20px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-weight: 500;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 1.02rem;
+  animation: ${popIn} 0.5s cubic-bezier(.4,2,.6,1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   
   ${({ type }) => {
     switch (type) {
       case 'success':
         return `
-          background: #10b98120;
+          background: #10b98122;
           color: #10b981;
-          border: 1px solid #10b98140;
+          border: 1.5px solid #10b98144;
         `;
       case 'error':
         return `
-          background: #ef444420;
+          background: #ef444422;
           color: #ef4444;
-          border: 1px solid #ef444440;
+          border: 1.5px solid #ef444444;
         `;
       default:
         return `
-          background: #3b82f620;
+          background: #3b82f622;
           color: #3b82f6;
-          border: 1px solid #3b82f640;
+          border: 1.5px solid #3b82f644;
         `;
     }
   }}
@@ -177,6 +214,74 @@ const LoadingText = styled.span`
   color: ${({ theme }) => theme.text};
   opacity: 0.7;
   font-style: italic;
+  font-size: 1.01rem;
+`;
+
+// Glassmorphism and animated background
+const AnimatedBg = styled.div`
+  position: absolute;
+  top: -60px;
+  left: -60px;
+  width: 340px;
+  height: 340px;
+  z-index: 0;
+  filter: blur(60px);
+  opacity: 0.7;
+  background: radial-gradient(circle at 60% 40%, ${({ theme }) => theme.primary}99 0%, ${({ theme }) => theme.accent}66 60%, transparent 100%);
+  animation: floatBg 7s ease-in-out infinite alternate;
+
+  @keyframes floatBg {
+    0% { transform: scale(1) translateY(0) translateX(0); }
+    100% { transform: scale(1.1) translateY(30px) translateX(40px); }
+  }
+`;
+
+const GlassFormContainer = styled(FormContainer)`
+  background: rgba(255,255,255,0.18);
+  box-shadow: 0 8px 40px 0 rgba(37,99,235,0.18), 0 1.5px 8px rgba(0,0,0,0.04);
+  backdrop-filter: blur(16px) saturate(1.2);
+  border: 2.5px solid rgba(255,255,255,0.22);
+  overflow: hidden;
+`;
+
+const AnimatedIcon = styled.span`
+  display: flex;
+  align-items: center;
+  animation: iconPop 1.2s cubic-bezier(.4,2,.6,1) infinite alternate;
+  @keyframes iconPop {
+    0% { transform: scale(1) rotate(-6deg); }
+    100% { transform: scale(1.13) rotate(8deg); }
+  }
+`;
+
+const GlowingButton = styled(SubmitButton)`
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 0 0 16px 2px ${({ theme }) => theme.primary}55, 0 2px 16px 0 ${({ theme }) => theme.accent}33;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: box-shadow 0.22s, border 0.22s, background 0.22s;
+
+  &::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    border-radius: 16px;
+    background: linear-gradient(120deg, ${({ theme }) => theme.primary} 0%, ${({ theme }) => theme.accent} 100%);
+    filter: blur(8px);
+    opacity: 0.7;
+    transition: opacity 0.22s;
+    animation: glowBtn 2.5s linear infinite alternate;
+  }
+  @keyframes glowBtn {
+    0% { opacity: 0.7; }
+    100% { opacity: 1; }
+  }
+  &:hover::before {
+    opacity: 1;
+  }
 `;
 
 const AddPerformanceForm = ({ onSuccess }) => {
@@ -250,121 +355,116 @@ const AddPerformanceForm = ({ onSuccess }) => {
   };
 
   return (
-    <FormContainer onClick={handleFormClick} style={{ cursor: 'pointer' }}>
-      <FormTitle>
-        <FaPlus size={20} />
-        Add Performance Record
-      </FormTitle>
-      
-      <form onSubmit={handleSubmit}>
-        <FormGrid>
-          <FormGroup>
-            <Label>
-              <FaUserGraduate size={14} />
-              Student Name
-            </Label>
-            {studentsLoading ? (
-              <LoadingText>Loading students...</LoadingText>
+    <div style={{ position: 'relative' }}>
+      <AnimatedBg />
+      <GlassFormContainer style={{ cursor: 'pointer' }}>
+        <FormTitle>
+          <AnimatedIcon><FaPlus size={24} /></AnimatedIcon>
+          Add Performance Record
+        </FormTitle>
+        <form onSubmit={handleSubmit}>
+          <FormGrid>
+            <FormGroup>
+              <Label>
+                <AnimatedIcon><FaUserGraduate size={16} /></AnimatedIcon>
+                Student Name
+              </Label>
+              {studentsLoading ? (
+                <LoadingText>Loading students...</LoadingText>
+              ) : (
+                <Select name="student" value={form.student} onChange={handleChange} required>
+                  <option value="">Select a student</option>
+                  {students.map((student) => (
+                    <option key={student._id} value={student._id}>
+                      {student.name}
+                    </option>
+                  ))}
+                </Select>
+              )}
+            </FormGroup>
+            <FormGroup>
+              <Label>
+                <AnimatedIcon><FaEnvelope size={16} /></AnimatedIcon>
+                Email
+              </Label>
+              <Input 
+                name="email" 
+                type="email" 
+                value={form.email} 
+                onChange={handleChange} 
+                required 
+                placeholder="student@email.com"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>
+                <AnimatedIcon><FaStar size={16} /></AnimatedIcon>
+                Score
+              </Label>
+              <Input 
+                name="score" 
+                type="number" 
+                value={form.score} 
+                onChange={handleChange} 
+                required 
+                min="0" 
+                max="100"
+                placeholder="Enter score (0-100)"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>
+                <AnimatedIcon><FaBook size={16} /></AnimatedIcon>
+                Subject
+              </Label>
+              <Input 
+                name="subject" 
+                value={form.subject} 
+                onChange={handleChange}
+                placeholder="e.g., Mathematics, Science"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>
+                <AnimatedIcon><FaCalendarAlt size={16} /></AnimatedIcon>
+                Date
+              </Label>
+              <Input 
+                name="date" 
+                type="date" 
+                value={form.date} 
+                onChange={handleChange}
+              />
+            </FormGroup>
+          </FormGrid>
+          <GlowingButton type="submit" disabled={loading || studentsLoading}>
+            {loading ? (
+              <>
+                <FaCheck size={18} />
+                Adding Performance...
+              </>
             ) : (
-              <Select name="student" value={form.student} onChange={handleChange} required>
-                <option value="">Select a student</option>
-                {students.map((student) => (
-                  <option key={student._id} value={student._id}>
-                    {student.name}
-                  </option>
-                ))}
-              </Select>
+              <>
+                <FaPlus size={18} />
+                Add Performance
+              </>
             )}
-          </FormGroup>
-
-          <FormGroup>
-            <Label>
-              <FaEnvelope size={14} />
-              Email
-            </Label>
-            <Input 
-              name="email" 
-              type="email" 
-              value={form.email} 
-              onChange={handleChange} 
-              required 
-              placeholder="student@email.com"
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <Label>
-              <FaStar size={14} />
-              Score
-            </Label>
-            <Input 
-              name="score" 
-              type="number" 
-              value={form.score} 
-              onChange={handleChange} 
-              required 
-              min="0" 
-              max="100"
-              placeholder="Enter score (0-100)"
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <Label>
-              <FaBook size={14} />
-              Subject
-            </Label>
-            <Input 
-              name="subject" 
-              value={form.subject} 
-              onChange={handleChange}
-              placeholder="e.g., Mathematics, Science"
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <Label>
-              <FaCalendarAlt size={14} />
-              Date
-            </Label>
-            <Input 
-              name="date" 
-              type="date" 
-              value={form.date} 
-              onChange={handleChange}
-            />
-          </FormGroup>
-        </FormGrid>
-
-        <SubmitButton type="submit" disabled={loading || studentsLoading}>
-          {loading ? (
-            <>
-              <FaCheck size={16} />
-              Adding Performance...
-            </>
-          ) : (
-            <>
-              <FaPlus size={16} />
-              Add Performance
-            </>
+          </GlowingButton>
+          {success && (
+            <Message type="success">
+              <FaCheck size={18} />
+              Performance record added successfully!
+            </Message>
           )}
-        </SubmitButton>
-
-        {success && (
-          <Message type="success">
-            <FaCheck size={16} />
-            Performance record added successfully!
-          </Message>
-        )}
-        
-        {error && (
-          <Message type="error">
-            <FaExclamationTriangle size={16} />
-            {error}
-          </Message>
-        )}
-      </form>
-    </FormContainer>
+          {error && (
+            <Message type="error">
+              <FaExclamationTriangle size={18} />
+              {error}
+            </Message>
+          )}
+        </form>
+      </GlassFormContainer>
+    </div>
   );
 };
 
