@@ -3,6 +3,7 @@ import styled, { useTheme } from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom'; 
 import { BsGraphUp, BsFileText, BsBook, BsGraphDown, BsCalendar, BsGear, BsChatDots, BsBoxArrowRight } from 'react-icons/bs';
 import avatarImg from '../../assets/bg1.png';
+import StudentLogin from '../../assets/Student.jpg'
 
 const SidebarContainer = styled.div`
   position: fixed;
@@ -42,22 +43,20 @@ const ProfileSection = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  padding: 24px 18px 18px 18px;
+  padding: 20px 18px 16px 18px;
   border-bottom: 1px solid ${({ theme }) => theme.border};
-  min-height: 72px;
   transition: padding 0.25s;
-  margin-top: 35px;
+  margin-top: 0;
   
   @media (max-width: 700px) {
     padding: 16px 12px 12px 12px;
     gap: 6px;
-    min-height: 60px;
   }
 `;
 
 const Avatar = styled.img`
-  width: 44px;
-  height: 44px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   object-fit: cover;
   background: ${({ theme }) => theme.card};
@@ -227,9 +226,9 @@ const Sidebar = ({ onToggle }) => {
 
   // Dummy profile info (replace with real student info if available)
   const profile = {
-    name: 'Student User',
+    name: 'Student',
     role: 'Student',
-    avatar: avatarImg,
+    avatar: StudentLogin,
   };
 
   // Sync initial state with parent

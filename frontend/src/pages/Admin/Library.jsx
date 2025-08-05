@@ -456,12 +456,21 @@ const Library = () => {
           bookname: newBook.title,
           author: newBook.author,
         });
-        setBooks([...books, response.data]);
+        
+        // If the response includes the created book, add it to the list
+        if (response.data.book) {
+          setBooks([...books, response.data.book]);
+        } else {
+          // Otherwise fetch the updated list
+          await fetchBooks();
+        }
+        
         setNewBook({ title: '', author: '' });
         showSuccess('Book added successfully!');
       } catch (error) {
         console.error('Error adding book:', error);
-        showError('Failed to add book');
+        const errorMsg = error.response?.data?.message || 'Failed to add book';
+        showError(errorMsg);
       } finally {
         setLoading(false);
       }

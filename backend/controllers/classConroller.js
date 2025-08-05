@@ -8,10 +8,11 @@ export const createClass = async (req, res, next) => {
     if (!grade ) {
       handleValidationError("Please Fill Form!", 400);
   }
-  await Class.create({ grade });
+  const newClass = await Class.create({ grade });
   res.status(200).json({
     success: true,
     message: "Class Created!",
+    class: newClass
   }); 
   } catch (err) {
     next(err);

@@ -3,6 +3,7 @@ import styled, { useTheme } from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom'; 
 import { BsGraphUp, BsPeople, BsPerson, BsFileText, BsBook, BsGraphDown, BsCalendar, BsGear, BsChatDots, BsCalendarEvent, BsBoxArrowRight } from 'react-icons/bs';
 import avatarImg from '../../assets/bg1.png';
+import AdminLogin from '../../assets/AdminLogin.jpg'
 
 const SidebarContainer = styled.div`
   position: fixed;
@@ -45,8 +46,8 @@ const ProfileSection = styled.div`
 `;
 
 const Avatar = styled.img`
-  width: 60px;
-  height: 60px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   object-fit: cover;
   background: ${({ theme }) => theme.card};
@@ -214,7 +215,7 @@ const Sidebar = () => {
   const profile = {
     name: 'Admin',
     role: 'Administrator',
-    avatar: avatarImg,
+    avatar: AdminLogin,
   };
 
   const toggleSidebar = () => {

@@ -4,7 +4,6 @@ import axios from 'axios';
 import Sidebar from './Sidebar';
 import { 
   StudentDashboardContainer, 
-  Content, 
   WelcomeSection,
   WelcomeTitle,
   WelcomeSubtitle,
@@ -26,6 +25,27 @@ import {
   MetricLabel,
   MetricIcon
 } from '../../styles/DashboardStyles';
+import styled from 'styled-components';
+
+const Content = styled.div`
+  flex: 1;
+  padding: 32px 40px;
+  margin-left: 250px;
+  background: ${({ theme }) => theme.background};
+  min-height: 100vh;
+  overflow-y: auto;
+  transition: margin-left 0.25s ease;
+  
+  @media (max-width: 700px) {
+    margin-left: 160px;
+    padding: 20px 20px;
+  }
+  
+  @media (max-width: 480px) {
+    margin-left: 0;
+    padding: 16px 16px;
+  }
+`;
 import { 
   FaUserGraduate, 
   FaChartLine, 

@@ -475,7 +475,11 @@ const SettingsProfile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem('adminToken');
-      if (!token) return;
+      if (!token) {
+        showError('Please log in to access your profile');
+        navigate('/admin-signIn');
+        return;
+      }
 
       try {
         setLoading(true);
@@ -496,14 +500,21 @@ const SettingsProfile = () => {
         }
       } catch (error) {
         console.error('Error fetching admin profile:', error);
-        showError('Failed to fetch profile information');
+        if (error.response?.status === 401) {
+          showError('Session expired. Please log in again.');
+          localStorage.removeItem('adminToken');
+          localStorage.removeItem('adminInfo');
+          navigate('/admin-signIn');
+        } else {
+          showError('Failed to fetch profile information');
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchProfile();
-  }, [showError]);
+  }, [showError, navigate]);
 
   const handleEdit = () => setEditMode(true);
   
@@ -572,6 +583,37 @@ const SettingsProfile = () => {
   }
 
   if (!adminInfo) {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      return (
+        <ProfileContainer>
+          <Sidebar />
+          <Content>
+            <div style={{ textAlign: 'center', padding: '40px', color: '#6b7280' }}>
+              <FaUserCog style={{ fontSize: '3rem', marginBottom: '16px' }} />
+              <h3>Not Logged In</h3>
+              <p>Please log in to access your profile</p>
+              <button 
+                onClick={() => navigate('/admin-signIn')}
+                style={{
+                  marginTop: '16px',
+                  padding: '12px 24px',
+                  background: '#2563eb',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontSize: '1rem'
+                }}
+              >
+                Go to Login
+              </button>
+            </div>
+          </Content>
+        </ProfileContainer>
+      );
+    }
+    
     return (
       <ProfileContainer>
         <Sidebar />
@@ -579,7 +621,26 @@ const SettingsProfile = () => {
           <div style={{ textAlign: 'center', padding: '40px', color: '#6b7280' }}>
             <FaUserCog style={{ fontSize: '3rem', marginBottom: '16px' }} />
             <h3>Profile not found</h3>
-            <p>Unable to load profile information</p>
+            <p>Unable to load profile information. Please try logging in again.</p>
+            <button 
+              onClick={() => {
+                localStorage.removeItem('adminToken');
+                localStorage.removeItem('adminInfo');
+                navigate('/admin-signIn');
+              }}
+              style={{
+                marginTop: '16px',
+                padding: '12px 24px',
+                background: '#2563eb',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                fontSize: '1rem'
+              }}
+            >
+              Login Again
+            </button>
           </div>
         </Content>
       </ProfileContainer>

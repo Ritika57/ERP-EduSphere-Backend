@@ -13,10 +13,11 @@ export const createAssignment = async (req, res, next) => {
     if (!title || !description || !grade || !deadline) {
       handleValidationError("Please Fill Full Form!", 400);
     }
-    await Assignment.create({ title, description, grade, deadline });
+    const assignment = await Assignment.create({ title, description, grade, deadline });
     res.status(201).json({
       success: true,
       message: "Assignment Created!",
+      assignment,
     });
   } catch (err) {
     next(err);

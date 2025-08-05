@@ -8,10 +8,11 @@ export const createBook = async (req, res, next) => {
     if (!bookname || !author) {
       return next("Please Fill Full Form!", 400);
     }
-    await Book.create({ bookname, author });
+    const book = await Book.create({ bookname, author });
     res.status(200).json({
       success: true,
       message: "A new book is Created!",
+      book,
     });
   } catch (err) {
     next(err);

@@ -3,6 +3,7 @@ import styled, { useTheme } from 'styled-components';
 import { Link, useLocation, useNavigate } from 'react-router-dom'; 
 import { BsGraphUp, BsPeople, BsPerson, BsFileText, BsBook, BsGraphDown, BsCalendar, BsGear, BsChatDots, BsCalendarEvent, BsBoxArrowRight } from 'react-icons/bs';
 import avatarImg from '../../assets/bg1.png';
+import TeacherLogin from '../../assets/TeacherLogin.jpg';
 
 const SidebarContainer = styled.div`
   position: fixed;
@@ -45,8 +46,8 @@ const ProfileSection = styled.div`
 `;
 
 const Avatar = styled.img`
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   object-fit: cover;
   background: ${({ theme }) => theme.card};
@@ -211,9 +212,9 @@ const Sidebar = () => {
 
   // Dummy profile info (replace with real teacher info if available)
   const profile = {
-    name: 'Teacher User',
+    name: 'Teacher',
     role: 'Teacher',
-    avatar: avatarImg,
+    avatar: TeacherLogin,
   };
 
   const toggleSidebar = () => {

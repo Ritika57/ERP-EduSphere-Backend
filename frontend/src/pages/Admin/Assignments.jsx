@@ -67,11 +67,20 @@ const Assignments = () => {
         setSubmitting(true);
         const response = await axios.post('http://localhost:4000/api/v1/assignments', newAssignment);
         toast.success('Assignment added successfully! 🎉');
-        setAssignments([...assignments, response.data.assignment]);
+        
+        // If the response includes the created assignment, add it to the list
+        if (response.data.assignment) {
+          setAssignments([...assignments, response.data.assignment]);
+        } else {
+          // Otherwise fetch the updated list
+          await fetchAssignments();
+        }
+        
         setNewAssignment({ title: '', description: '', grade: '', deadline: '' });
       } catch (error) {
         console.error('Error adding assignment:', error);
-        toast.error('Failed to add assignment');
+        const errorMsg = error.response?.data?.message || 'Failed to add assignment';
+        toast.error(errorMsg);
       } finally {
         setSubmitting(false);
       }

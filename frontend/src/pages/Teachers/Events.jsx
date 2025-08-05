@@ -402,13 +402,13 @@ const EventSection = () => {
           {/* Add Event Panel */}
           <Panel>
             <PanelTitle>Add New Event</PanelTitle>
-            <AddEventForm onSubmit={addEvent}>
+        <AddEventForm onSubmit={addEvent}>
               <FormGroup>
                 <Label>Event Description</Label>
                 <Input
-                  type="text"
-                  value={newEvent}
-                  onChange={(e) => setNewEvent(e.target.value)}
+            type="text"
+            value={newEvent}
+            onChange={(e) => setNewEvent(e.target.value)}
                   placeholder="Enter event description..."
                 />
               </FormGroup>
@@ -426,7 +426,7 @@ const EventSection = () => {
                 <FaPlus />
                 {loading ? 'Adding...' : 'Add Event'}
               </Button>
-            </AddEventForm>
+        </AddEventForm>
             
             {error && (
               <ErrorMessage>
@@ -456,7 +456,7 @@ const EventSection = () => {
                     <EventDetails>
                       <EventName>{event.events}</EventName>
                       <EventDate>
-                        {event.date ? new Date(event.date).toLocaleDateString() : 'No date'}
+                {event.date ? new Date(event.date).toLocaleDateString() : 'No date'}
                       </EventDate>
                     </EventDetails>
                   </EventItem>

@@ -10,18 +10,45 @@ export const createStudent = async (req, res, next) => {
     return res.status(400).json({ success: false, message: "Please Fill Full Form!" });
   }
   
+  // Check if email already exists in StudentUser collection
+  const existingUser = await StudentUser.findOne({ email });
+  if (existingUser) {
+    return res.status(400).json({ 
+      success: false, 
+      message: "Email already registered. Please use a different email." 
+    });
+  }
+  
+  // Check if registration number already exists in Student collection
+  const existingStudent = await Student.findOne({ registrationNumber });
+  if (existingStudent) {
+    return res.status(400).json({ 
+      success: false, 
+      message: "Registration number already exists. Please use a different registration number." 
+    });
+  }
+  
+  // Create user account for authentication first
+  const studentUser = await StudentUser.create({ email, password });
+  
   // Create student record
   const student = await Student.create({ name, registrationNumber, grade, email });
   
-  // Create user account for authentication
-  await StudentUser.create({ email, password });
-  
   res.status(200).json({
     success: true,
-    message: "Student Created!",
+    message: "Student Created Successfully!",
     student,
   });   
 } catch (err) {
+  console.error('Error creating student:', err);
+  
+  // Handle specific MongoDB errors
+  if (err.code === 11000) {
+    const field = Object.keys(err.keyPattern)[0];
+    const message = `${field.charAt(0).toUpperCase() + field.slice(1)} already exists. Please use a different ${field}.`;
+    return res.status(400).json({ success: false, message });
+  }
+  
   next(err);
 } 
 };

@@ -463,15 +463,16 @@ const Classes = () => {
       try {
         setLoading(true);
         const response = await axios.post('http://localhost:4000/api/v1/class', { grade: newClassName });
-        setClasses(prevClasses => {
-          if (Array.isArray(prevClasses)) {
-            return [...prevClasses, response.data];
-          } else {
-            return [];
-          }
-        });
         setNewClassName('');
         showSuccess('Class added successfully!');
+        
+        // If the response includes the created class, add it to the list
+        if (response.data.class) {
+          setClasses(prevClasses => [...prevClasses, response.data.class]);
+        } else {
+          // Otherwise fetch the updated list
+          await fetchClasses();
+        }
       } catch (error) {
         console.error('Error adding class:', error);
         showError('Failed to add class');
