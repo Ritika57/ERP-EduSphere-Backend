@@ -1,6 +1,6 @@
 // Students.js
 import React, { useState, useEffect } from 'react';
-import Sidebar from './Sidebar';
+import AdminLayout from '../../components/AdminLayout';
 import axios from 'axios';
 import { FaUserGraduate, FaPlus, FaSearch, FaFilter, FaGraduationCap, FaIdCard, FaEnvelope } from 'react-icons/fa';
 import { useFlashMessage } from '../../context/FlashMessageContext';
@@ -17,24 +17,7 @@ const slideInLeft = keyframes`
   to { opacity: 1; transform: translateX(0); }
 `;
 
-const StudentsContainer = styled.div`
-  display: flex;
-  min-height: 100vh;
-`;
 
-const Content = styled.div`
-  flex: 1;
-  padding: 32px 40px;
-  margin-left: 250px;
-  background: #f3f4f8;
-  min-height: 100vh;
-  overflow-y: auto;
-  
-  @media (max-width: 700px) {
-    margin-left: 0;
-    padding: 20px 16px;
-  }
-`;
 
 const StudentsContent = styled.div`
   max-width: 1200px;
@@ -505,10 +488,8 @@ const Students = () => {
   });
 
   return (
-    <StudentsContainer>
-      <Sidebar />
-      <Content>
-        <StudentsContent>
+    <AdminLayout>
+      <StudentsContent>
           <HeaderSection>
             <div>
               <HeaderTitle>Students Management</HeaderTitle>
@@ -705,8 +686,7 @@ const Students = () => {
             </ModalOverlay>
           )}
         </StudentsContent>
-      </Content>
-    </StudentsContainer>
+    </AdminLayout>
   );
 };
 

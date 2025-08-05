@@ -24,6 +24,7 @@ const pulse = keyframes`
 export const AdminDashboardContainer = styled.div`
   display: flex;
   min-height: 100vh;
+  width: 100%;
 `;
 
 export const Content = styled.div`
@@ -32,12 +33,16 @@ export const Content = styled.div`
   background: ${({ theme }) => theme.background};
   min-height: 100vh;
   overflow-y: auto;
+  margin-left: ${({ isOpen }) => (isOpen ? '250px' : '80px')};
+  transition: margin-left 0.25s ease;
   
   @media (max-width: 700px) {
+    margin-left: ${({ isOpen }) => (isOpen ? '160px' : '0')};
     padding: 20px 12px;
   }
   
   @media (max-width: 480px) {
+    margin-left: 0;
     padding: 16px 8px;
   }
 `;

@@ -1,14 +1,12 @@
 // AdminDashboard.js
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from './Sidebar';
+import AdminLayout from '../../components/AdminLayout';
 import EventCalendar from './EventCalender';
 import Announcement from './Announcement';
 import Performance from './Performance';
 import axios from 'axios';
 import {
-  AdminDashboardContainer,
-  Content,
   BottomContent,
   SectionTitle,
   TopPanel,
@@ -130,9 +128,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <AdminDashboardContainer>
-      <Sidebar />
-      <Content isOpen={true}>
+    <AdminLayout>
         {/* Welcome Section */}
         <WelcomeSection>
           <div 
@@ -330,8 +326,7 @@ const AdminDashboard = () => {
         <BottomContent>
      
         </BottomContent>
-      </Content>
-    </AdminDashboardContainer>
+    </AdminLayout>
   );
 };
 

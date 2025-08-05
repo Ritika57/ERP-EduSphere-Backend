@@ -54,11 +54,19 @@ export const pulseGlow = keyframes`
   }
 `;
 
-export const AnnouncementContainer = styled.div``;
+export const AnnouncementContainer = styled.div`
+  display: flex;
+  min-height: 100vh;
+  margin-left: 250px;
+  @media (max-width: 700px) {
+    flex-direction: column;
+    margin-left: 0;
+  }
+`;
 
 export const Content = styled.div`
   flex: 1;
-  margin-left: 250px;
+  /* margin-left: 250px; */
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
@@ -67,7 +75,7 @@ export const Content = styled.div`
   justify-content: flex-start;
   padding: 32px 24px;
   @media (max-width: 700px) {
-    margin-left: 0;
+    /* margin-left: 0; */
     padding: 24px 16px;
   }
 `;
