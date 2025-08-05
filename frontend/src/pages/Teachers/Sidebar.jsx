@@ -34,36 +34,42 @@ const SidebarContainer = styled.div`
 
 const ProfileSection = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 14px;
-  padding: 24px 18px 18px 18px;
+  gap: 10px;
+  padding: 32px 18px 22px 18px;
   border-bottom: 1px solid ${({ theme }) => theme.border};
-  min-height: 72px;
+  min-height: 120px;
   transition: padding 0.25s;
-  margin-top: 35px;
+  margin-top: 18px;
 `;
 
 const Avatar = styled.img`
-  width: 44px;
-  height: 44px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   object-fit: cover;
   background: ${({ theme }) => theme.card};
-  border: 2px solid ${({ theme }) => theme.primary};
+  border: 3px solid ${({ theme }) => theme.primary};
+  margin-bottom: 6px;
 `;
 
 const ProfileInfo = styled.div`
-  display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2px;
 `;
 
 const ProfileName = styled.div`
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   color: ${({ theme }) => theme.primary};
+  margin-bottom: 2px;
 `;
 
 const ProfileRole = styled.div`
-  font-size: 0.95rem;
+  font-size: 0.97rem;
   color: ${({ theme }) => theme.text};
   opacity: 0.7;
 `;
@@ -216,7 +222,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate('/teacher-signIn');
+    navigate('/choose-user');
   };
 
   return (

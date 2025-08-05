@@ -8,7 +8,6 @@ import {
   WelcomeSubtitle,
   SectionTitle,
   OverviewPanel,
-  Content as DashboardContent,
   ActionButton,
   ActivityPanel,
   ActivityItem,
@@ -85,6 +84,25 @@ const fadeInUp = styled.div`
   }
 `;
 
+const Content = styled.div`
+  flex: 1;
+  padding: 32px 40px;
+  margin-left: 250px;
+  background: ${({ theme }) => theme.background};
+  min-height: 100vh;
+  overflow-y: auto;
+  
+  @media (max-width: 700px) {
+    margin-left: 160px;
+    padding: 20px 20px;
+  }
+  
+  @media (max-width: 480px) {
+    margin-left: 0;
+    padding: 16px 16px;
+  }
+`;
+
 const CheckAnnouncementSection = () => {
   const [announcement, setAnnouncement] = useState('');
   const [announcements, setAnnouncements] = useState([]);
@@ -122,7 +140,7 @@ const CheckAnnouncementSection = () => {
   return (
     <AnnouncementContainer>
       <Sidebar />
-      <DashboardContent>
+      <Content>
         <AnimatedBg />
         <WelcomeSection>
           <div>
@@ -137,31 +155,92 @@ const CheckAnnouncementSection = () => {
           </div>
         </WelcomeSection>
         {/* Stat Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24, margin: '0 0 32px 0', maxWidth: 900, width: '100%' }}>
-          <fadeInUp>
-            <MetricCard style={{ background: theme.card, border: `1px solid ${theme.border}`, minHeight: 110 }}>
-              <MetricIcon style={{ background: `linear-gradient(135deg, ${theme.primary} 0%, ${theme.accent} 100%)` }}>
-                <FaBullhorn size={22} color="white" />
-              </MetricIcon>
-              <div>
-                <MetricValue style={{ color: theme.text }}>{announcements.length}</MetricValue>
-                <MetricLabel style={{ color: theme.text }}>Total Announcements</MetricLabel>
-              </div>
-            </MetricCard>
-          </fadeInUp>
-          <fadeInUp>
-            <MetricCard style={{ background: theme.card, border: `1px solid ${theme.border}`, minHeight: 110 }}>
-              <MetricIcon style={{ background: `linear-gradient(135deg, ${theme.accent} 0%, ${theme.primary} 100%)` }}>
-                <FaBell size={22} color="white" />
-              </MetricIcon>
-              <div>
-                <MetricValue style={{ fontSize: '1.1rem', fontWeight: 600, maxWidth: 180, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: theme.text }}>
-                  {announcements.length > 0 ? announcements[announcements.length-1].announcement : 'No announcements yet'}
-                </MetricValue>
-                <MetricLabel style={{ color: theme.text }}>Most Recent</MetricLabel>
-              </div>
-            </MetricCard>
-          </fadeInUp>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, margin: '0 0 32px 0', maxWidth: 900, width: '100%' }}>
+          <MetricCard style={{ 
+            background: 'white', 
+            border: '1px solid #e5e7eb', 
+            borderRadius: '16px',
+            padding: '24px',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+            minHeight: 120,
+            transition: 'all 0.3s ease',
+            cursor: 'pointer'
+          }}>
+            <MetricIcon style={{ 
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              width: '50px',
+              height: '50px',
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '16px'
+            }}>
+              <FaBullhorn size={20} color="white" />
+            </MetricIcon>
+            <div>
+              <MetricValue style={{ 
+                color: '#2d3748', 
+                fontSize: '2rem',
+                fontWeight: '700',
+                marginBottom: '4px'
+              }}>
+                {announcements.length}
+              </MetricValue>
+              <MetricLabel style={{ 
+                color: '#718096', 
+                fontSize: '0.9rem',
+                fontWeight: '500'
+              }}>
+                Total Announcements
+              </MetricLabel>
+            </div>
+          </MetricCard>
+          
+          <MetricCard style={{ 
+            background: 'white', 
+            border: '1px solid #e5e7eb', 
+            borderRadius: '16px',
+            padding: '24px',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+            minHeight: 120,
+            transition: 'all 0.3s ease',
+            cursor: 'pointer'
+          }}>
+            <MetricIcon style={{ 
+              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+              width: '50px',
+              height: '50px',
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '16px'
+            }}>
+              <FaBell size={20} color="white" />
+            </MetricIcon>
+            <div>
+              <MetricValue style={{ 
+                color: '#2d3748', 
+                fontSize: '1.1rem',
+                fontWeight: '600',
+                maxWidth: '200px',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                marginBottom: '4px'
+              }}>
+                {announcements.length > 0 ? announcements[announcements.length-1].announcement : 'No announcements yet'}
+              </MetricValue>
+              <MetricLabel style={{ 
+                color: '#718096', 
+                fontSize: '0.9rem',
+                fontWeight: '500'
+              }}>
+                Most Recent
+              </MetricLabel>
+            </div>
+          </MetricCard>
         </div>
         <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', marginBottom: 32, justifyContent: 'center' }}>
           <GlassPanel style={{ flex: 1, minWidth: 340, maxWidth: 700, margin: '0 auto' }}>
@@ -197,7 +276,7 @@ const CheckAnnouncementSection = () => {
             </ActivityPanel>
           </GlassPanel>
         </div>
-      </DashboardContent>
+      </Content>
     </AnnouncementContainer>
   );
 };

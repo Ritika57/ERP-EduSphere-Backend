@@ -33,7 +33,7 @@ export const Content = styled.div`
   background: ${({ theme }) => theme.background};
   min-height: 100vh;
   overflow-y: auto;
-  margin-left: ${({ isOpen }) => (isOpen ? '250px' : '80px')};
+
   transition: margin-left 0.25s ease;
   
   @media (max-width: 700px) {

@@ -57,7 +57,7 @@ export const pulseGlow = keyframes`
 export const AnnouncementContainer = styled.div`
   display: flex;
   min-height: 100vh;
-  margin-left: 250px;
+ 
   @media (max-width: 700px) {
     flex-direction: column;
     margin-left: 0;
