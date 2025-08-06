@@ -591,7 +591,7 @@ const TeacherProfileSection = () => {
 
   return (
     <ProfileContainer>
-      <Sidebar />
+        <Sidebar />
       <Content>
         <ProfileContent>
           <HeaderSection>
@@ -646,14 +646,14 @@ const TeacherProfileSection = () => {
                     <FaUser size={14} />
                     Full Name
                   </Label>
-                  {editMode ? (
+          {editMode ? (
                     <Input
-                      name="name"
-                      value={form.name}
-                      onChange={handleChange}
+              name="name"
+              value={form.name}
+              onChange={handleChange}
                       placeholder="Enter your full name"
-                    />
-                  ) : (
+            />
+          ) : (
                     <InfoDisplay>
                       {teacherInfo.name || 'Not provided'}
                     </InfoDisplay>
@@ -665,15 +665,15 @@ const TeacherProfileSection = () => {
                     <FaEnvelope size={14} />
                     Email Address
                   </Label>
-                  {editMode ? (
+          {editMode ? (
                     <Input
-                      name="email"
-                      value={form.email}
-                      onChange={handleChange}
+              name="email"
+              value={form.email}
+              onChange={handleChange}
                       placeholder="Enter your email"
-                      type="email"
-                    />
-                  ) : (
+              type="email"
+            />
+          ) : (
                     <InfoDisplay>
                       {teacherInfo.email || 'Not provided'}
                     </InfoDisplay>
@@ -685,14 +685,14 @@ const TeacherProfileSection = () => {
                     <FaPhone size={14} />
                     Phone Number
                   </Label>
-                  {editMode ? (
+          {editMode ? (
                     <Input
-                      name="phone"
-                      value={form.phone}
-                      onChange={handleChange}
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
                       placeholder="Enter your phone number"
-                    />
-                  ) : (
+            />
+          ) : (
                     <InfoDisplay>
                       {teacherInfo.phone || 'Not provided'}
                     </InfoDisplay>
@@ -704,14 +704,14 @@ const TeacherProfileSection = () => {
                     <FaGraduationCap size={14} />
                     Qualification
                   </Label>
-                  {editMode ? (
+          {editMode ? (
                     <Input
-                      name="qualification"
-                      value={form.qualification}
-                      onChange={handleChange}
+              name="qualification"
+              value={form.qualification}
+              onChange={handleChange}
                       placeholder="Enter your qualification"
-                    />
-                  ) : (
+            />
+          ) : (
                     <InfoDisplay>
                       {teacherInfo.qualification || 'Not provided'}
                     </InfoDisplay>
@@ -723,11 +723,11 @@ const TeacherProfileSection = () => {
                     <FaChalkboardTeacher size={14} />
                     Subject
                   </Label>
-                  {editMode ? (
+          {editMode ? (
                     <Input
-                      name="subject"
-                      value={form.subject}
-                      onChange={handleChange}
+              name="subject"
+              value={form.subject}
+              onChange={handleChange}
                       placeholder="Enter your subject"
                     />
                   ) : (
@@ -748,18 +748,18 @@ const TeacherProfileSection = () => {
                       value={form.address}
                       onChange={handleChange}
                       placeholder="Enter your address"
-                    />
-                  ) : (
+            />
+          ) : (
                     <InfoDisplay>
                       {teacherInfo.address || 'Not provided'}
                     </InfoDisplay>
-                  )}
+          )}
                 </FormGroup>
               </FormGrid>
 
               <ButtonGroup>
-                {editMode ? (
-                  <>
+        {editMode ? (
+          <>
                     <CancelButton onClick={handleCancel}>
                       <FaTimes size={16} />
                       Cancel
@@ -768,13 +768,13 @@ const TeacherProfileSection = () => {
                       <FaSave size={16} />
                       {loading ? 'Saving...' : 'Save Changes'}
                     </SaveButton>
-                  </>
-                ) : (
+          </>
+        ) : (
                   <EditButton onClick={handleEdit}>
                     <FaEdit size={16} />
                     Edit Profile
                   </EditButton>
-                )}
+        )}
               </ButtonGroup>
             </DetailsCard>
           </ProfileGrid>

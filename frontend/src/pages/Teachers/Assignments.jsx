@@ -59,6 +59,16 @@ const AssignmentSection = () => {
     fetchClasses();
   }, []);
 
+  // Clear message after 5 seconds
+  useEffect(() => {
+    if (message.text) {
+      const timer = setTimeout(() => {
+        setMessage({ text: '', type: '' });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
   const fetchAssignments = async () => {
     try {
       setLoading(true);
@@ -95,16 +105,27 @@ const AssignmentSection = () => {
     }
 
     try {
+      setLoading(true);
       const response = await axios.post('http://localhost:4000/api/v1/assignments', newAssignment);
       if (response.data.success) {
         setMessage({ text: 'Assignment added successfully!', type: 'success' });
         setNewAssignment({ title: '', description: '', grade: '', deadline: '' });
         setShowAddForm(false);
-        fetchAssignments();
+        
+        // If the response includes the created assignment, add it to the list
+        if (response.data.assignment) {
+          setAssignments([...assignments, response.data.assignment]);
+        } else {
+          // Otherwise fetch the updated list
+          await fetchAssignments();
+        }
       }
     } catch (error) {
       console.error('Error adding assignment:', error);
-      setMessage({ text: 'Failed to add assignment. Please try again.', type: 'error' });
+      const errorMsg = error.response?.data?.message || 'Failed to add assignment. Please try again.';
+      setMessage({ text: errorMsg, type: 'error' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -217,6 +238,34 @@ const AssignmentSection = () => {
           </div>
         </div>
 
+        {/* Add Assignment Button */}
+        <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div></div>
+          <button
+            onClick={() => setShowAddForm(!showAddForm)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '12px 20px',
+              background: '#2563eb',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: '1rem',
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              boxShadow: '0 2px 8px rgba(37,99,235,0.2)'
+            }}
+            onMouseOver={(e) => e.target.style.background = '#1d4ed8'}
+            onMouseOut={(e) => e.target.style.background = '#2563eb'}
+          >
+            <FaPlus size={16} />
+            {showAddForm ? 'Cancel' : 'Add New Assignment'}
+          </button>
+        </div>
+
         {/* Message Display */}
         {message.text && (
           <div style={{
@@ -244,23 +293,27 @@ const AssignmentSection = () => {
                   placeholder="Assignment Title"
                   value={newAssignment.title}
                   onChange={(e) => setNewAssignment({ ...newAssignment, title: e.target.value })}
+                  disabled={loading}
                   style={{
                     padding: '12px 16px',
                     border: '1px solid #e2e8f0',
                     borderRadius: '8px',
                     fontSize: '1rem',
-                    background: '#fff'
+                    background: loading ? '#f9fafb' : '#fff',
+                    cursor: loading ? 'not-allowed' : 'text'
                   }}
                 />
                 <select
                   value={newAssignment.grade}
                   onChange={(e) => setNewAssignment({ ...newAssignment, grade: e.target.value })}
+                  disabled={loading}
                   style={{
                     padding: '12px 16px',
                     border: '1px solid #e2e8f0',
                     borderRadius: '8px',
                     fontSize: '1rem',
-                    background: '#fff'
+                    background: loading ? '#f9fafb' : '#fff',
+                    cursor: loading ? 'not-allowed' : 'pointer'
                   }}
                 >
                   <option value="">Select Class</option>
@@ -275,14 +328,16 @@ const AssignmentSection = () => {
                 placeholder="Assignment Description"
                 value={newAssignment.description}
                 onChange={(e) => setNewAssignment({ ...newAssignment, description: e.target.value })}
+                disabled={loading}
                 rows={4}
                 style={{
                   padding: '12px 16px',
                   border: '1px solid #e2e8f0',
                   borderRadius: '8px',
                   fontSize: '1rem',
-                  background: '#fff',
-                  resize: 'vertical'
+                  background: loading ? '#f9fafb' : '#fff',
+                  resize: 'vertical',
+                  cursor: loading ? 'not-allowed' : 'text'
                 }}
               />
               <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
@@ -290,32 +345,39 @@ const AssignmentSection = () => {
                   type="date"
                   value={newAssignment.deadline}
                   onChange={(e) => setNewAssignment({ ...newAssignment, deadline: e.target.value })}
+                  disabled={loading}
                   style={{
                     padding: '12px 16px',
                     border: '1px solid #e2e8f0',
                     borderRadius: '8px',
                     fontSize: '1rem',
-                    background: '#fff',
-                    flex: 1
+                    background: loading ? '#f9fafb' : '#fff',
+                    flex: 1,
+                    cursor: loading ? 'not-allowed' : 'text'
                   }}
                 />
                 <button
                   type="submit"
+                  disabled={loading}
                   style={{
                     padding: '12px 24px',
-                    background: '#2563eb',
+                    background: loading ? '#9ca3af' : '#2563eb',
                     color: 'white',
                     border: 'none',
                     borderRadius: '8px',
                     fontSize: '1rem',
                     fontWeight: '600',
-                    cursor: 'pointer',
+                    cursor: loading ? 'not-allowed' : 'pointer',
                     transition: 'all 0.2s ease'
                   }}
-                  onMouseOver={(e) => e.target.style.background = '#1d4ed8'}
-                  onMouseOut={(e) => e.target.style.background = '#2563eb'}
+                  onMouseOver={(e) => {
+                    if (!loading) e.target.style.background = '#1d4ed8';
+                  }}
+                  onMouseOut={(e) => {
+                    if (!loading) e.target.style.background = '#2563eb';
+                  }}
                 >
-                  Add Assignment
+                  {loading ? 'Adding...' : 'Add Assignment'}
                 </button>
               </div>
             </form>
