@@ -2,18 +2,20 @@
 import styled from 'styled-components';
 
 export const LibraryContainer = styled.div`
-  display: flex;
+
 `;
 
 export const Content = styled.div`
   flex: 1;
   padding: 48px 40px 40px 48px;
+  margin-left: 250px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   @media (max-width: 768px) {
     padding-left: 0;
     padding-right: 10px;
     padding-top: 24px;
+    margin-left: 0;
   }
 `;
 

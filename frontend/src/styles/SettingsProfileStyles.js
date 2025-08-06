@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 
 export const ProfileContainer = styled.div`
-  display: flex;
+
 `;
 
 export const SidebarContainer = styled.div`
@@ -11,6 +11,7 @@ export const SidebarContainer = styled.div`
 
 export const Content = styled.div`
   flex: 1;
+  margin-left: 250px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -18,6 +19,9 @@ export const Content = styled.div`
   justify-content: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   position: relative;
+  @media (max-width: 700px) {
+    margin-left: 0;
+  }
 `;
 
 export const ProfileCard = styled.div`

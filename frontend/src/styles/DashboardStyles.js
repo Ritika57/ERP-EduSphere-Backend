@@ -211,7 +211,7 @@ export const StatTrend = styled.div`
 
 // Main Content Panels
 export const TopPanel = styled.div`
-  display: flex;
+
   gap: 32px;
   margin-bottom: 32px;
   align-items: flex-start;

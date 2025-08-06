@@ -14,17 +14,16 @@ const fadeInUp = keyframes`
 export const AttendanceContainer = styled.div`
   display: flex;
   min-height: 100vh;
-  margin-left: 250px;
   @media screen and (max-width: 768px) {
     flex-direction: column;
     padding-left: 0;
-    margin-left: 0;
   }
 `;
 
 export const Content = styled.div`
   flex: 1;
   padding: 40px 32px;
+  margin-left: 250px;
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
@@ -33,6 +32,7 @@ export const Content = styled.div`
   animation: ${fadeInUp} 0.7s cubic-bezier(0.23, 1, 0.32, 1);
   @media (max-width: 900px) {
     padding: 18px 2vw;
+    margin-left: 0;
   }
 `;
 

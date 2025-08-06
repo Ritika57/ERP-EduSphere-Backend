@@ -225,9 +225,6 @@ const Home = () => {
           <NavLink onClick={() => scrollToSection('contact')}>Contact Us</NavLink>
         </NavigationLinks>
         <ButtonsContainer>
-          <ThemeToggleButton themeMode={themeMode} onClick={toggleTheme} aria-label="Toggle theme">
-            {themeMode === 'dark' ? '🌙' : '☀️'}
-          </ThemeToggleButton>
           <LoginButton onClick={handleLoginClick}>Sign In</LoginButton>
         </ButtonsContainer>
       </Navbar>

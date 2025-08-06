@@ -1,11 +1,10 @@
-// ClassSection.js
+// StudentClasses.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from './Sidebar';
 import {
-  TeacherDashboardContainer,
-  Content,
+  StudentDashboardContainer,
   WelcomeSection,
   WelcomeTitle,
   WelcomeSubtitle,
@@ -21,35 +20,45 @@ import {
   StatLabel,
   StatTrend,
 } from '../../styles/DashboardStyles';
+import styled from 'styled-components';
+
+const Content = styled.div`
+  flex: 1;
+  padding: 32px 40px;
+  margin-left: 250px;
+  background: ${({ theme }) => theme.background};
+  min-height: 100vh;
+  overflow-y: auto;
+  transition: margin-left 0.25s ease;
+  
+  @media (max-width: 700px) {
+    margin-left: 160px;
+    padding: 20px 20px;
+  }
+  
+  @media (max-width: 480px) {
+    margin-left: 0;
+    padding: 16px 16px;
+  }
+`;
+
 import { 
   FaSchool, 
   FaUserGraduate, 
-  FaPlus, 
   FaArrowUp,
   FaChalkboardTeacher,
   FaBook,
   FaUsers,
+  FaCalendarAlt,
+  FaClock,
 } from 'react-icons/fa';
 import { useTheme } from '../../App';
 
-const ClassSection = () => {
+const StudentClasses = () => {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [newClass, setNewClass] = useState('');
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [message, setMessage] = useState({ text: '', type: '' });
   const navigate = useNavigate();
-
-  // Clear message after 5 seconds
-  useEffect(() => {
-    if (message.text) {
-      const timer = setTimeout(() => {
-        setMessage({ text: '', type: '' });
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [message]);
 
   useEffect(() => {
     fetchClasses();
@@ -72,53 +81,6 @@ const ClassSection = () => {
     }
   };
 
-  const handleAddClass = async (e) => {
-    e.preventDefault();
-    if (!newClass.trim()) {
-      setMessage({ text: 'Please enter a class name', type: 'error' });
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const response = await axios.post('http://localhost:4000/api/v1/class', {
-        grade: newClass.trim()
-      });
-      
-      if (response.data.success) {
-        setMessage({ text: 'Class added successfully!', type: 'success' });
-        setNewClass('');
-        setShowAddForm(false);
-        await fetchClasses(); // Refresh the list
-      }
-    } catch (error) {
-      console.error('Error adding class:', error);
-      const errorMsg = error.response?.data?.message || 'Failed to add class. Please try again.';
-      setMessage({ text: errorMsg, type: 'error' });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDeleteClass = async (classId) => {
-    if (window.confirm('Are you sure you want to delete this class?')) {
-      try {
-        setLoading(true);
-        const response = await axios.delete(`http://localhost:4000/api/v1/class/delete/${classId}`);
-        if (response.data.success) {
-          setMessage({ text: 'Class deleted successfully!', type: 'success' });
-          await fetchClasses(); // Refresh the list
-        }
-      } catch (error) {
-        console.error('Error deleting class:', error);
-        const errorMsg = error.response?.data?.message || 'Failed to delete class. Please try again.';
-        setMessage({ text: errorMsg, type: 'error' });
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
-
   const getCurrentTime = () => {
     const now = new Date();
     const hours = now.getHours();
@@ -130,7 +92,7 @@ const ClassSection = () => {
   const theme = useTheme()?.theme || {};
 
   return (
-    <TeacherDashboardContainer>
+    <StudentDashboardContainer>
       <Sidebar />
       <Content isOpen={true}>
         {/* Assignment-style Gradient Header for Classes (Compact) */}
@@ -173,7 +135,7 @@ const ClassSection = () => {
               textShadow: '0 2px 12px #2563eb55',
               lineHeight: 1.08,
             }}>
-              Classes
+              My Classes
             </h1>
             <div style={{
               fontSize: '1rem',
@@ -182,101 +144,10 @@ const ClassSection = () => {
               marginTop: 6,
               textShadow: '0 1px 4px #17c3b233',
             }}>
-              Manage your classes and view student information
+              View your enrolled classes and course information
             </div>
           </div>
         </div>
-
-        {/* Message Display */}
-        {message.text && (
-          <div style={{
-            padding: '12px 20px',
-            borderRadius: '8px',
-            marginBottom: '20px',
-            color: message.type === 'success' ? '#155724' : '#721c24',
-            background: message.type === 'success' ? '#d4edda' : '#f8d7da',
-            border: `1px solid ${message.type === 'success' ? '#c3e6cb' : '#f5c6cb'}`,
-            fontSize: '1rem',
-            fontWeight: '500'
-          }}>
-            {message.text}
-          </div>
-        )}
-
-        {/* Add Class Button */}
-        <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div></div>
-          <button
-            onClick={() => setShowAddForm(!showAddForm)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '12px 20px',
-              background: '#2563eb',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              fontSize: '1rem',
-              fontWeight: '600',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              boxShadow: '0 2px 8px rgba(37,99,235,0.2)'
-            }}
-            onMouseOver={(e) => e.target.style.background = '#1d4ed8'}
-            onMouseOut={(e) => e.target.style.background = '#2563eb'}
-          >
-            <FaPlus size={16} />
-            {showAddForm ? 'Cancel' : 'Add New Class'}
-          </button>
-        </div>
-
-        {/* Add Class Form */}
-        {showAddForm && (
-          <OverviewPanel style={{ marginBottom: '32px' }}>
-            <SectionTitle>Add New Class</SectionTitle>
-            <form onSubmit={handleAddClass} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <input
-                type="text"
-                value={newClass}
-                onChange={(e) => setNewClass(e.target.value)}
-                placeholder="Enter class name (e.g., Grade 10A)"
-                style={{
-                  flex: 1,
-                  padding: '12px 16px',
-                  border: '1px solid #e2e8f0',
-                  borderRadius: '8px',
-                  fontSize: '1rem',
-                  background: '#fff'
-                }}
-                disabled={loading}
-              />
-              <button
-                type="submit"
-                disabled={loading}
-                style={{
-                  padding: '12px 24px',
-                  background: loading ? '#9ca3af' : '#2563eb',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '8px',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                  transition: 'all 0.2s ease'
-                }}
-                onMouseOver={(e) => {
-                  if (!loading) e.target.style.background = '#1d4ed8';
-                }}
-                onMouseOut={(e) => {
-                  if (!loading) e.target.style.background = '#2563eb';
-                }}
-              >
-                {loading ? 'Adding...' : 'Add Class'}
-              </button>
-            </form>
-          </OverviewPanel>
-        )}
 
         {/* Stats Grid */}
         <StatsGrid>
@@ -286,10 +157,10 @@ const ClassSection = () => {
             </StatIcon>
             <StatInfo>
               <StatNumber>{classes.length}</StatNumber>
-              <StatLabel>Total Classes</StatLabel>
+              <StatLabel>Enrolled Classes</StatLabel>
               <StatTrend positive>
                 <FaArrowUp size={12} />
-                Active classes
+                Active enrollment
               </StatTrend>
             </StatInfo>
           </StatCard>
@@ -299,11 +170,11 @@ const ClassSection = () => {
               <FaUserGraduate size={24} color="white" />
             </StatIcon>
             <StatInfo>
-              <StatNumber>{classes.length * 25}</StatNumber>
-              <StatLabel>Total Students</StatLabel>
+              <StatNumber>5</StatNumber>
+              <StatLabel>Subjects</StatLabel>
               <StatTrend positive>
                 <FaArrowUp size={12} />
-                Across all classes
+                This semester
               </StatTrend>
             </StatInfo>
           </StatCard>
@@ -313,8 +184,8 @@ const ClassSection = () => {
               <FaChalkboardTeacher size={24} color="white" />
             </StatIcon>
             <StatInfo>
-              <StatNumber>5</StatNumber>
-              <StatLabel>Subjects Taught</StatLabel>
+              <StatNumber>8</StatNumber>
+              <StatLabel>Teachers</StatLabel>
               <StatTrend positive>
                 <FaArrowUp size={12} />
                 This semester
@@ -327,7 +198,7 @@ const ClassSection = () => {
               <FaBook size={24} color="white" />
             </StatIcon>
             <StatInfo>
-              <StatNumber>12</StatNumber>
+              <StatNumber>15</StatNumber>
               <StatLabel>Active Assignments</StatLabel>
               <StatTrend positive>
                 <FaArrowUp size={12} />
@@ -339,7 +210,7 @@ const ClassSection = () => {
 
         {/* Classes List */}
         <OverviewPanel>
-          <SectionTitle>My Classes</SectionTitle>
+          <SectionTitle>My Enrolled Classes</SectionTitle>
           {loading ? (
             <div style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
               Loading classes...
@@ -351,10 +222,10 @@ const ClassSection = () => {
           ) : classes.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
               <FaSchool size={48} style={{ marginBottom: '16px', opacity: 0.5 }} />
-              <p>No classes found. Add your first class to get started!</p>
+              <p>No classes found. Contact your administrator to enroll in classes.</p>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '20px' }}>
               {classes.map((classItem, index) => (
                 <div
                   key={classItem._id || index}
@@ -375,7 +246,7 @@ const ClassSection = () => {
                     e.target.style.transform = 'translateY(0)';
                     e.target.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
                   }}
-                  onClick={() => navigate(`/teacher/students?class=${classItem.grade}`)}
+                  onClick={() => navigate(`/student/assignments?class=${classItem.grade}`)}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -399,40 +270,6 @@ const ClassSection = () => {
                         </p>
                       </div>
                     </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteClass(classItem._id);
-                      }}
-                      disabled={loading}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        color: loading ? '#9ca3af' : '#dc2626',
-                        cursor: loading ? 'not-allowed' : 'pointer',
-                        padding: '8px',
-                        borderRadius: '6px',
-                        fontSize: '0.875rem',
-                        transition: 'all 0.2s ease'
-                      }}
-                      onMouseOver={(e) => {
-                        if (!loading) e.target.style.background = '#fef2f2';
-                      }}
-                      onMouseOut={(e) => {
-                        if (!loading) e.target.style.background = 'none';
-                      }}
-                    >
-                      {loading ? 'Deleting...' : 'Delete'}
-                    </button>
-                  </div>
-                  
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <FaUsers size={16} color="#6b7280" />
-                      <span style={{ fontSize: '0.875rem', color: '#6b7280' }}>
-                        ~25 students
-                      </span>
-                    </div>
                     <div style={{
                       padding: '4px 12px',
                       background: '#f0f9ff',
@@ -441,7 +278,39 @@ const ClassSection = () => {
                       fontSize: '0.75rem',
                       fontWeight: '500'
                     }}>
-                      Active
+                      Enrolled
+                    </div>
+                  </div>
+                  
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <FaUsers size={16} color="#6b7280" />
+                        <span style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                          ~25 students
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <FaChalkboardTeacher size={16} color="#6b7280" />
+                        <span style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                          Prof. Smith
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <FaCalendarAlt size={16} color="#6b7280" />
+                        <span style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                          Mon, Wed, Fri
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <FaClock size={16} color="#6b7280" />
+                        <span style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                          9:00 AM
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -450,16 +319,8 @@ const ClassSection = () => {
           )}
         </OverviewPanel>
       </Content>
-    </TeacherDashboardContainer>
+    </StudentDashboardContainer>
   );
 };
 
-export default ClassSection;
-
-
-
-
-
-
-
-
+export default StudentClasses; 

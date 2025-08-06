@@ -23,6 +23,7 @@ import EventCalender from '../src/pages/Admin/EventCalender';
 import SettingsProfile from '../src/pages/Admin/SettingsProfile';
 import Announcement from '../src/pages/Admin/Announcement';
 import StudentAssignments from '../src/pages/Students/Assignments';
+import StudentClasses from '../src/pages/Students/Classes';
 import ExamSection from '../src/pages/Students/Exams';
 import PerformanceSection from '../src/pages/Students/Performance';
 import AttendanceSection from '../src/pages/Students/Attendance';
@@ -135,6 +136,7 @@ const App = () => {
               <Route exact path="/admin/events" element={<EventCalender />} />
               <Route exact path="/admin/settings" element={<SettingsProfile />} />
               {/* Students sections here  */}
+              <Route exact path="/student/classes" element={<StudentClasses />} />
               <Route exact path="/student/assignments" element={<StudentAssignments />} />
               <Route exact path="/student/exams" element={<ExamSection />} />
               <Route exact path="/student/performance" element={<PerformanceSection />} />
