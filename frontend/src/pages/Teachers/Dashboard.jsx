@@ -151,83 +151,16 @@ const TeacherDashboard = () => {
         </WelcomeSection>
 
         {/* Quick Metrics Section */}
-        <div style={{ 
+        {/* <div style={{ 
           marginBottom: '32px',
           background: 'white',
           borderRadius: '20px',
           padding: '24px',
           boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
           border: '1px solid #e2e8f0'
-        }}>
-          <SectionTitle style={{ 
-            marginBottom: '20px',
-            fontSize: '1.3rem',
-            fontWeight: '700',
-            color: '#2d3748',
-            position: 'relative'
-          }}>
-            Quick Metrics
-            <div style={{
-              position: 'absolute',
-              bottom: '-8px',
-              left: '0',
-              width: '60px',
-              height: '3px',
-              background: 'linear-gradient(90deg, #20bf6b, #0fb9b1)',
-              borderRadius: '2px'
-            }}></div>
-          </SectionTitle>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
-            <MetricCard 
-              onClick={() => handleCardClick('/teacher/attendance')}
-              style={{ cursor: 'pointer' }}
-            >
-              <MetricIcon style={{ background: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)' }}>
-                <FaUserGraduate size={16} color="white" />
-              </MetricIcon>
-              <div>
-                <MetricValue>94%</MetricValue>
-                <MetricLabel>Class Attendance</MetricLabel>
-              </div>
-            </MetricCard>
-            <MetricCard 
-              onClick={() => handleCardClick('/teacher/performance')}
-              style={{ cursor: 'pointer' }}
-            >
-              <MetricIcon style={{ background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)' }}>
-                <FaChartLine size={16} color="white" />
-              </MetricIcon>
-              <div>
-                <MetricValue>82%</MetricValue>
-                <MetricLabel>Class Performance</MetricLabel>
-              </div>
-            </MetricCard>
-            <MetricCard 
-              onClick={() => handleCardClick('/teacher/assignments')}
-              style={{ cursor: 'pointer' }}
-            >
-              <MetricIcon style={{ background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)' }}>
-                <FaClipboardList size={16} color="white" />
-              </MetricIcon>
-              <div>
-                <MetricValue>{assignments.length}</MetricValue>
-                <MetricLabel>Active Assignments</MetricLabel>
-              </div>
-            </MetricCard>
-            <MetricCard 
-              onClick={() => handleCardClick('/teacher/communication')}
-              style={{ cursor: 'pointer' }}
-            >
-              <MetricIcon style={{ background: 'linear-gradient(135deg, #d299c2 0%, #fef9d7 100%)' }}>
-                <FaBell size={16} color="white" />
-              </MetricIcon>
-              <div>
-                <MetricValue>{announcements.length}</MetricValue>
-                <MetricLabel>Announcements</MetricLabel>
-              </div>
-            </MetricCard>
-          </div>
-        </div>
+        }}> */}
+          {/* Quick Metrics title removed to avoid implying static data */}
+        
 
         {/* Stats Grid */}
         <StatsGrid>
@@ -241,10 +174,10 @@ const TeacherDashboard = () => {
             <StatInfo>
               <StatNumber>{totalStudents}</StatNumber>
               <StatLabel>My Students</StatLabel>
-              <StatTrend positive>
+              {/* <StatTrend positive>
                 <FaArrowUp size={12} />
                 +8% this month
-              </StatTrend>
+              </StatTrend> */}
             </StatInfo>
           </StatCard>
 
@@ -258,10 +191,7 @@ const TeacherDashboard = () => {
             <StatInfo>
               <StatNumber>{totalClasses}</StatNumber>
               <StatLabel>My Classes</StatLabel>
-              <StatTrend positive>
-                <FaArrowUp size={12} />
-                +2 this semester
-              </StatTrend>
+              {/* Trend removed (static) */}
             </StatInfo>
           </StatCard>
 
@@ -275,29 +205,34 @@ const TeacherDashboard = () => {
             <StatInfo>
               <StatNumber>{assignments.length}</StatNumber>
               <StatLabel>Assignments</StatLabel>
-              <StatTrend positive>
-                <FaArrowUp size={12} />
-                +5 this week
-              </StatTrend>
+              {/* Trend removed (static) */}
             </StatInfo>
           </StatCard>
-
           <StatCard 
-            onClick={() => handleCardClick('/teacher/performance')}
+            onClick={() => handleCardClick('/teacher/assignments')}
             style={{ cursor: 'pointer' }}
           >
-            <StatIcon style={{ background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }}>
+            <StatIcon style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}>
+              <FaClipboardList size={24} color="white" />
+            </StatIcon>
+            <StatInfo>
+              <StatNumber>{announcements.length}</StatNumber>
+              <StatLabel>Announcements</StatLabel>
+              {/* Trend removed (static) */}
+            </StatInfo>
+          </StatCard>
+          {/* <StatCard 
+            onClick={() => handleCardClick('/teacher/performance')}
+            style={{ cursor: 'pointer' }}
+          > */}
+            {/* <StatIcon style={{ background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }}>
               <FaChartLine size={24} color="white" />
             </StatIcon>
             <StatInfo>
-              <StatNumber>87%</StatNumber>
+              <StatNumber>—</StatNumber>
               <StatLabel>Class Average</StatLabel>
-              <StatTrend positive>
-                <FaArrowUp size={12} />
-                +6% this month
-              </StatTrend>
-            </StatInfo>
-          </StatCard>
+            </StatInfo> */}
+          {/* </StatCard> */}
         </StatsGrid>
 
         {/* Main Content Panels */}

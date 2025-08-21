@@ -672,7 +672,7 @@ const Announcement = ({ announcements: propAnnouncements }) => {
                         <AnnouncementStatus>{stats.priority} Priority</AnnouncementStatus>
                       </AnnouncementInfo>
                     </AnnouncementHeader>
-                    <AnnouncementStats>
+                    {/* <AnnouncementStats>
                       <Stat>
                         <StatNumber>{stats.views}</StatNumber>
                         <StatLabel>Views</StatLabel>
@@ -681,7 +681,7 @@ const Announcement = ({ announcements: propAnnouncements }) => {
                         <StatNumber>{stats.responses}</StatNumber>
                         <StatLabel>Responses</StatLabel>
                       </Stat>
-                    </AnnouncementStats>
+                    </AnnouncementStats> */}
                   </AnnouncementCard>
                 );
               })}

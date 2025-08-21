@@ -191,7 +191,7 @@ const LogoutButton = styled.button`
 
 const navLinks = [
   { to: '/teacher/dashboard', icon: <BsGraphUp />, label: 'Dashboard' },
-  { to: '/teacher/classes', icon: <BsPeople />, label: 'Classes' },
+  // { to: '/teacher/classes', icon: <BsPeople />, label: 'Classes' },
   { to: '/teacher/students', icon: <BsPeople />, label: 'Students' },
   { to: '/teacher/teachers', icon: <BsPerson />, label: 'Teachers' },
   { to: '/teacher/assignments', icon: <BsFileText />, label: 'Assignments' },

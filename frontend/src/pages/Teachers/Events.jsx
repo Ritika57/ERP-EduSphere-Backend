@@ -349,11 +349,19 @@ const EventSection = () => {
     }
   };
 
+  const EventList = styled.div`
+  max-height: 250px;   /* adjust height as per design */
+  overflow-y: auto;    /* enables vertical scroll */
+  padding-right: 8px;  /* prevents content hiding behind scrollbar */
+`;
+
+
   // Calculate statistics
   const totalEvents = events.length;
   const upcomingEvents = events.filter(event => {
     const eventDate = new Date(event.date);
     return eventDate >= new Date();
+    
   }).length;
   const todayEvents = events.filter(event => {
     const eventDate = new Date(event.date);
@@ -438,32 +446,33 @@ const EventSection = () => {
 
           {/* Events List Panel */}
           <Panel>
-            <PanelTitle>All Events</PanelTitle>
-            <EventList>
-              {events.length === 0 ? (
-                <EmptyState>
-                  <EmptyIcon>
-                    <FaCalendarAlt />
-                  </EmptyIcon>
-                  <EmptyText>No events scheduled yet</EmptyText>
-                </EmptyState>
-              ) : (
-                events.map((event, index) => (
-                  <EventItem key={index}>
-                    <EventIcon>
-                      <FaCalendarAlt />
-                    </EventIcon>
-                    <EventDetails>
-                      <EventName>{event.events}</EventName>
-                      <EventDate>
-                {event.date ? new Date(event.date).toLocaleDateString() : 'No date'}
-                      </EventDate>
-                    </EventDetails>
-                  </EventItem>
-                ))
-              )}
-            </EventList>
-          </Panel>
+  <PanelTitle>All Events</PanelTitle>
+  <EventList>
+    {events.length === 0 ? (
+      <EmptyState>
+        <EmptyIcon>
+          <FaCalendarAlt />
+        </EmptyIcon>
+        <EmptyText>No events scheduled yet</EmptyText>
+      </EmptyState>
+    ) : (
+      events.map((event, index) => (
+        <EventItem key={index}>
+          <EventIcon>
+            <FaCalendarAlt />
+          </EventIcon>
+          <EventDetails>
+            <EventName>{event.events}</EventName>
+            <EventDate>
+              {event.date ? new Date(event.date).toLocaleDateString() : 'No date'}
+            </EventDate>
+          </EventDetails>
+        </EventItem>
+      ))
+    )}
+  </EventList>
+</Panel>
+
         </MainContent>
       </Content>
     </EventContainer>

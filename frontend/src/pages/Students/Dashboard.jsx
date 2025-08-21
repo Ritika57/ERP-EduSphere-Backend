@@ -82,9 +82,37 @@ const StudentDashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
+      // Get student info from localStorage to get their grade
+      const studentInfo = JSON.parse(localStorage.getItem('studentInfo'));
+      
       // Fetch assignments
       const assignmentsRes = await axios.get('http://localhost:4000/api/v1/assignments/getall');
-      const assignments = assignmentsRes.data.assignments || [];
+      const allAssignments = assignmentsRes.data.assignments || [];
+      
+      // Filter assignments by student's grade if grade is available
+      let assignments = allAssignments;
+      if (studentInfo && studentInfo.grade) {
+        assignments = allAssignments.filter(assignment => {
+          // Handle different grade formats (e.g., "10", "Grade 10", "10th")
+          const assignmentGrade = assignment.grade?.toString().toLowerCase();
+          const studentGrade = studentInfo.grade?.toString().toLowerCase();
+          
+          if (!assignmentGrade || !studentGrade) return false;
+          
+          // Direct match
+          if (assignmentGrade === studentGrade) return true;
+          
+          // Extract numbers for comparison
+          const assignmentGradeNum = assignmentGrade.match(/\d+/)?.[0];
+          const studentGradeNum = studentGrade.match(/\d+/)?.[0];
+          
+          return assignmentGradeNum && studentGradeNum && assignmentGradeNum === studentGradeNum;
+        });
+        console.log('Dashboard: Filtered assignments for grade', studentInfo.grade + ':', assignments.length, 'out of', allAssignments.length);
+      } else {
+        console.log('Dashboard: No student grade found, showing all assignments');
+      }
+      
       setAssignmentCount(assignments.length);
 
       // Fetch performance
@@ -116,13 +144,11 @@ const StudentDashboard = () => {
       });
       setUpcomingEvents(upcoming);
 
-      // Set attendance rate (mock data for now)
-      setAttendanceRate(92);
+      // Avoid static placeholders; keep values if available from backend later
+      setAttendanceRate(attendanceRate || 0);
+      setTerm(term || '-');
 
-      // Set term
-      setTerm('1');
-
-      // Combine recent activities
+      // Combine recent activities (use filtered assignments)
       const activities = [
         ...assignments.slice(-3).reverse().map(a => ({ 
           type: 'Assignment', 
@@ -301,10 +327,7 @@ const StudentDashboard = () => {
             <StatInfo>
               <StatNumber>{assignmentCount}</StatNumber>
               <StatLabel>Total Assignments</StatLabel>
-              <StatTrend positive>
-                <FaArrowUp size={12} />
-                +{assignmentCount} this month
-              </StatTrend>
+              {/* Trend removed (static) */}
             </StatInfo>
           </StatCard>
 
@@ -318,10 +341,7 @@ const StudentDashboard = () => {
             <StatInfo>
               <StatNumber>{performanceScore}</StatNumber>
               <StatLabel>Performance Score</StatLabel>
-              <StatTrend positive>
-                <FaArrowUp size={12} />
-                +8% this month
-              </StatTrend>
+              {/* Trend removed (static) */}
             </StatInfo>
           </StatCard>
 
@@ -335,14 +355,11 @@ const StudentDashboard = () => {
             <StatInfo>
               <StatNumber>{examCount}</StatNumber>
               <StatLabel>Total Exams</StatLabel>
-              <StatTrend positive>
-                <FaArrowUp size={12} />
-                +{examCount} this month
-              </StatTrend>
+              {/* Trend removed (static) */}
             </StatInfo>
           </StatCard>
 
-          <StatCard 
+          {/* <StatCard 
             onClick={() => handleCardClick('/student/attendance')}
             style={{ cursor: 'pointer' }}
           >
@@ -352,58 +369,13 @@ const StudentDashboard = () => {
             <StatInfo>
               <StatNumber>{attendanceRate}%</StatNumber>
               <StatLabel>Attendance Rate</StatLabel>
-              <StatTrend positive>
-                <FaArrowUp size={12} />
-                +5% this month
-              </StatTrend>
+              Trend removed (static)
             </StatInfo>
-          </StatCard>
+          </StatCard> */}
         </StatsGrid>
 
         {/* Recent Activity Section */}
-        <OverviewPanel style={{ marginBottom: 32 }}>
-          <SectionTitle>Recent Activity</SectionTitle>
-          <ActivityPanel>
-            {recentActivities.length === 0 && <ActivityItem>No recent activities.</ActivityItem>}
-            {recentActivities.map((activity, idx) => (
-              <ActivityItem key={idx} style={{ 
-                animation: 'fadeIn 0.5s', 
-                animationDelay: `${idx * 0.05}s`, 
-                animationFillMode: 'backwards' 
-              }}>
-                {activity.icon}
-                <span style={{ flex: 1 }}>
-                  <b>[{activity.type}] {activity.title}</b> 
-                  {activity.score && <span style={{ color: theme.accent, fontWeight: 600 }}> (Score: {activity.score})</span>}
-                </span>
-                <span style={{ fontSize: '0.95em', color: theme.text, opacity: 0.7 }}>
-                  {activity.date ? new Date(activity.date).toLocaleDateString() : ''}
-                </span>
-              </ActivityItem>
-            ))}
-          </ActivityPanel>
-        </OverviewPanel>
-
-        {/* Upcoming Events Section */}
-        <OverviewPanel>
-          <SectionTitle>Upcoming Events</SectionTitle>
-          <ActivityPanel>
-            {upcomingEvents.length === 0 && <ActivityItem>No upcoming events.</ActivityItem>}
-            {upcomingEvents.map((event, idx) => (
-              <ActivityItem key={idx} style={{ 
-                animation: 'fadeIn 0.5s', 
-                animationDelay: `${idx * 0.05}s`, 
-                animationFillMode: 'backwards' 
-              }}>
-                <FaCalendarAlt color={theme.primary || '#2563eb'} size={20} />
-                <span style={{ flex: 1 }}><b>{event.events}</b></span>
-                <span style={{ fontSize: '0.95em', color: theme.text, opacity: 0.7 }}>
-                  {event.date ? new Date(event.date).toLocaleDateString() : 'No date'}
-                </span>
-              </ActivityItem>
-            ))}
-          </ActivityPanel>
-        </OverviewPanel>
+       
       </Content>
     </StudentDashboardContainer> 
   );

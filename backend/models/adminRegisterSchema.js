@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import validator from "validator";
-import bcrypt from "bcryptjs"; // ✅ Add bcrypt
+import bcrypt from "bcryptjs";
 
 const adminRegisterSchema = new mongoose.Schema({
   email: {
@@ -23,14 +23,24 @@ const adminRegisterSchema = new mongoose.Schema({
 
 // ✅ Hash password before saving
 adminRegisterSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
+  try {
+    if (!this.isModified("password")) return next();
+    this.password = await bcrypt.hash(this.password, 10);
+    next();
+  } catch (error) {
+    console.error("❌ Error hashing password:", error);
+    next(error);
+  }
 });
 
 // ✅ Add method to compare password
 adminRegisterSchema.methods.isValidPassword = async function (password) {
-  return await bcrypt.compare(password, this.password);
+  try {
+    return await bcrypt.compare(password, this.password);
+  } catch (error) {
+    console.error("❌ Error comparing password:", error);
+    return false;
+  }
 };
 
 export const Admin = mongoose.model('Admin', adminRegisterSchema);

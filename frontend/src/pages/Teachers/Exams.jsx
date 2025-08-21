@@ -63,6 +63,16 @@ const CheckExamSection = () => {
     fetchClasses();
   }, []);
 
+  // Clear message after 5 seconds
+  useEffect(() => {
+    if (message.text) {
+      const timer = setTimeout(() => {
+        setMessage({ text: '', type: '' });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
   const fetchExams = async () => {
     try {
       setLoading(true);
@@ -99,30 +109,45 @@ const CheckExamSection = () => {
     }
 
     try {
+      setLoading(true);
       const response = await axios.post('http://localhost:4000/api/v1/exam', newExam);
       if (response.data.success) {
         setMessage({ text: 'Exam record added successfully!', type: 'success' });
         setNewExam({ name: '', registrationNumber: '', className: '', marks: '', email: '' });
         setShowAddForm(false);
-        fetchExams();
+        
+        // If the response includes the created exam, add it to the list
+        if (response.data.exam) {
+          setExams([...exams, response.data.exam]);
+        } else {
+          // Otherwise fetch the updated list
+          await fetchExams();
+        }
       }
     } catch (error) {
       console.error('Error adding exam:', error);
-      setMessage({ text: 'Failed to add exam record. Please try again.', type: 'error' });
+      const errorMsg = error.response?.data?.message || 'Failed to add exam record. Please try again.';
+      setMessage({ text: errorMsg, type: 'error' });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDeleteExam = async (examId) => {
     if (window.confirm('Are you sure you want to delete this exam record?')) {
       try {
+        setLoading(true);
         const response = await axios.delete(`http://localhost:4000/api/v1/exam/delete/${examId}`);
         if (response.data.success) {
           setMessage({ text: 'Exam record deleted successfully!', type: 'success' });
-          fetchExams();
+          await fetchExams();
         }
       } catch (error) {
         console.error('Error deleting exam:', error);
-        setMessage({ text: 'Failed to delete exam record. Please try again.', type: 'error' });
+        const errorMsg = error.response?.data?.message || 'Failed to delete exam record. Please try again.';
+        setMessage({ text: errorMsg, type: 'error' });
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -225,6 +250,34 @@ const CheckExamSection = () => {
         <p style={{ fontSize: '1.1rem', color: '#555', marginBottom: 32 }}>
           Manage exam records and track student performance
         </p>
+
+        {/* Add Exam Button */}
+        <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div></div>
+          <button
+            onClick={() => setShowAddForm(!showAddForm)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '12px 20px',
+              background: '#2563eb',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              fontSize: '1rem',
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              boxShadow: '0 2px 8px rgba(37,99,235,0.2)'
+            }}
+            onMouseOver={(e) => e.target.style.background = '#1d4ed8'}
+            onMouseOut={(e) => e.target.style.background = '#2563eb'}
+          >
+            <FaPlus size={16} />
+            {showAddForm ? 'Cancel' : 'Add Exam Result'}
+          </button>
+        </div>
         {/* Message Display */}
         {message.text && (
           <div style={{
@@ -252,12 +305,14 @@ const CheckExamSection = () => {
                   placeholder="Student Name"
                   value={newExam.name}
                   onChange={(e) => setNewExam({ ...newExam, name: e.target.value })}
+                  disabled={loading}
                   style={{
                     padding: '12px 16px',
                     border: '1px solid #e2e8f0',
                     borderRadius: '8px',
                     fontSize: '1rem',
-                    background: '#fff'
+                    background: loading ? '#f9fafb' : '#fff',
+                    cursor: loading ? 'not-allowed' : 'text'
                   }}
                 />
                 <input
@@ -265,12 +320,14 @@ const CheckExamSection = () => {
                   placeholder="Registration Number"
                   value={newExam.registrationNumber}
                   onChange={(e) => setNewExam({ ...newExam, registrationNumber: e.target.value })}
+                  disabled={loading}
                   style={{
                     padding: '12px 16px',
                     border: '1px solid #e2e8f0',
                     borderRadius: '8px',
                     fontSize: '1rem',
-                    background: '#fff'
+                    background: loading ? '#f9fafb' : '#fff',
+                    cursor: loading ? 'not-allowed' : 'text'
                   }}
                 />
               </div>
@@ -278,12 +335,14 @@ const CheckExamSection = () => {
                 <select
                   value={newExam.className}
                   onChange={(e) => setNewExam({ ...newExam, className: e.target.value })}
+                  disabled={loading}
                   style={{
                     padding: '12px 16px',
                     border: '1px solid #e2e8f0',
                     borderRadius: '8px',
                     fontSize: '1rem',
-                    background: '#fff'
+                    background: loading ? '#f9fafb' : '#fff',
+                    cursor: loading ? 'not-allowed' : 'pointer'
                   }}
                 >
                   <option value="">Select Class</option>
@@ -298,6 +357,7 @@ const CheckExamSection = () => {
                   placeholder="Marks (0-100)"
                   value={newExam.marks}
                   onChange={(e) => setNewExam({ ...newExam, marks: e.target.value })}
+                  disabled={loading}
                   min="0"
                   max="100"
                   style={{
@@ -305,7 +365,8 @@ const CheckExamSection = () => {
                     border: '1px solid #e2e8f0',
                     borderRadius: '8px',
                     fontSize: '1rem',
-                    background: '#fff'
+                    background: loading ? '#f9fafb' : '#fff',
+                    cursor: loading ? 'not-allowed' : 'text'
                   }}
                 />
               </div>
@@ -314,32 +375,39 @@ const CheckExamSection = () => {
                 placeholder="Student Email (Optional)"
                 value={newExam.email}
                 onChange={(e) => setNewExam({ ...newExam, email: e.target.value })}
+                disabled={loading}
                 style={{
                   padding: '12px 16px',
                   border: '1px solid #e2e8f0',
                   borderRadius: '8px',
                   fontSize: '1rem',
-                  background: '#fff'
+                  background: loading ? '#f9fafb' : '#fff',
+                  cursor: loading ? 'not-allowed' : 'text'
                 }}
               />
               <button
                 type="submit"
+                disabled={loading}
                 style={{
                   padding: '12px 24px',
-                  background: '#2563eb',
+                  background: loading ? '#9ca3af' : '#2563eb',
                   color: 'white',
                   border: 'none',
                   borderRadius: '8px',
                   fontSize: '1rem',
                   fontWeight: '600',
-                  cursor: 'pointer',
+                  cursor: loading ? 'not-allowed' : 'pointer',
                   transition: 'all 0.2s ease',
                   alignSelf: 'flex-start'
                 }}
-                onMouseOver={(e) => e.target.style.background = '#1d4ed8'}
-                onMouseOut={(e) => e.target.style.background = '#2563eb'}
+                onMouseOver={(e) => {
+                  if (!loading) e.target.style.background = '#1d4ed8';
+                }}
+                onMouseOut={(e) => {
+                  if (!loading) e.target.style.background = '#2563eb';
+                }}
               >
-                Add Exam Record
+                {loading ? 'Adding...' : 'Add Exam Record'}
               </button>
             </form>
           </OverviewPanel>
@@ -713,18 +781,23 @@ const CheckExamSection = () => {
                             e.stopPropagation();
                             handleDeleteExam(exam._id);
                           }}
+                          disabled={loading}
                           style={{
                             background: 'none',
                             border: 'none',
-                            color: '#dc2626',
-                            cursor: 'pointer',
+                            color: loading ? '#9ca3af' : '#dc2626',
+                            cursor: loading ? 'not-allowed' : 'pointer',
                             padding: '8px',
                             borderRadius: '6px',
                             fontSize: '0.875rem',
                             transition: 'all 0.2s ease'
                           }}
-                          onMouseOver={(e) => e.target.style.background = '#fef2f2'}
-                          onMouseOut={(e) => e.target.style.background = 'none'}
+                          onMouseOver={(e) => {
+                            if (!loading) e.target.style.background = '#fef2f2';
+                          }}
+                          onMouseOut={(e) => {
+                            if (!loading) e.target.style.background = 'none';
+                          }}
                         >
                           <FaTrash size={14} />
                         </button>

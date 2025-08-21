@@ -628,7 +628,7 @@ const Students = () => {
                          </div>
                        </StudentInfo>
                     </StudentHeader>
-                    <StudentStats>
+                    {/* <StudentStats>
                       <Stat>
                         <StatNumber>{stats.attendance}%</StatNumber>
                         <StatLabel>Attendance</StatLabel>
@@ -641,7 +641,7 @@ const Students = () => {
                         <StatNumber>{stats.performance}%</StatNumber>
                         <StatLabel>Performance</StatLabel>
                       </Stat>
-                    </StudentStats>
+                    </StudentStats> */}
                   </StudentCard>
                 );
               })}

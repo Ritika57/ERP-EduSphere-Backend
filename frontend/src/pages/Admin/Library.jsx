@@ -624,7 +624,7 @@ const Library = () => {
                         </BookStatus>
                       </BookInfo>
                     </BookHeader>
-                    <BookStats>
+                    {/* <BookStats>
                       <Stat>
                         <StatNumber>{stats.copies}</StatNumber>
                         <StatLabel>Copies</StatLabel>
@@ -637,7 +637,7 @@ const Library = () => {
                         <StatNumber>{stats.available}</StatNumber>
                         <StatLabel>Available</StatLabel>
                       </Stat>
-                    </BookStats>
+                    </BookStats> */}
                   </BookCard>
                 );
               })}

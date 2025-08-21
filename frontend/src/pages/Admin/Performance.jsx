@@ -30,6 +30,7 @@ import {
   EmptyState,
   EmptyIcon,
   EmptyText,
+  ScrollableList,
 } from '../../styles/PerformanceStyles'; 
 import AddPerformanceForm from '../../components/AddPerformanceForm';
 import { 
@@ -211,7 +212,7 @@ const Performance = ({hideAddPerformanceForm = false}) => {
               <PerformanceCard>
                 <h3>All Performance Records</h3>
                 {performanceData.length > 0 ? (
-                  <StudentList>
+                  <ScrollableList>
                     {performanceData.map((record) => (
                       <StudentItem 
                         key={record._id}
@@ -230,7 +231,7 @@ const Performance = ({hideAddPerformanceForm = false}) => {
                         </StudentInfo>
                       </StudentItem>
                     ))}
-                  </StudentList>
+                  </ScrollableList>
                 ) : (
                   <EmptyState>
                     <EmptyIcon>

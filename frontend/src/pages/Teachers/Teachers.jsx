@@ -145,7 +145,7 @@ const TeacherSection = () => {
             </StatInfo>
           </StatCard>
 
-          <StatCard>
+          {/* <StatCard>
             <StatIcon style={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}>
               <FaBook size={24} color="white" />
             </StatIcon>
@@ -184,8 +184,8 @@ const TeacherSection = () => {
                 <FaArrowUp size={12} />
                 This month
               </StatTrend>
-            </StatInfo>
-          </StatCard>
+            </StatInfo> */}
+          {/* </StatCard> */}
         </StatsGrid>
 
         {/* Search and Filter Section */}

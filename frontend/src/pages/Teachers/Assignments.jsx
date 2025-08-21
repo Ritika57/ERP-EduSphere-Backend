@@ -44,7 +44,6 @@ const AssignmentSection = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGrade, setSelectedGrade] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
-  const [classes, setClasses] = useState([]);
   const [message, setMessage] = useState({ text: '', type: '' });
   const [newAssignment, setNewAssignment] = useState({
     title: '',
@@ -56,7 +55,6 @@ const AssignmentSection = () => {
 
   useEffect(() => {
     fetchAssignments();
-    fetchClasses();
   }, []);
 
   // Clear message after 5 seconds
@@ -86,16 +84,6 @@ const AssignmentSection = () => {
     }
   };
 
-  const fetchClasses = async () => {
-    try {
-      const response = await axios.get('http://localhost:4000/api/v1/class/getall');
-      if (response.data && Array.isArray(response.data.classes)) {
-        setClasses(response.data.classes);
-      }
-    } catch (error) {
-      console.error('Error fetching classes:', error);
-    }
-  };
 
   const handleAddAssignment = async (e) => {
     e.preventDefault();
@@ -313,15 +301,23 @@ const AssignmentSection = () => {
                     borderRadius: '8px',
                     fontSize: '1rem',
                     background: loading ? '#f9fafb' : '#fff',
-                    cursor: loading ? 'not-allowed' : 'pointer'
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    color: newAssignment.grade ? '#1a202c' : '#9ca3af'
                   }}
                 >
-                  <option value="">Select Class</option>
-                  {classes.map((classItem) => (
-                    <option key={classItem._id} value={classItem.grade}>
-                      {classItem.grade}
-                    </option>
-                  ))}
+                  <option value="">Select Grade</option>
+                  <option value="1">Grade 1</option>
+                  <option value="2">Grade 2</option>
+                  <option value="3">Grade 3</option>
+                  <option value="4">Grade 4</option>
+                  <option value="5">Grade 5</option>
+                  <option value="6">Grade 6</option>
+                  <option value="7">Grade 7</option>
+                  <option value="8">Grade 8</option>
+                  <option value="9">Grade 9</option>
+                  <option value="10">Grade 10</option>
+                  <option value="11">Grade 11</option>
+                  <option value="12">Grade 12</option>
                 </select>
               </div>
               <textarea
@@ -393,10 +389,10 @@ const AssignmentSection = () => {
             <StatInfo>
               <StatNumber>{assignments.length}</StatNumber>
               <StatLabel>Total Assignments</StatLabel>
-              <StatTrend positive>
+              {/* <StatTrend positive>
                 <FaArrowUp size={12} />
                 Active assignments
-              </StatTrend>
+              </StatTrend> */}
             </StatInfo>
           </StatCard>
 
@@ -407,10 +403,10 @@ const AssignmentSection = () => {
             <StatInfo>
               <StatNumber>{upcomingDeadlines.length}</StatNumber>
               <StatLabel>Upcoming Deadlines</StatLabel>
-              <StatTrend positive>
+              {/* <StatTrend positive>
                 <FaArrowUp size={12} />
                 Next 7 days
-              </StatTrend>
+              </StatTrend> */}
             </StatInfo>
           </StatCard>
 
@@ -428,7 +424,7 @@ const AssignmentSection = () => {
             </StatInfo>
           </StatCard>
 
-          <StatCard>
+          {/* <StatCard>
             <StatIcon style={{ background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }}>
               <FaCheckCircle size={24} color="white" />
             </StatIcon>
@@ -440,7 +436,7 @@ const AssignmentSection = () => {
                 This month
               </StatTrend>
             </StatInfo>
-          </StatCard>
+          </StatCard> */}
         </StatsGrid>
 
         {/* Search and Filter Section */}

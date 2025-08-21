@@ -378,10 +378,41 @@ const StudentAssignments = () => {
 
   const fetchAssignments = async () => {
     try {
+      // Get student info from localStorage to get their grade
+      const studentInfo = JSON.parse(localStorage.getItem('studentInfo'));
+      console.log(studentInfo);
+      
+      if (!studentInfo || !studentInfo.grade) {
+        console.error('Student grade not found in localStorage');
+        showNotification('Unable to fetch assignments: Student grade not found', false);
+        return;
+      }
+
+      // Fetch all assignments from backend
       const response = await axios.get('http://localhost:4000/api/v1/assignments/getall');
-      const assignmentsData = response.data.assignments || [];
-      console.log('Fetched assignments:', assignmentsData);
-      setAssignments(assignmentsData);
+      const allAssignments = response.data.assignments || [];
+      
+      // Filter assignments locally based on student's grade
+      const gradeFilteredAssignments = allAssignments.filter(assignment => {
+        // Handle different grade formats (e.g., "10", "Grade 10", "10th")
+        const assignmentGrade = assignment.grade?.toString().toLowerCase();
+        const studentGrade = studentInfo.grade?.toString().toLowerCase();
+        
+        if (!assignmentGrade || !studentGrade) return false;
+        
+        // Direct match
+        if (assignmentGrade === studentGrade) return true;
+        
+        // Extract numbers for comparison
+        const assignmentGradeNum = assignmentGrade.match(/\d+/)?.[0];
+        const studentGradeNum = studentGrade.match(/\d+/)?.[0];
+        
+        return assignmentGradeNum && studentGradeNum && assignmentGradeNum === studentGradeNum;
+      });
+      
+      console.log('All assignments:', allAssignments.length);
+      console.log('Filtered assignments for grade', studentInfo.grade + ':', gradeFilteredAssignments.length);
+      setAssignments(gradeFilteredAssignments);
     } catch (error) {
       console.error('Error fetching assignments:', error);
       showNotification('Error fetching assignments', false);

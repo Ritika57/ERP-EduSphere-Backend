@@ -184,6 +184,26 @@ export const StudentList = styled.div`
   gap: 16px;
 `;
 
+// Scrollable variant for long lists
+export const ScrollableList = styled(StudentList)`
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 6px;
+
+  /* nice scrollbar */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: ${({ theme }) => theme.background};
+    border-radius: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.border};
+    border-radius: 8px;
+  }
+`;
+
 export const StudentItem = styled.div`
   display: flex;
   align-items: center;

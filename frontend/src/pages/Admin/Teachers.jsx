@@ -599,7 +599,7 @@ const Teachers = () => {
                         <TeacherSubject>{teacher.subject}</TeacherSubject>
                       </TeacherInfo>
                     </TeacherHeader>
-                    <TeacherStats>
+                    {/* <TeacherStats>
                       <Stat>
                         <StatNumber>{stats.experience}</StatNumber>
                         <StatLabel>Years Exp.</StatLabel>
@@ -612,7 +612,7 @@ const Teachers = () => {
                         <StatNumber>{stats.students}</StatNumber>
                         <StatLabel>Students</StatLabel>
                       </Stat>
-                    </TeacherStats>
+                    </TeacherStats> */}
                   </TeacherCard>
                 );
               })}
@@ -633,7 +633,7 @@ const Teachers = () => {
                     <TeacherSubject style={{ marginTop: '12px' }}>{modalTeacher.subject}</TeacherSubject>
                   </TeacherInfo>
                 </TeacherHeader>
-                <TeacherStats style={{ marginTop: '24px' }}>
+                {/* <TeacherStats style={{ marginTop: '24px' }}>
                   <Stat>
                     <StatNumber>{modalTeacher.experience}</StatNumber>
                     <StatLabel>Years Experience</StatLabel>
@@ -646,7 +646,7 @@ const Teachers = () => {
                     <StatNumber>{modalTeacher.students}</StatNumber>
                     <StatLabel>Students</StatLabel>
                   </Stat>
-                </TeacherStats>
+                </TeacherStats> */}
               </ModalCard>
             </ModalOverlay>
           )}

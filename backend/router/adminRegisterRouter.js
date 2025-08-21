@@ -7,7 +7,9 @@ const router = express.Router();
 router.post('/signin', adminSignIn);
 
 router.post('/admin', (req, res, next) => {
-  console.log("✅ [DEBUG] /api/v1/register/admin HIT");
+  console.log("✅ [DEBUG] /api/v1/register/admin route hit");
+  console.log("📝 Request method:", req.method);
+  console.log("🌐 Request URL:", req.url);
   next();
 }, adminRegister);
 

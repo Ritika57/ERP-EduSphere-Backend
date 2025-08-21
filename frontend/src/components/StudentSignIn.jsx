@@ -9,19 +9,34 @@ import { useRef, useEffect } from 'react';
 const StudentSignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [grade, setGrade] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
+    
+    if (!grade) {
+      setError('Please select your grade');
+      return;
+    }
+    
     try {
       const response = await axios.post('http://localhost:4000/api/v1/users/student/signin', {
         email,
         password
       });
-      
+
       if (response.data.success && response.data.student) {
-        localStorage.setItem('studentInfo', JSON.stringify(response.data.student));
+        // Take student data from backend and add the selected grade
+        const studentData = response.data.student;
+        const studentWithGrade = {
+          ...studentData,
+          grade: grade  // Use the grade selected by the student
+        };
+
+        // Save to localStorage
+        localStorage.setItem('studentInfo', JSON.stringify(studentWithGrade));
         navigate('/student/dashboard');
       }
     } catch (error) {
@@ -115,7 +130,38 @@ const StudentSignIn = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-              /> 
+              />
+              <select
+                value={grade}
+                onChange={(e) => setGrade(e.target.value)}
+                required
+                style={{
+                  width: '100%',
+                  padding: '16px 20px',
+                  border: '2px solid #e2e8f0',
+                  borderRadius: '12px',
+                  fontSize: '1rem',
+                  backgroundColor: '#f8fafc',
+                  outline: 'none',
+                  fontWeight: '600',
+                  marginBottom: '16px',
+                  color: grade ? '#1a202c' : '#9ca3af'
+                }}
+              >
+                <option value="">Select your grade</option>
+                <option value="1">Grade 1</option>
+                <option value="2">Grade 2</option>
+                <option value="3">Grade 3</option>
+                <option value="4">Grade 4</option>
+                <option value="5">Grade 5</option>
+                <option value="6">Grade 6</option>
+                <option value="7">Grade 7</option>
+                <option value="8">Grade 8</option>
+                <option value="9">Grade 9</option>
+                <option value="10">Grade 10</option>
+                <option value="11">Grade 11</option>
+                <option value="12">Grade 12</option>
+              </select>
               <SubmitButton type="submit">{error === 'Loging In...' ? 'Loging In...' : 'Log In'}</SubmitButton>
             </FormContainer>
           </FormCard>

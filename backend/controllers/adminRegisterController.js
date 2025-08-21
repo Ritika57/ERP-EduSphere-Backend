@@ -3,7 +3,9 @@ import {Admin } from "../models/adminRegisterSchema.js";
 import { handleValidationError } from "../middlewares/errorHandler.js";
 
 export const adminRegister = async (req, res, next) => {
-  console.log("REQ.BODY:", req.body);
+  console.log("🔍 Admin registration request received");
+  console.log("📧 Email:", req.body.email);
+  console.log("🔑 Password length:", req.body.password?.length || 0);
 
   const { email, password } = req.body;
 
@@ -25,7 +27,8 @@ export const adminRegister = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "Admin already exists" });
     }
 
-    await Admin.create({ email, password });
+    const newAdmin = await Admin.create({ email, password });
+    console.log("Admin created successfully:", newAdmin._id);
 
     return res.status(200).json({ success: true, message: "Admin Created!" });
   } catch (error) {
@@ -37,6 +40,14 @@ export const adminRegister = async (req, res, next) => {
       return res.status(400).json({ 
         success: false, 
         message: validationErrors.join(', ') 
+      });
+    }
+    
+    // Handle duplicate key errors
+    if (error.code === 11000) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Admin with this email already exists" 
       });
     }
     
