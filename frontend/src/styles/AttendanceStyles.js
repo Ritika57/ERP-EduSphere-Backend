@@ -13,6 +13,7 @@ const fadeInUp = keyframes`
 
 export const AttendanceContainer = styled.div`
   display: flex;
+  padding: 0px 20px 32px 239px;
   min-height: 100vh;
   @media screen and (max-width: 768px) {
     flex-direction: column;

@@ -19,7 +19,7 @@ const getStats = (announcements) => {
   const total = announcements.length;
   const today = new Date().toDateString();
   const recent = announcements.filter(ann => {
-    const annDate = new Date(ann.createdAt || Date.now()).toDateString();
+    const annDate = new Date(ann.createdAt).toDateString();
     return annDate === today;
   }).length;
   const important = announcements.filter(ann => 
@@ -27,7 +27,7 @@ const getStats = (announcements) => {
     ann.announcement?.toLowerCase().includes('urgent')
   ).length;
   const todayCount = announcements.filter(ann => {
-    const annDate = new Date(ann.createdAt || Date.now()).toDateString();
+    const annDate = new Date(ann.createdAt).toDateString();
     return annDate === today;
   }).length;
   return { total, recent, important, today: todayCount };
@@ -231,7 +231,7 @@ const AnnouncementSection = () => {
                           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                             <FaCalendarAlt size={12} color="#6b7280" />
                             <span style={{ fontSize: 12, color: '#6b7280' }}>
-                              {formatDate(announcement.createdAt || Date.now())}
+                              {formatDate(announcement.createdAt)}
                             </span>
                           </div>
                           
