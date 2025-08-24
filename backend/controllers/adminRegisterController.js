@@ -1,6 +1,7 @@
 
 import {Admin } from "../models/adminRegisterSchema.js";
 import { handleValidationError } from "../middlewares/errorHandler.js";
+import { sendAdminWelcomeEmail } from "../utils/emailService.js";
 
 export const adminRegister = async (req, res, next) => {
   console.log("🔍 Admin registration request received");
@@ -29,6 +30,20 @@ export const adminRegister = async (req, res, next) => {
 
     const newAdmin = await Admin.create({ email, password });
     console.log("Admin created successfully:", newAdmin._id);
+
+    // Send welcome email to the new admin
+    try {
+      const emailResult = await sendAdminWelcomeEmail(email);
+      if (emailResult.success) {
+        console.log("✅ Welcome email sent successfully to:", email);
+      } else {
+        console.error("❌ Failed to send welcome email:", emailResult.error);
+        // Don't fail the registration if email fails, just log the error
+      }
+    } catch (emailError) {
+      console.error("❌ Email service error:", emailError);
+      // Continue with successful registration even if email fails
+    }
 
     return res.status(200).json({ success: true, message: "Admin Created!" });
   } catch (error) {

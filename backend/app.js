@@ -16,6 +16,7 @@ import attendanceRouter from "./router/attendanceRouter.js";
 import usersRouter from "./router/usersRouter.js"
 import adminRegisterRouter from "./router/adminRegisterRouter.js"
 import performanceRouter from "./router/performanceRouter.js";
+import emailTestRouter from "./router/emailTestRouter.js";
 import  { errorHandler } from "./middlewares/errorHandler.js";
 
 
@@ -65,6 +66,7 @@ app.use("/api/v1/performance", performanceRouter);
 
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/register", adminRegisterRouter);
+app.use("/api/v1/email", emailTestRouter);
 
 // Test route to check if server is working
 app.get("/api/v1/test", (req, res) => {

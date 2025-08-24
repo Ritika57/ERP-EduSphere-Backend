@@ -1,5 +1,6 @@
 import Teacher from "../models/teacherSchema.js";
 import { handleValidationError } from "../middlewares/errorHandler.js";
+import { sendTeacherWelcomeEmail } from "../utils/emailService.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
@@ -20,6 +21,28 @@ export const createTeacher = async (req, res, next) => {
     }
 
     const newTeacher = await Teacher.create({ name, email, subject, password });
+    
+    // Send welcome email to the new teacher
+    try {
+      const teacherData = {
+        name,
+        email,
+        password, // Include the original password for the email
+        subject
+      };
+      
+      const emailResult = await sendTeacherWelcomeEmail(teacherData);
+      if (emailResult.success) {
+        console.log("✅ Teacher welcome email sent successfully to:", email);
+      } else {
+        console.error("❌ Failed to send teacher welcome email:", emailResult.error);
+        // Don't fail the registration if email fails, just log the error
+      }
+    } catch (emailError) {
+      console.error("❌ Email service error:", emailError);
+      // Continue with successful registration even if email fails
+    }
+    
     res.status(200).json({
       success: true,
       message: "Teacher created!",

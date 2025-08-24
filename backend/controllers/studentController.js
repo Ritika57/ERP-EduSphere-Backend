@@ -1,6 +1,7 @@
 import Student from "../models/studentSchema.js";
 import { Student as StudentUser } from "../models/usersSchema.js";
 import { handleValidationError } from "../middlewares/errorHandler.js";
+import { sendStudentWelcomeEmail } from "../utils/emailService.js";
 
 export const createStudent = async (req, res, next) => {
   console.log(req.body);
@@ -33,6 +34,28 @@ export const createStudent = async (req, res, next) => {
   
   // Create student record
   const student = await Student.create({ name, registrationNumber, grade, email });
+  
+  // Send welcome email to the new student
+  try {
+    const studentData = {
+      name,
+      email,
+      password, // Include the original password for the email
+      registrationNumber,
+      grade
+    };
+    
+    const emailResult = await sendStudentWelcomeEmail(studentData);
+    if (emailResult.success) {
+      console.log("✅ Student welcome email sent successfully to:", email);
+    } else {
+      console.error("❌ Failed to send student welcome email:", emailResult.error);
+      // Don't fail the registration if email fails, just log the error
+    }
+  } catch (emailError) {
+    console.error("❌ Email service error:", emailError);
+    // Continue with successful registration even if email fails
+  }
   
   res.status(200).json({
     success: true,
